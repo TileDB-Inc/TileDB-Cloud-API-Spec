@@ -82,6 +82,28 @@ definitions:
       - global-order
       # Unordered layout
       - unordered
+  Querytype:
+    description: Type of query
+    type: string
+    enum: &QUERYTYPE
+      # READ
+      - READ
+      # Write
+      - WRITE
+  Querystatus:
+    description: STatus of query
+    type: string
+    enum: &QUERYSTATUS
+      # FAILED
+      - FAILED
+      # COMPLETED
+      - COMPLETED
+      # INPROGRESS
+      - INPROGRESS
+      # INCOMPLETE
+      - INCOMPLETE
+      # UNINITIALIZED
+      - UNINITIALIZED
   Compressor:
     description: TileDB compressor setting
     type: string
@@ -191,12 +213,12 @@ definitions:
         description: Tile Order
         type: string
         enum: *LAYOUT
-        example: "ROW_MAJOR"
+        example: row-major
       cell_order:
         description: Tile Order
         type: string
         enum: *LAYOUT
-        example: "COL_MAJOR"
+        example: col-major
       dimensions:
         type: array
         description: Array of dimensions
@@ -232,17 +254,17 @@ definitions:
         description: Type of array
         type: string
         enum: *ARRAYTYPE
-        example: "SPARSE"
+        example: sparse
       tile_order:
         description: Tile order setting of array
         type: string
         enum: *LAYOUT
-        example: ROW_MAJOR
+        example: row-major
       cell_order:
         description: Order of cells
         type: string
         enum: *LAYOUT
-        example: "ROW_MAJOR"
+        example: row-major
       capacity:
         description: Capacity of array
         type: integer
@@ -279,8 +301,120 @@ definitions:
         package: "github.com/TileDB-Inc/TileDB-Go"
         alias: "tiledb"
       type: "ArraySchema"
-  Error:
+  AttributeBuffer:
+    description: Represents an attribute buffer
     type: object
+    required:
+      - buffer
+    properties:
+        buffer:
+          description: value buffer
+          type: object
+        buffer_offset:
+          description: offset buffer for variable length attributes
+          type: object
+  LastTile:
+    description: last tile written
+    type: object
+    required:
+      - type
+      - compressor
+      - compressor_level
+      - cell_size
+      - dim_num
+      - buffer
+    properties:
+      type:
+        type: string
+        enum: *DATATYPE
+        example: "INT32"
+      compressor:
+        description: Type of compression for buffer (enum)
+        type: string
+        enum: *COMPRESSOR
+        example: "GZIP"
+      compressor_level:
+        description: Level of buffer compression
+        type: integer
+        example: 3
+      cell_size:
+        description: Size of cells for writting
+        type: integer
+        format: uint64
+        example: "10"
+      dim_num:
+        description: number of dimensions
+        type: integer
+        format: uint64
+        example: "10"
+      buffer:
+        description: buffer of data
+        type: object
+  LastTiles:
+    type: array
+    items:
+      $ref: "#/definitions/LastTile"
+
+  GlobalWriteState:
+    description: state of global writes
+    type: object
+    required:
+      - cells_written
+      - last_tiles
+    properties:
+      last_tiles:
+        description: last tiles written to disk
+        type: object
+        additionalProperties:
+          $ref: "#/definitions/LastTiles"
+      cells_written:
+        description: Cells written so far in global write
+        type: object
+        additionalProperties:
+          type: integer
+          format: uint64
+  Query:
+    type: object
+    required:
+      - type
+      - array_schema
+      - buffers
+      - layout
+      - status
+    properties:
+      type:
+        description: Type of query
+        type: string
+        enum: *QUERYTYPE
+      layout:
+        description: query write layout
+        type: string
+        enum: *LAYOUT
+        example: row-major
+      status:
+        description: query status
+        type: string
+        enum: *QUERYSTATUS
+        example: COMPLETED
+      array_schema:
+        description: Array Schema query is running on
+        $ref: "#/definitions/ArraySchema"
+      subarray:
+        description: Limit dense operations to these dimensions
+        type: object
+      buffers:
+        description: map of buffers
+        type: object
+        additionalProperties:
+          $ref: "#/definitions/AttributeBuffer"
+      writer:
+        description: writer contains data needed for continuation of global write order queries
+        type: object
+        properties:
+          global_write_state:
+            $ref: "#/definitions/GlobalWriteState"
+  Error:
+    type:  object
     required:
       - message
       - code
@@ -340,7 +474,7 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-    
+
   /arrays/group/{group}/project/{project}/uri/{uri}:
     parameters:
       - name: group
@@ -399,6 +533,86 @@ paths:
       responses:
         204:
           description: schema created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+  /queries/group/{group}/project/{project}/uri/{uri}/submit:
+    parameters:
+      - name: group
+        in: path
+        description: group name
+        type: string
+        required: true
+      - name: project
+        in: path
+        description: project name
+        type: string
+        required: true
+      - name: uri
+        in: path
+        description: uri of array that is url-encoded
+        type: string
+        required: true
+    post:
+      description: send a query to run against a specified array/URI registered to a group/project
+      tags:
+        - query
+      operationId: submitQuery
+      parameters:
+        - name: query
+          in: body
+          description: query to run
+          schema:
+            $ref: "#/definitions/Query"
+          required: true
+      responses:
+        200:
+          description: query completed and results are returned in query object
+          schema:
+            $ref: "#/definitions/Query"
+        204:
+          description: query completed successfully with no return
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+  /queries/group/{group}/project/{project}/uri/{uri}/finalize:
+    parameters:
+      - name: group
+        in: path
+        description: group name
+        type: string
+        required: true
+      - name: project
+        in: path
+        description: project name
+        type: string
+        required: true
+      - name: uri
+        in: path
+        description: uri of array that is url-encoded
+        type: string
+        required: true
+    post:
+      description: send a query to run against a specified array/URI registered to a group/project
+      tags:
+        - query
+      operationId: finalizeQuery
+      parameters:
+        - name: query
+          in: body
+          description: query to run
+          schema:
+            $ref: "#/definitions/Query"
+          required: true
+      responses:
+        200:
+          description: query completed and results are returned in query object
+          schema:
+            $ref: "#/definitions/Query"
+        204:
+          description: query completed successfully with no return
         default:
           description: error response
           schema:
