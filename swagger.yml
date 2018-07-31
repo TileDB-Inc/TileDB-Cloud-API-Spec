@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.2
+  version: 0.0.3
 
 produces:
 - application/json
@@ -296,11 +296,6 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/Attribute"
-    x-go-type:
-      import:
-        package: "github.com/TileDB-Inc/TileDB-Go"
-        alias: "tiledb"
-      type: "ArraySchema"
   AttributeBuffer:
     description: Represents an attribute buffer
     type: object
