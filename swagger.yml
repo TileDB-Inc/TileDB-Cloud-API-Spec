@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.3
+  version: 0.0.4
 
 produces:
 - application/json
@@ -420,6 +420,25 @@ definitions:
       message:
         type: string
 paths:
+  /.stats:
+    get:
+      description: Fetch libtiledb stat
+      tags:
+        - stats
+      operationId: getTiledbStats
+      responses:
+        200:
+          description: stats
+          schema:
+            type: object
+            properties:
+              stats:
+                description: string of stats from tiledb
+                type: string
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
   /arrays/group/{group}/project/{project}:
     parameters:
       - name: group
