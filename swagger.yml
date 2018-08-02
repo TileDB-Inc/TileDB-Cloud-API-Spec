@@ -296,6 +296,11 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/Attribute"
+    x-go-type:
+      import:
+        package: "github.com/TileDB-Inc/TileDB-Go"
+        alias: "tiledb"
+      type: "ArraySchema"
   AttributeBuffer:
     description: Represents an attribute buffer
     type: object
