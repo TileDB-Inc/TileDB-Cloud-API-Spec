@@ -64,7 +64,7 @@ enum Querytype {
 
 struct ArraySchema {
 # ArraySchema during creation or retrevial
-    arrayType @0 :ArrayType;
+    arrayType @0 :Text;
     # Type of array
 
     attributes @1 :List(Attribute);
@@ -73,10 +73,10 @@ struct ArraySchema {
     capacity @2 :Int64;
     # Capacity of array
 
-    cellOrder @3 :Layout;
+    cellOrder @3 :Text;
     # Order of cells
 
-    coordsCompression @4 :Compressor;
+    coordsCompression @4 :Text;
     # Type of compression for coordinates (enum)
 
     coordsCompressionLevel @5 :Int32;
@@ -85,13 +85,13 @@ struct ArraySchema {
     domain @6 :Domain;
     # Domain of array
 
-    offsetCompression @7 :Compressor;
+    offsetCompression @7 :Text;
     # Compression type of cell variable offsets (enum)
 
     offsetCompressionLevel @8 :Int32;
     # Compression level for cell variable offsets
 
-    tileOrder @9 :Layout;
+    tileOrder @9 :Text;
     # Tile order setting of array
 
     uri @10 :Text;
@@ -106,7 +106,7 @@ struct Attribute {
     cellValNum @0 :UInt32;
     # Attribute number of values per cell
 
-    compressor @1 :Compressor;
+    compressor @1 :Text;
     # Compressor type used for attribute compression (enum)
 
     compressorLevel @2 :Int32;
@@ -115,13 +115,13 @@ struct Attribute {
     name @3 :Text;
     # Attribute name
 
-    type @4 :Datatype;
+    type @4 :Text;
     # TileDB attribute datatype
 }
 
 struct AttributeBuffer {
 # Represents an attribute buffer
-    type @0 :Datatype;
+    type @0 :Text;
 
     buffer :union {
       listInt8 @1 :List(Int8);
@@ -150,7 +150,7 @@ struct Dimension {
     nullTileExtent @1 :Bool;
     # Is tile extent null
 
-    type @2 :Datatype;
+    type @2 :Text;
     # Datatype for Dimension
 
     tileExtent :union {
@@ -184,16 +184,16 @@ struct Dimension {
 
 struct Domain {
 # Domain of array
-    cellOrder @0 :Layout;
+    cellOrder @0 :Text;
     # Tile Order
 
     dimensions @1 :List(Dimension);
     # Array of dimensions
 
-    tileOrder @2 :Layout;
+    tileOrder @2 :Text;
     # Tile Order
 
-    type @3 :Datatype;
+    type @3 :Text;
     # Datatype of domain
 }
 
@@ -233,7 +233,7 @@ struct LastTile {
     cellSize @0 :UInt64;
     # Size of cells for writting
 
-    compressor @1 :Compressor;
+    compressor @1 :Text;
     # Type of compression for buffer (enum)
 
     compressorLevel @2 :Int32;
@@ -243,7 +243,7 @@ struct LastTile {
     dimNum @3 :UInt32;
 
     # datatype of tile
-    type @4 :Datatype;
+    type @4 :Text;
     buffer :union {
       listInt8 @5 :List(Int8);
       listUint8 @6 :List(UInt8);
@@ -271,13 +271,13 @@ struct Query {
     buffers @1 :Map(Text, AttributeBuffer);
     # map of buffers
 
-    layout @2 :Layout;
+    layout @2 :Text;
     # query write layout
 
-    status @3 :Querystatus;
+    status @3 :Text;
     # query status
 
-    type @4 :Querytype;
+    type @4 :Text;
     # Type of query
 
     writer @5 :Writer;
