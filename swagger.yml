@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.4
+  version: 0.0.5
 
 produces:
 - application/json
@@ -413,6 +413,11 @@ definitions:
         properties:
           global_write_state:
             $ref: "#/definitions/GlobalWriteState"
+    x-go-type:
+      import:
+        package: "github.com/TileDB-Inc/TileDB-Go"
+        alias: "tiledb"
+      type: "Query"
   Error:
     type:  object
     required:
