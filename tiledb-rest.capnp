@@ -70,7 +70,7 @@ struct ArraySchema {
     attributes @1 :List(Attribute);
     # Attributes of array
 
-    capacity @2 :Int64;
+    capacity @2 :UInt64;
     # Capacity of array
 
     cellOrder @3 :Text;
@@ -124,17 +124,17 @@ struct AttributeBuffer {
     type @0 :Text;
 
     buffer :union {
-      listInt8 @1 :List(Int8);
-      listUint8 @2 :List(UInt8);
-      listInt16 @3 :List(Int16);
-      listUint16 @4 :List(UInt16);
-      listInt32 @5 :List(Int32);
-      listUint32 @6 :List(UInt32);
-      listInt64 @7 :List(Int64);
-      listUint64 @8 :List(UInt64);
-      listFloat32 @9 :List(Float32);
-      listFloat64 @10 :List(Float64);
-      listText @11 :Text;
+      int8 @1 :List(Int8);
+      uint8 @2 :List(UInt8);
+      int16 @3 :List(Int16);
+      uint16 @4 :List(UInt16);
+      int32 @5 :List(Int32);
+      uint32 @6 :List(UInt32);
+      int64 @7 :List(Int64);
+      uint64 @8 :List(UInt64);
+      float32 @9 :List(Float32);
+      float64 @10 :List(Float64);
+      text @11 :Text;
     }
 
     # offset buffer for variable length attributes
@@ -168,16 +168,16 @@ struct Dimension {
     # Extent of tile
 
     domain :union {
-      listInt8 @13 :List(Int8);
-      listUint8 @14 :List(UInt8);
-      listInt16 @15 :List(Int16);
-      listUint16 @16 :List(UInt16);
-      listInt32 @17 :List(Int32);
-      listUint32 @18 :List(UInt32);
-      listInt64 @19 :List(Int64);
-      listUint64 @20 :List(UInt64);
-      listFloat32 @21 :List(Float32);
-      listFloat64 @22 :List(Float64);
+      int8 @13 :List(Int8);
+      uint8 @14 :List(UInt8);
+      int16 @15 :List(Int16);
+      uint16 @16 :List(UInt16);
+      int32 @17 :List(Int32);
+      uint32 @18 :List(UInt32);
+      int64 @19 :List(Int64);
+      uint64 @20 :List(UInt64);
+      float32 @21 :List(Float32);
+      float64 @22 :List(Float64);
     }
     # extent of domain
 }
@@ -223,11 +223,11 @@ struct GlobalWriteState {
     cellsWritten @0 :MapInt64;
     # Cells written so far in global write
 
-    lastTiles @1 :Map(Text, List(LastTile));
+    lastTiles @1 :Map(Text, List(Tile));
     # last tiles written to disk
 }
 
-struct LastTile {
+struct Tile {
 # last tile written
 
     cellSize @0 :UInt64;
@@ -245,16 +245,16 @@ struct LastTile {
     # datatype of tile
     type @4 :Text;
     buffer :union {
-      listInt8 @5 :List(Int8);
-      listUint8 @6 :List(UInt8);
-      listInt16 @7 :List(Int16);
-      listUint16 @8 :List(UInt16);
-      listInt32 @9 :List(Int32);
-      listUint32 @10 :List(UInt32);
-      listInt64 @11 :List(Int64);
-      listUint64 @12 :List(UInt64);
-      listFloat32 @13 :List(Float32);
-      listFloat64 @14 :List(Float64);
+      int8 @5 :List(Int8);
+      uint8 @6 :List(UInt8);
+      int16 @7 :List(Int16);
+      uint16 @8 :List(UInt16);
+      int32 @9 :List(Int32);
+      uint32 @10 :List(UInt32);
+      int64 @11 :List(Int64);
+      uint64 @12 :List(UInt64);
+      float32 @13 :List(Float32);
+      float64 @14 :List(Float64);
     }
     # buffer of data
 }
@@ -284,16 +284,16 @@ struct Query {
     # writer contains data needed for continuation of global write order queries
 
     subarray :union {
-      listInt8 @6 :List(Int8);
-      listUint8 @7 :List(UInt8);
-      listInt16 @8 :List(Int16);
-      listUint16 @9 :List(UInt16);
-      listInt32 @10 :List(Int32);
-      listUint32 @11 :List(UInt32);
-      listInt64 @12 :List(Int64);
-      listUint64 @13 :List(UInt64);
-      listFloat32 @14 :List(Float32);
-      listFloat64 @15 :List(Float64);
+      int8 @6 :List(Int8);
+      uint8 @7 :List(UInt8);
+      int16 @8 :List(Int16);
+      uint16 @9 :List(UInt16);
+      int32 @10 :List(Int32);
+      uint32 @11 :List(UInt32);
+      int64 @12 :List(Int64);
+      uint64 @13 :List(UInt64);
+      float32 @14 :List(Float32);
+      float64 @15 :List(Float64);
     }
     # Limit dense operations to these dimensions
 }
