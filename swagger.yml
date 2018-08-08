@@ -6,8 +6,10 @@ info:
 
 produces:
 - application/json
+- application/capnp
 consumes:
 - application/json
+- application/capnp
 schemes:
 - https
 
