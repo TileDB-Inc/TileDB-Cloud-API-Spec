@@ -307,6 +307,11 @@ definitions:
     required:
       - buffer
     properties:
+        type:
+          description: Datatype of buffer
+          type: string
+          enum: *DATATYPE
+          example: "INT32"
         buffer:
           description: value buffer
           type: object
