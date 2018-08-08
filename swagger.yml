@@ -143,8 +143,8 @@ definitions:
       - name
       - type
       - compressor
-      - compressor_level
-      - cell_val_num
+      - compressorLevel
+      - cellValNum
     properties:
       name:
         description: Attribute name
@@ -160,11 +160,11 @@ definitions:
         type: string
         enum: *COMPRESSOR
         example: "GZIP"
-      compressor_level:
+      compressorLevel:
         description: Level setting for compression
         type: integer
         example: 3
-      cell_val_num:
+      cellValNum:
         description: Attribute number of values per cell
         type: integer
         example: 1
@@ -174,7 +174,7 @@ definitions:
     required:
       - type
       - domain
-      - null_tile_extent
+      - nullTileExtent
     properties:
       name:
         description: Dimension name
@@ -190,11 +190,11 @@ definitions:
         type: array
         items:
           type: number
-      null_tile_extent:
+      nullTileExtent:
         description: Is tile extent null
         type: boolean
         example: true
-      tile_extent:
+      tileExtent:
         description: Extent of tile
         type: number
   Domain:
@@ -202,8 +202,8 @@ definitions:
     type: object
     required:
       - type
-      - tile_order
-      - cell_order
+      - tileOrder
+      - cellOrder
       - dimensions
     properties:
       type:
@@ -211,12 +211,12 @@ definitions:
         type: string
         enum: *DATATYPE
         example: "INT32"
-      tile_order:
+      tileOrder:
         description: Tile Order
         type: string
         enum: *LAYOUT
         example: row-major
-      cell_order:
+      cellOrder:
         description: Tile Order
         type: string
         enum: *LAYOUT
@@ -231,14 +231,14 @@ definitions:
     type: object
     required:
       - version
-      - array_type
-      - tile_order
-      - cell_order
+      - arrayType
+      - tileOrder
+      - cellOrder
       - capacity
-      - coords_compression
-      - coords_compression_level
-      - offset_compression
-      - offset_compression_level
+      - coordsCompression
+      - coordsCompressionLevel
+      - offsetCompression
+      - offsetCompressionLevel
       - domain
       - attributes
     properties:
@@ -252,17 +252,17 @@ definitions:
         items:
           type: integer
         example: [1,3,0]
-      array_type:
+      arrayType:
         description: Type of array
         type: string
         enum: *ARRAYTYPE
         example: sparse
-      tile_order:
+      tileOrder:
         description: Tile order setting of array
         type: string
         enum: *LAYOUT
         example: row-major
-      cell_order:
+      cellOrder:
         description: Order of cells
         type: string
         enum: *LAYOUT
@@ -272,21 +272,21 @@ definitions:
         type: integer
         format: uint64
         example: 100000
-      coords_compression:
+      coordsCompression:
         description: Type of compression for coordinates (enum)
         type: string
         enum: *COMPRESSOR
         example: "GZIP"
-      coords_compression_level:
+      coordsCompressionLevel:
         description: Level of coordinates compression
         type: integer
         example: 3
-      offset_compression:
+      offsetCompression:
         description: Compression type of cell variable offsets (enum)
         type: string
         enum: *COMPRESSOR
         example: "GZIP"
-      offset_compression_level:
+      offsetCompressionLevel:
         description: Compression level for cell variable offsets
         type: integer
         example: 3
@@ -317,7 +317,7 @@ definitions:
         buffer:
           description: value buffer
           type: object
-        buffer_offset:
+        bufferOffset:
           description: offset buffer for variable length attributes
           type: object
   LastTile:
@@ -326,9 +326,9 @@ definitions:
     required:
       - type
       - compressor
-      - compressor_level
-      - cell_size
-      - dim_num
+      - compressorLevel
+      - cellSize
+      - dimNum
       - buffer
     properties:
       type:
@@ -340,16 +340,16 @@ definitions:
         type: string
         enum: *COMPRESSOR
         example: "GZIP"
-      compressor_level:
+      compressorLevel:
         description: Level of buffer compression
         type: integer
         example: 3
-      cell_size:
+      cellSize:
         description: Size of cells for writting
         type: integer
         format: uint64
         example: "10"
-      dim_num:
+      dimNum:
         description: number of dimensions
         type: integer
         format: uint64
@@ -366,15 +366,15 @@ definitions:
     description: state of global writes
     type: object
     required:
-      - cells_written
-      - last_tiles
+      - cellsWritten
+      - lastTiles
     properties:
-      last_tiles:
+      lastTiles:
         description: last tiles written to disk
         type: object
         additionalProperties:
           $ref: "#/definitions/LastTiles"
-      cells_written:
+      cellsWritten:
         description: Cells written so far in global write
         type: object
         additionalProperties:
@@ -384,7 +384,7 @@ definitions:
     type: object
     required:
       - type
-      - array_schema
+      - arraySchema
       - buffers
       - layout
       - status
@@ -403,7 +403,7 @@ definitions:
         type: string
         enum: *QUERYSTATUS
         example: COMPLETED
-      array_schema:
+      arraySchema:
         description: Array Schema query is running on
         $ref: "#/definitions/ArraySchema"
       subarray:
@@ -418,7 +418,7 @@ definitions:
         description: writer contains data needed for continuation of global write order queries
         type: object
         properties:
-          global_write_state:
+          globalWriteState:
             $ref: "#/definitions/GlobalWriteState"
     x-go-type:
       import:
