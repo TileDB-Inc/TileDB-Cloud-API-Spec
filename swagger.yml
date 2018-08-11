@@ -568,7 +568,7 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-  /queries/group/{group}/project/{project}/uri/{uri}/submit:
+  /queries/type/{type}/group/{group}/project/{project}/uri/{uri}/submit:
     parameters:
       - name: group
         in: path
@@ -585,6 +585,11 @@ paths:
         description: uri of array that is url-encoded
         type: string
         required: true
+      - name: type
+        in: path
+        description: type of query
+        required: true
+        type: string
     post:
       description: send a query to run against a specified array/URI registered to a group/project
       tags:
@@ -608,7 +613,7 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-  /queries/group/{group}/project/{project}/uri/{uri}/finalize:
+  /queries/type/{type}/group/{group}/project/{project}/uri/{uri}/finalize:
     parameters:
       - name: group
         in: path
@@ -625,6 +630,11 @@ paths:
         description: uri of array that is url-encoded
         type: string
         required: true
+      - name: type
+        in: path
+        description: type of query
+        required: true
+        type: string
     post:
       description: send a query to run against a specified array/URI registered to a group/project
       tags:
