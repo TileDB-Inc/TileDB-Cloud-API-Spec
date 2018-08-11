@@ -262,6 +262,12 @@ struct Tile {
 struct Writer {
   # Write struct
   globalWriteState @0 :GlobalWriteState;
+
+  checkCoordDups @1 :Bool;
+
+  dedupCoords @2 :Bool;
+
+  initialized @3 :Bool;
 }
 
 struct Query {
