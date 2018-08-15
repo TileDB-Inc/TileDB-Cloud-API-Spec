@@ -151,15 +151,9 @@ definitions:
         type: string
         example: attribute1
       type:
-        description: TileDB attribute datatype
-        type: string
-        enum: *DATATYPE
-        example: "INT32"
+        $ref: "#/definitions/Datatype"
       compressor:
-        description: Compressor type used for attribute compression (enum)
-        type: string
-        enum: *COMPRESSOR
-        example: "GZIP"
+        $ref: "#/definitions/Compressor"
       compressorLevel:
         description: Level setting for compression
         type: integer
@@ -181,10 +175,7 @@ definitions:
         type: string
         example: "row"
       type:
-        description: Datatype for Dimension
-        type: string
-        enum: *DATATYPE
-        example: "INT32"
+        $ref: "#/definitions/Datatype"
       domain:
         description: extent of domain
         type: array
@@ -207,20 +198,14 @@ definitions:
       - dimensions
     properties:
       type:
-        description: Datatype of domain
-        type: string
-        enum: *DATATYPE
-        example: "INT32"
+        $ref: "#/definitions/Datatype"
+        description: Domain Type
       tileOrder:
+        $ref: "#/definitions/Layout"
         description: Tile Order
-        type: string
-        enum: *LAYOUT
-        example: row-major
       cellOrder:
-        description: Tile Order
-        type: string
-        enum: *LAYOUT
-        example: col-major
+        $ref: "#/definitions/Layout"
+        description: Cell Order
       dimensions:
         type: array
         description: Array of dimensions
@@ -253,19 +238,16 @@ definitions:
           type: integer
         example: [1,3,0]
       arrayType:
+        $ref: "#/definitions/ArrayType"
         description: Type of array
-        type: string
-        enum: *ARRAYTYPE
         example: sparse
       tileOrder:
         description: Tile order setting of array
-        type: string
-        enum: *LAYOUT
+        $ref: "#/definitions/Layout"
         example: row-major
       cellOrder:
         description: Order of cells
-        type: string
-        enum: *LAYOUT
+        $ref: "#/definitions/Layout"
         example: row-major
       capacity:
         description: Capacity of array
@@ -274,8 +256,7 @@ definitions:
         example: 100000
       coordsCompression:
         description: Type of compression for coordinates (enum)
-        type: string
-        enum: *COMPRESSOR
+        $ref: "#/definitions/Compressor"
         example: "GZIP"
       coordsCompressionLevel:
         description: Level of coordinates compression
@@ -283,8 +264,7 @@ definitions:
         example: 3
       offsetCompression:
         description: Compression type of cell variable offsets (enum)
-        type: string
-        enum: *COMPRESSOR
+        $ref: "#/definitions/Compressor"
         example: "GZIP"
       offsetCompressionLevel:
         description: Compression level for cell variable offsets
@@ -312,7 +292,7 @@ definitions:
         type:
           description: Datatype of buffer
           type: string
-          enum: *DATATYPE
+          $ref: "#/definitions/Datatype"
           example: "INT32"
         buffer:
           description: value buffer
@@ -333,12 +313,11 @@ definitions:
     properties:
       type:
         type: string
-        enum: *DATATYPE
+        $ref: "#/definitions/Datatype"
         example: "INT32"
       compressor:
         description: Type of compression for buffer (enum)
-        type: string
-        enum: *COMPRESSOR
+        $ref: "#/definitions/Compressor"
         example: "GZIP"
       compressorLevel:
         description: Level of buffer compression
@@ -390,19 +369,11 @@ definitions:
       - status
     properties:
       type:
-        description: Type of query
-        type: string
-        enum: *QUERYTYPE
+        $ref: "#/definitions/Querytype"
       layout:
-        description: query write layout
-        type: string
-        enum: *LAYOUT
-        example: row-major
+        $ref: "#/definitions/Layout"
       status:
-        description: query status
-        type: string
-        enum: *QUERYSTATUS
-        example: COMPLETED
+        $ref: "#/definitions/Querystatus"
       arraySchema:
         description: Array Schema query is running on
         $ref: "#/definitions/ArraySchema"
