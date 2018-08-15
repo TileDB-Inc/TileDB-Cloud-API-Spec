@@ -379,6 +379,56 @@ struct Writer {
   dedupCoords @2 :Bool;
 
   initialized @3 :Bool;
+
+  fragmentUri @4 :Text;
+}
+
+struct ReadState {
+
+  initialized @0 :Bool;
+  # True if the reader has been initialized.
+
+  overflowed @1 :Bool;
+  # `True` if the query produced results that could not fit in some buffer.
+
+  curSubarrayPartition :union {
+    int8 @2 :List(Int8);
+    uint8 @3 :List(UInt8);
+    int16 @4 :List(Int16);
+    uint16 @5 :List(UInt16);
+    int32 @6 :List(Int32);
+    uint32 @7 :List(UInt32);
+    int64 @8 :List(Int64);
+    uint64 @9 :List(UInt64);
+    float32 @10 :List(Float32);
+    float64 @11 :List(Float64);
+  }
+  # The current subarray the query is constrained on.
+
+  subarrayPartitions :union {
+    int8 @12 :List(List(Int8));
+    uint8 @13 :List(List(UInt8));
+    int16 @14 :List(List(Int16));
+    uint16 @15 :List(List(UInt16));
+    int32 @16 :List(List(Int32));
+    uint32 @17 :List(List(UInt32));
+    int64 @18 :List(List(Int64));
+    uint64 @19 :List(List(UInt64));
+    float32 @20 :List(List(Float32));
+    float64 @21 :List(List(Float64));
+  }
+  # A list of subarray partitions. The head of the list is the partition
+  # to be split next.
+}
+
+struct QueryReader {
+  # Read struct (can't be called reader due to class name conflict)
+
+  fragmentMetadata @0 :List(FragmentMetadata);
+  # The fragment metadata.
+
+  readState @1 :ReadState;
+  # To handle incomplete read queries.
 }
 
 struct Query {
@@ -400,17 +450,19 @@ struct Query {
     writer @5 :Writer;
     # writer contains data needed for continuation of global write order queries
 
+    reader @6 :QueryReader;
+
     subarray :union {
-      int8 @6 :List(Int8);
-      uint8 @7 :List(UInt8);
-      int16 @8 :List(Int16);
-      uint16 @9 :List(UInt16);
-      int32 @10 :List(Int32);
-      uint32 @11 :List(UInt32);
-      int64 @12 :List(Int64);
-      uint64 @13 :List(UInt64);
-      float32 @14 :List(Float32);
-      float64 @15 :List(Float64);
+      int8 @7 :List(Int8);
+      uint8 @8 :List(UInt8);
+      int16 @9 :List(Int16);
+      uint16 @10 :List(UInt16);
+      int32 @11 :List(Int32);
+      uint32 @12 :List(UInt32);
+      int64 @13 :List(Int64);
+      uint64 @14 :List(UInt64);
+      float32 @15 :List(Float32);
+      float64 @16 :List(Float64);
     }
     # Limit dense operations to these dimensions
 }
