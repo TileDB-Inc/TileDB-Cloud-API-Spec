@@ -134,7 +134,7 @@ struct AttributeBuffer {
       uint64 @8 :List(UInt64);
       float32 @9 :List(Float32);
       float64 @10 :List(Float64);
-      text @11 :Text;
+      text @11 :Data;
     }
 
     # offset buffer for variable length attributes
