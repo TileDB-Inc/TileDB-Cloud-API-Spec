@@ -428,6 +428,10 @@ definitions:
               items:
                 type: integer
                 format: float64
+            char:
+              type: array
+              items:
+                type: string
         bufferOffset:
           description: offset buffer for variable length attributes
           type: array
