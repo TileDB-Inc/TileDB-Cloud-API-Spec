@@ -1007,7 +1007,6 @@ definitions:
     type: object
     required:
       - type
-      - arraySchema
       - buffers
       - layout
       - status
@@ -1018,9 +1017,6 @@ definitions:
         $ref: "#/definitions/Layout"
       status:
         $ref: "#/definitions/Querystatus"
-      arraySchema:
-        description: Array Schema query is running on
-        $ref: "#/definitions/ArraySchema"
       subarray:
         description: Limit dense operations to these dimensions
         type: object
