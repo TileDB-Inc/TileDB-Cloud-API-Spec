@@ -370,37 +370,34 @@ struct QueryReader {
 }
 
 struct Query {
-    arraySchema @0 :ArraySchema;
-    # Array Schema query is running on
-
-    buffers @1 :Map(Text, AttributeBuffer);
+    buffers @0 :Map(Text, AttributeBuffer);
     # map of buffers
 
-    layout @2 :Text;
+    layout @1 :Text;
     # query write layout
 
-    status @3 :Text;
+    status @2 :Text;
     # query status
 
-    type @4 :Text;
+    type @3 :Text;
     # Type of query
 
-    writer @5 :Writer;
+    writer @4 :Writer;
     # writer contains data needed for continuation of global write order queries
 
-    reader @6 :QueryReader;
+    reader @5 :QueryReader;
 
     subarray :union {
-      int8 @7 :List(Int8);
-      uint8 @8 :List(UInt8);
-      int16 @9 :List(Int16);
-      uint16 @10 :List(UInt16);
-      int32 @11 :List(Int32);
-      uint32 @12 :List(UInt32);
-      int64 @13 :List(Int64);
-      uint64 @14 :List(UInt64);
-      float32 @15 :List(Float32);
-      float64 @16 :List(Float64);
+      int8 @6 :List(Int8);
+      uint8 @7 :List(UInt8);
+      int16 @8 :List(Int16);
+      uint16 @9 :List(UInt16);
+      int32 @10 :List(Int32);
+      uint32 @11 :List(UInt32);
+      int64 @12 :List(Int64);
+      uint64 @13 :List(UInt64);
+      float32 @14 :List(Float32);
+      float64 @15 :List(Float64);
     }
     # Limit dense operations to these dimensions
 }
