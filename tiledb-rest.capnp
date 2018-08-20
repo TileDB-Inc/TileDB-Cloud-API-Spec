@@ -371,3 +371,16 @@ struct NonEmptyDomain {
   isEmpty @1 :Bool;
   # Is non-empty domain really empty?
 }
+
+struct MaxBufferSizeVar {
+  # used to return max buffer/var buffer sizes for an array
+
+  attribute @0 :Text;
+  # name of attribute
+
+  bufferSize @1 :UInt64;
+  # max size of a buffer for given subarray
+
+  bufferOffsetSize @2 :UInt64;
+  # max buffer offset for a given subarray
+}

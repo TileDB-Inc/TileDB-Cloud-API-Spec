@@ -909,6 +909,28 @@ definitions:
         type: boolean
         example: False
 
+  MaxBufferSizeVar:
+    description: Used to return max buffer/var buffer sizes for an array
+    type: object
+    required:
+      - attribute
+      - bufferSize
+    properties:
+      attribute:
+        description: name of attribute
+        type: string
+        example: "attribute1"
+      bufferSize:
+        description: max size of a buffer for given subarray
+        type: integer
+        format: uint64
+        example: 100
+      bufferOffsetSize:
+        description: max buffer offset for a given subarray
+        type: integer
+        format: uint64
+        example: 4
+
   Error:
     type:  object
     required:
@@ -1019,6 +1041,86 @@ paths:
           description: get the non empty domain of an array
           schema:
             $ref: "#/definitions/NonEmptyDomain"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+  /arrays/{organization}/{array}/max_buffer_size:
+    parameters:
+      - name: organization
+        in: path
+        description: organization name
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: subarray
+        in: query
+        description: subarray to find max buffer size on
+        type: array
+        items:
+          type: number
+        required: true
+      - name: attribute
+        in: query
+        description: attribute to fetch max buffer on, all non-variable sized attributes returned if not passed
+        type: string
+        required: false
+    get:
+      description: get the max buffer size needed for a subarray and a given attribute (or all non-variable sized attribute)
+      tags:
+        - array
+      operationId: getArrayMaxBufferSize
+      responses:
+        200:
+          description: get the max buffer size of a attribute
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/MaxBufferSizeVar"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+  /arrays/{organization}/{array}/max_buffer_size_var:
+    parameters:
+      - name: organization
+        in: path
+        description: organization name
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: subarray
+        in: query
+        description: subarray to find max variable-legnth buffer size on
+        type: array
+        items:
+          type: number
+        required: true
+      - name: attribute
+        in: query
+        description: attribute to fetch max buffer on, all variable sized attributes returned if not passed
+        type: string
+        required: false
+    get:
+      description: get the max buffer size needed for a subarray and a given attribute (or all variable sized attribute)
+      tags:
+        - array
+      operationId: getArrayMaxBufferSizeVar
+      responses:
+        200:
+          description: get the max buffer size of a attribute
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/MaxBufferSizeVar"
         default:
           description: error response
           schema:
