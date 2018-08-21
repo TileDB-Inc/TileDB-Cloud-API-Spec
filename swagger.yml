@@ -2,14 +2,12 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.7
+  version: 0.0.8
 
 produces:
 - application/json
-- application/capnp
 consumes:
 - application/json
-- application/capnp
 schemes:
 - https
 
@@ -988,6 +986,12 @@ paths:
             $ref: "#/definitions/Error"
     get:
       description: get an ArraySchema using a url encoded uri
+      produces:
+        - application/json
+        - application/capnp
+      consumes:
+        - application/json
+        - application/capnp
       tags:
         - array
       operationId: getArray
@@ -1146,6 +1150,12 @@ paths:
       description: send a query to run against a specified array/URI registered to a group/project
       tags:
         - query
+      produces:
+        - application/json
+        - application/capnp
+      consumes:
+        - application/json
+        - application/capnp
       operationId: submitQuery
       parameters:
         - name: query
@@ -1186,6 +1196,12 @@ paths:
       description: send a query to run against a specified array/URI registered to a group/project
       tags:
         - query
+      produces:
+        - application/json
+        - application/capnp
+      consumes:
+        - application/json
+        - application/capnp
       operationId: finalizeQuery
       parameters:
         - name: query
