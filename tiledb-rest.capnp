@@ -1,5 +1,18 @@
 @0xb57d9224b587d87f;
 
+struct DomainArray {
+  int8 @0 :List(Int8);
+  uint8 @1 :List(UInt8);
+  int16 @2 :List(Int16);
+  uint16 @3 :List(UInt16);
+  int32 @4 :List(Int32);
+  uint32 @5 :List(UInt32);
+  int64 @6 :List(Int64);
+  uint64 @7 :List(UInt64);
+  float32 @8 :List(Float32);
+  float64 @9 :List(Float64);
+}
+
 struct ArraySchema {
 # ArraySchema during creation or retrevial
     arrayType @0 :Text;
@@ -105,18 +118,7 @@ struct Dimension {
     }
     # Extent of tile
 
-    domain :union {
-      int8 @13 :List(Int8);
-      uint8 @14 :List(UInt8);
-      int16 @15 :List(Int16);
-      uint16 @16 :List(UInt16);
-      int32 @17 :List(Int32);
-      uint32 @18 :List(UInt32);
-      int64 @19 :List(Int64);
-      uint64 @20 :List(UInt64);
-      float32 @21 :List(Float32);
-      float64 @22 :List(Float64);
-    }
+    domain @13 :DomainArray;
     # extent of domain
 }
 
@@ -191,77 +193,55 @@ struct FragmentMetadata {
   dense @13 :Bool;
   # True if the fragment is dense, and false if it is sparse.
 
-  domain :union {
-    int8 @14 :List(Int8);
-    uint8 @15 :List(UInt8);
-    int16 @16 :List(Int16);
-    uint16 @17 :List(UInt16);
-    int32 @18 :List(Int32);
-    uint32 @19 :List(UInt32);
-    int64 @20 :List(Int64);
-    uint64 @21 :List(UInt64);
-    float32 @22 :List(Float32);
-    float64 @23 :List(Float64);
-  }
+  domain @14 :DomainArray;
   # The (expanded) domain in which the fragment is constrained. "Expanded"
   # means that the domain is enlarged minimally to coincide with tile
   # boundaries (if there is a tile grid imposed by tile extents). Note that the
   # type of the domain must be the same as the type of the array coordinates.
 
 
-  fileSizes @24 :List(UInt64);
+  fileSizes @15 :List(UInt64);
   # Stores the size of each attribute file.
 
-  fileVarSizes @25 :List(UInt64);
+  fileVarSizes @16 :List(UInt64);
   # Stores the size of each variable attribute file.
 
-  fragmentUri @26 :Text;
+  fragmentUri @17 :Text;
   # The uri of the fragment the metadata belongs to.
 
-  lastTileCellNum @27 :UInt64;
+  lastTileCellNum @18 :UInt64;
   # Number of cells in the last tile (meaningful only in the sparse case).
 
-  mbrs @28 :Void;
+  mbrs @19 :Void;
   # The MBRs (applicable only to the sparse case with irregular tiles).
 
-  nextTileOffsets @29 :List(UInt64);
+  nextTileOffsets @20 :List(UInt64);
   # The offsets of the next tile for each attribute.
 
-  nextTileVarOffsets @30 :List(UInt64);
+  nextTileVarOffsets @21 :List(UInt64);
   # The offsets of the next variable tile for each attribute.
 
-  nonEmptyDomain :union {
-    int8 @31 :List(Int8);
-    uint8 @32 :List(UInt8);
-    int16 @33 :List(Int16);
-    uint16 @34 :List(UInt16);
-    int32 @35 :List(Int32);
-    uint32 @36 :List(UInt32);
-    int64 @37 :List(Int64);
-    uint64 @38 :List(UInt64);
-    float32 @39 :List(Float32);
-    float64 @40 :List(Float64);
-  }
+  nonEmptyDomain @22 :DomainArray;
   # The non-empty domain in which the fragment is constrained. Note that the
   # type of the domain must be the same as the type of the array coordinates.
 
-  tileIndexBase @41 :UInt64;
+  tileIndexBase @23 :UInt64;
   # The tile index base which is added to tile indices in setter functions.
   # Only used in global order writes.
 
-  tileOffsets @42 :List(List(UInt64));
+  tileOffsets @24 :List(List(UInt64));
   # The tile offsets in their corresponding attribute files. Meaningful only
   # when there is compression.
 
-  tileVarOffsets @43 :List(List(UInt64));
+  tileVarOffsets @25 :List(List(UInt64));
   # The variable tile offsets in their corresponding attribute files.
   # Meaningful only for variable-sized tiles.
 
-  tileVarSizes @44 :List(List(UInt64));
+  tileVarSizes @26 :List(List(UInt64));
   # The sizes of the uncompressed variable tiles.
   # Meaningful only when there is compression for variable tiles.
 
-  version @45 :List(Int32);
+  version @27 :List(Int32);
   # The version of the library that created this metadata.
 }
 
@@ -288,11 +268,12 @@ struct Tile {
     compressorLevel @2 :Int32;
     # Level of buffer compression
 
-    # number of dimensions
     dimNum @3 :UInt32;
+    # number of dimensions
 
-    # datatype of tile
     type @4 :Text;
+    # datatype of tile
+
     buffer :union {
       int8 @5 :List(Int8);
       uint8 @6 :List(UInt8);
@@ -329,31 +310,20 @@ struct ReadState {
   overflowed @1 :Bool;
   # `True` if the query produced results that could not fit in some buffer.
 
-  curSubarrayPartition :union {
-    int8 @2 :List(Int8);
-    uint8 @3 :List(UInt8);
-    int16 @4 :List(Int16);
-    uint16 @5 :List(UInt16);
-    int32 @6 :List(Int32);
-    uint32 @7 :List(UInt32);
-    int64 @8 :List(Int64);
-    uint64 @9 :List(UInt64);
-    float32 @10 :List(Float32);
-    float64 @11 :List(Float64);
-  }
+  curSubarrayPartition @2 :DomainArray;
   # The current subarray the query is constrained on.
 
   subarrayPartitions :union {
-    int8 @12 :List(List(Int8));
-    uint8 @13 :List(List(UInt8));
-    int16 @14 :List(List(Int16));
-    uint16 @15 :List(List(UInt16));
-    int32 @16 :List(List(Int32));
-    uint32 @17 :List(List(UInt32));
-    int64 @18 :List(List(Int64));
-    uint64 @19 :List(List(UInt64));
-    float32 @20 :List(List(Float32));
-    float64 @21 :List(List(Float64));
+    int8 @3 :List(List(Int8));
+    uint8 @4 :List(List(UInt8));
+    int16 @5 :List(List(Int16));
+    uint16 @6 :List(List(UInt16));
+    int32 @7 :List(List(Int32));
+    uint32 @8 :List(List(UInt32));
+    int64 @9 :List(List(Int64));
+    uint64 @10 :List(List(UInt64));
+    float32 @11 :List(List(Float32));
+    float64 @12 :List(List(Float64));
   }
   # A list of subarray partitions. The head of the list is the partition
   # to be split next.
@@ -386,18 +356,31 @@ struct Query {
     # writer contains data needed for continuation of global write order queries
 
     reader @5 :QueryReader;
+    # reader contains data needed for continuation of incomplete reads
 
-    subarray :union {
-      int8 @6 :List(Int8);
-      uint8 @7 :List(UInt8);
-      int16 @8 :List(Int16);
-      uint16 @9 :List(UInt16);
-      int32 @10 :List(Int32);
-      uint32 @11 :List(UInt32);
-      int64 @12 :List(Int64);
-      uint64 @13 :List(UInt64);
-      float32 @14 :List(Float32);
-      float64 @15 :List(Float64);
-    }
+    subarray @6 :DomainArray;
     # Limit dense operations to these dimensions
+}
+
+struct NonEmptyDomain {
+  # object representing a non-empty domain
+
+  nonEmptyDomain @0 :Map(Text, DomainArray);
+  # Non Empty Dmoain of array
+
+  isEmpty @1 :Bool;
+  # Is non-empty domain really empty?
+}
+
+struct MaxBufferSizeVar {
+  # used to return max buffer/var buffer sizes for an array
+
+  attribute @0 :Text;
+  # name of attribute
+
+  bufferSize @1 :UInt64;
+  # max size of a buffer for given subarray
+
+  bufferOffsetSize @2 :UInt64;
+  # max buffer offset for a given subarray
 }
