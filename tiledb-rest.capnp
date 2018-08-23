@@ -362,10 +362,18 @@ struct Query {
     # Limit dense operations to these dimensions
 }
 
+struct NonEmptyDomainArray {
+  # object represening non-empty domain with dimension name
+  name @0 :Text;
+  #dimension name
+
+  domain @1 :DomainArray;
+}
+
 struct NonEmptyDomain {
   # object representing a non-empty domain
 
-  nonEmptyDomain @0 :Map(Text, DomainArray);
+  nonEmptyDomain @0 :List(NonEmptyDomainArray);
   # Non Empty Dmoain of array
 
   isEmpty @1 :Bool;

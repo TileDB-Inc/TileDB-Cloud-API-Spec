@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.8
+  version: 0.0.9
 
 produces:
 - application/json
@@ -10,6 +10,7 @@ consumes:
 - application/json
 schemes:
 - https
+- http
 
 basePath: /v1
 
@@ -890,6 +891,16 @@ definitions:
         alias: "tiledb"
       type: "Query"
 
+  NonEmptyDomainArray:
+    type: object
+    description: object represening non-empty domain with dimension name
+    properties:
+      name:
+        type: string
+        description: dimension name
+        example: "d1"
+      domain:
+        $ref: "#/definitions/DomainArray"
   NonEmptyDomain:
     type: object
     description: object representing a non-empty domain
@@ -898,10 +909,10 @@ definitions:
       - isEmpty
     properties:
       nonEmptyDomain:
-        type: object
+        type: array
         description: Non Empty Dmoain of array
-        additionalProperties:
-          $ref: "#/definitions/DomainArray"
+        items:
+          $ref: "#/definitions/NonEmptyDomainArray"
       isEmpty:
         description: Is non-empty domain really empty?
         type: boolean
