@@ -19,7 +19,7 @@ securityDefinitions:
   ApiKeyAuth:
     type: apiKey
     in: header
-    name: X-TBDSP-API-Key
+    name: X-TILEDB-REST-API-Key
 
 definitions:
   ArrayType:
@@ -940,6 +940,40 @@ definitions:
         format: int64
       message:
         type: string
+  User:
+    description: User
+    type: object
+    required:
+      - username
+      - firstName
+      - lastName
+      - email
+    properties:
+      username:
+        type: string
+        minLength: 4
+        maxLength: 20
+        pattern: "^\\w+$"   # only allows alphanumeric characters
+        description: username must be unique
+      password:
+        type: string
+        minLength: 8
+        description: password
+      firstName:
+        description: the user's real first name
+        type: string
+        minLength: 1
+      lastName:
+        description: the user's real last name
+        type: string
+        minLength: 1
+      email:
+        type: string
+      lastActivityDate:
+        type: string
+        format: date-time
+        description: when the user last logged in (set by the server)
+        readOnly: true
 paths:
   /.stats:
     get:
@@ -1217,6 +1251,55 @@ paths:
             $ref: "#/definitions/Query"
         204:
           description: query completed successfully with no return
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+  /user:
+    post:
+      tags:
+        - user
+      description: create a user
+      operationId: createUser
+      parameters:
+        - name: user
+          in: body
+          description: user to create
+          schema:
+            $ref: "#/definitions/User"
+          required: true
+      responses:
+        204:
+          description: user created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+  /users/{username}:
+    parameters:
+      - name: username
+        in: path
+        description: username
+        required: true
+        type: string
+
+    get:
+      tags:
+        - user
+      description: get a user
+      operationId: getUser
+      parameters:
+        - name: user
+          in: body
+          description: user to create
+          schema:
+            $ref: "#/definitions/User"
+          required: true
+      responses:
+        200:
+          description: user created
+          schema:
+            $ref: "#/definitions/User"
         default:
           description: error response
           schema:
