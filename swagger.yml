@@ -21,6 +21,10 @@ securityDefinitions:
     in: header
     name: X-TILEDB-REST-API-Key
 
+security:
+  - BasicAuth: []
+  - ApiKeyAuth: []
+
 definitions:
   ArrayType:
     description: TileDB array type
@@ -1257,6 +1261,7 @@ paths:
             $ref: "#/definitions/Error"
   /user:
     post:
+      security: []
       tags:
         - user
       description: create a user
