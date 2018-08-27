@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.8
+  version: 0.0.9
 
 produces:
 - application/json
@@ -1287,24 +1287,47 @@ paths:
         description: username
         required: true
         type: string
-
     get:
       tags:
         - user
       description: get a user
       operationId: getUser
+      responses:
+        200:
+          description: user details
+          schema:
+            $ref: "#/definitions/User"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - user
+      description: delete a user
+      operationId: deleteUser
+      responses:
+        204:
+          description: user deleted
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - user
+      description: update a user
+      operationId: updateUser
       parameters:
         - name: user
           in: body
-          description: user to create
+          description: user details to update
           schema:
             $ref: "#/definitions/User"
           required: true
       responses:
-        200:
-          description: user created
-          schema:
-            $ref: "#/definitions/User"
+        204:
+          description: user updated successfully
         default:
           description: error response
           schema:
