@@ -138,6 +138,19 @@ definitions:
       - BZIP2
       # Double-delta compressor
       - DOUBLE_DELTA
+  OrganizationRoles:
+    description: role user has in organization
+    type: string
+    enum: &ORGANIZATIONROLES
+      # Owner/creator of group
+      - Owner
+      # Admin almost all rights but can't delete organization
+      - Admin
+      # User
+      - User
+      # Read Only User
+      - Read_Only
+
   DomainArray:
     description: Domain object for an array of each type
     type: object
@@ -978,6 +991,49 @@ definitions:
         format: date-time
         description: when the user last logged in (set by the server)
         readOnly: true
+      organizations:
+        type: array
+        description: Array of organizations a user is part of and their roles
+        readOnly: true
+        items:
+          $ref: "#/definitions/OrganizationUser"
+  OrganizationUser:
+    description: user in an organization
+    type: object
+    properties:
+      username:
+        description: username for user
+        type: string
+      organizationName:
+        description: name of organization
+        type: string
+      role:
+        $ref: "#/definitions/OrganizationRoles"
+
+  Organization:
+    description: Organization
+    type: object
+    required:
+      - name
+      - users
+    properties:
+      name:
+        type: string
+        minLength: 4
+        maxLength: 20
+        pattern: "^\\w+$"   # only allows alphanumeric characters
+        description: username must be unique
+      logo:
+        description: Organization logo
+        type: string
+        format: byte
+      description:
+        description: Organization description
+        type: string
+      users:
+        type: array
+        items:
+          $ref: '#/definitions/OrganizationUser'
 paths:
   /.stats:
     get:
@@ -1297,6 +1353,8 @@ paths:
           description: user details
           schema:
             $ref: "#/definitions/User"
+        404:
+          description: User does not exist
         default:
           description: error response
           schema:
@@ -1328,6 +1386,173 @@ paths:
       responses:
         204:
           description: user updated successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /organization:
+    post:
+      tags:
+        - organization
+      description: create a organization, the user creating will be listed as owner
+      operationId: createOrganization
+      parameters:
+        - name: organization
+          in: body
+          description: organization to create
+          schema:
+            $ref: "#/definitions/Organization"
+          required: true
+      responses:
+        204:
+          description: organization created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /organizations/{organization}:
+    parameters:
+      - name: organization
+        in: path
+        description: organization name
+        required: true
+        type: string
+    get:
+      tags:
+        - organization
+      description: get a organization
+      operationId: getOrganization
+      responses:
+        200:
+          description: organization details
+          schema:
+            $ref: "#/definitions/Organization"
+        404:
+          description: Organization does not exist
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - organization
+      description: delete a organization
+      operationId: deleteOrganization
+      responses:
+        204:
+          description: organization deleted
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - organization
+      description: update a organization
+      operationId: updateOrganization
+      parameters:
+        - name: organization
+          in: body
+          description: organization details to update
+          schema:
+            $ref: "#/definitions/Organization"
+          required: true
+      responses:
+        204:
+          description: organization updated successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /organizations/{organization}/user:
+    parameters:
+      - name: organization
+        in: path
+        description: organization name
+        required: true
+        type: string
+    post:
+      tags:
+        - user
+        - organization
+      description: add a user to an organization
+      operationId: addUserToOrganization
+      parameters:
+        - name: user
+          in: body
+          description: user to add
+          schema:
+            $ref: "#/definitions/OrganizationUser"
+          required: true
+      responses:
+        204:
+          description: user added to organization successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /organizations/{organization}/{username}:
+    parameters:
+      - name: organization
+        in: path
+        description: organization name
+        required: true
+        type: string
+      - name: username
+        in: path
+        description: username to manipulate
+        required: true
+        type: string
+    get:
+      tags:
+        - user
+        - organization
+      description: get a user from an organization
+      operationId: getOrganizationUser
+      responses:
+        200:
+          description: user from organization
+          schema:
+            $ref: "#/definitions/OrganizationUser"
+        404:
+          description: User is not in organization
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - user
+        - organization
+      description: delete a user from an organization
+      operationId: deleteUserFromOrganization
+      responses:
+        204:
+          description: user delete from organization successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - user
+        - organization
+      description: update a user in an organization
+      operationId: updateUserInOrganization
+      parameters:
+        - name: user
+          in: body
+          description: user details to update
+          schema:
+            $ref: "#/definitions/OrganizationUser"
+          required: true
+      responses:
+        204:
+          description: user update in organization successfully
         default:
           description: error response
           schema:
