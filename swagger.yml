@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.9
+  version: 0.0.10
 
 produces:
 - application/json
@@ -1054,11 +1054,11 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-  /arrays/{organization}/{array}:
+  /arrays/{namespace}/{array}:
     parameters:
-      - name: organization
+      - name: namespace
         in: path
-        description: organization name
+        description: namespace array is in (an organization name or user's username)
         type: string
         required: true
       - name: array
@@ -1117,11 +1117,11 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-  /arrays/{organization}/{array}/non_empty_domain:
+  /arrays/{namespace}/{array}/non_empty_domain:
     parameters:
-      - name: organization
+      - name: namespace
         in: path
-        description: organization name
+        description: namespace array is in (an organization name or user's username)
         type: string
         required: true
       - name: array
@@ -1143,11 +1143,11 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-  /arrays/{organization}/{array}/max_buffer_size:
+  /arrays/{namespace}/{array}/max_buffer_size:
     parameters:
-      - name: organization
+      - name: namespace
         in: path
-        description: organization name
+        description: namespace array is in (an organization name or user's username)
         type: string
         required: true
       - name: array
@@ -1183,11 +1183,11 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-  /arrays/{organization}/{array}/max_buffer_size_var:
+  /arrays/{namespace}/{array}/max_buffer_size_var:
     parameters:
-      - name: organization
+      - name: namespace
         in: path
-        description: organization name
+        description: namespace array is in (an organization name or user's username)
         type: string
         required: true
       - name: array
@@ -1223,11 +1223,11 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-  /arrays/{organization}/{array}/query/submit:
+  /arrays/{namespace}/{array}/query/submit:
     parameters:
-      - name: organization
+      - name: namespace
         in: path
-        description: organization name
+        description: namespace array is in (an organization name or user's username)
         type: string
         required: true
       - name: array
@@ -1269,11 +1269,11 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-  /arrays/{organization}/{array}/query/finalize:
+  /arrays/{namespace}/{array}/query/finalize:
     parameters:
-      - name: organization
+      - name: namespace
         in: path
-        description: organization name
+        description: namespace array is in (an organization name or user's username)
         type: string
         required: true
       - name: array
