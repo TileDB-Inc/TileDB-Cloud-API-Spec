@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.10
+  version: 0.0.11
 
 produces:
 - application/json
@@ -962,9 +962,6 @@ definitions:
     type: object
     required:
       - username
-      - firstName
-      - lastName
-      - email
     properties:
       username:
         type: string
@@ -1015,7 +1012,6 @@ definitions:
     type: object
     required:
       - name
-      - users
     properties:
       name:
         type: string
