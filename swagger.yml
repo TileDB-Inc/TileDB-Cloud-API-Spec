@@ -1030,6 +1030,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/OrganizationUser'
+
   ArrayMetadata:
     description: metadata of an array
     type: object
@@ -1043,6 +1044,48 @@ definitions:
         type: string
         example: "user1"
 
+  TokenRequest:
+    description: A request from a user for an api token
+    properties:
+      expires:
+        description: Expiration date for token, if empty token defaults to 30 minutes
+        type: string
+        format: date-time
+        example: 2018-12-31T12:13:14Z
+      name:
+        description: Optional name for token, if the name already exists for the user it will be auto incremented (i.e. myToken-1)
+        type: string
+        example: myToken
+
+  TokenRevocation:
+    description: A request to revoke a user api token, user can pass either the token name or the token itself
+    type: object
+    properties:
+      token:
+        description: Token to revoke
+        type: string
+      name:
+        description: Name of token to revoke
+        type: string
+
+  Token:
+    description: A api token and its metadata
+    type: object
+    properties:
+      token:
+        description: A api token
+        type: string
+      name:
+        description: Name of token to revoke
+        type: string
+      issuedAt:
+        description: datetime the token was created at
+        type: string
+        format: date-time
+      expiresAt:
+        description: datetime the token when token will expire
+        type: string
+        format: date-time
 paths:
   /.stats:
     get:
@@ -1585,6 +1628,72 @@ paths:
       responses:
         204:
           description: user update in organization successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /token:
+    post:
+      tags:
+        - user
+      description: Request an authorization token, optionally taken a TokenRequest object to set parameters on the token
+      operationId: requestToken
+      parameters:
+        - name: tokenRequest
+          in: body
+          description: token request object
+          schema:
+            $ref: "#/definitions/TokenRequest"
+          required: false
+      responses:
+        200:
+          description: token
+          schema:
+            $ref: "#/definitions/Token"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+  /tokens:
+    parameters:
+      - name: username
+        in: path
+        description: username to manipulate
+        required: true
+        type: string
+    get:
+      tags:
+        - user
+      description: Fetch a list of user tokens
+      responses:
+        200:
+          description: Array of all user created tokens
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Token"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /tokens/revoke:
+    post:
+      tags:
+        - user
+      description: revoke an authorization token
+      operationId: revokeToken
+      parameters:
+        - name: tokenRevocation
+          in: body
+          description: "revocation object"
+          schema:
+            $ref: "#/definitions/TokenRevocation"
+          required: false
+      responses:
+        204:
+          description: revokation successfully
         default:
           description: error response
           schema:
