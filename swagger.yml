@@ -1086,6 +1086,31 @@ definitions:
         description: datetime the token when token will expire
         type: string
         format: date-time
+
+  AWSAccessCredentials:
+    description: Model representing aws keys or service role, service roles are currently ignored, but will be preferred option in the future
+    type: object
+    required:
+      - namespace
+      - buckets
+    properties:
+      secretAccessKey:
+        type: string
+        description: aws secret access key
+      accessKey:
+        type: string
+        description: aws access key
+      serviceRoleARN:
+        type: string
+        description: aws service role to use for access
+      buckets:
+        description: a whitelist of one or more buckets this key should access
+        type: array
+        items:
+          type: string
+          description: A bucket or path of a bucket that is granted access by these credentials
+          example: "s3://company-bucket-1/tiledb/"
+
 paths:
   /.stats:
     get:
@@ -1466,6 +1491,66 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /credentials/{namespace}/aws:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace
+        required: true
+        type: string
+    post:
+      tags:
+        - user
+        - organization
+      description: Add aws keys
+      operationId: addAWSAccessCredentials
+      parameters:
+        - name: awsAccessCredentials
+          in: body
+          description: aws access credentials to store for a namespace
+          schema:
+            $ref: "#/definitions/AWSAccessCredentials"
+          required: true
+      responses:
+        204:
+          description: AWS keys added successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - user
+        - organization
+      description: Update aws keys or associated buckets. This will update the key associations for each array in the namespace
+      operationId: updateAWSAccessCredentials
+      parameters:
+        - name: awsAccessCredentials
+          in: body
+          description: aws credentials to update
+          schema:
+            $ref: "#/definitions/AWSAccessCredentials"
+          required: true
+      responses:
+        204:
+          description: AWS keys updated successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - user
+        - organization
+      description: delete a AWS Access credentials in a namespace. This will likely cause arrays to become unreachable
+      operationId: deleteAWSAccessCredentials
+      responses:
+        204:
+          description: AWS credentials deleted
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
   /organization:
     post:
       tags:
