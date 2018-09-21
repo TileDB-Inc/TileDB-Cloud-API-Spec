@@ -1656,12 +1656,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
   /tokens:
-    parameters:
-      - name: username
-        in: path
-        description: username to manipulate
-        required: true
-        type: string
     get:
       tags:
         - user
