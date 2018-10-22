@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.12
+  version: 0.0.13
 
 produces:
 - application/json
@@ -108,36 +108,50 @@ definitions:
       - INCOMPLETE
       # UNINITIALIZED
       - UNINITIALIZED
-  Compressor:
-    description: TileDB compressor setting
+  EncryptionType:
+    description: TileDB Encryption type
     type: string
-    enum: &COMPRESSOR
-      # No compressor
-      - NO_COMPRESSION
+    enum: &ENCRYPTIONTYPE
+      # No encryption
+      - NO_ENCRYPTION
+      # AES-256-GCM encryption
+      - AES_256_GCM
+  FilterType:
+    description: TileDB filter types
+    type: string
+    enum: &FILTERTYPE
+       # No-op filter
+      - FILTER_NONE
       # Gzip compressor
-      - GZIP
+      - FILTER_GZIP
       # Zstandard compressor
-      - ZSTD
+      - FILTER_ZSTD
       # LZ4 compressor
-      - LZ4
-      # Blosc compressor using LZ
-      - BLOSC_LZ
-      # Blosc compressor using LZ4
-      - BLOSC_LZ4
-      # Blosc compressor using LZ4HC
-      - BLOSC_LZ4HC
-      # Blosc compressor using Snappy
-      - BLOSC_SNAPPY
-      # Blosc compressor using zlib
-      - BLOSC_ZLIB
-      # Blosc compressor using Zstandard
-      - BLOSC_ZSTD
+      - FILTER_LZ4
       # Run-length encoding compressor
-      - RLE
+      - FILTER_RLE
       # Bzip2 compressor
-      - BZIP2
+      - FILTER_BZIP2
       # Double-delta compressor
-      - DOUBLE_DELTA
+      - FILTER_DOUBLE_DELTA
+      # Bit width reduction filter.
+      - FILTER_BIT_WIDTH_REDUCTION
+      # Bitshuffle filter.
+      - FILTER_BITSHUFFLE
+      # Byteshuffle filter.
+      - FILTER_BYTESHUFFLE
+      # Positive-delta encoding filter.
+      - FILTER_POSITIVE_DELTA
+  FilterOption:
+    description: TileDB filter option
+    type: string
+    enum: &FILTEROPTION
+      # Compression level. Type: `int32_t`
+      - COMPRESSION_LEVEL
+      # Max window length for bit width reduction. Type: `uint32_t`
+      - BIT_WIDTH_MAX_WINDOW
+      # Max window length for positive-delta encoding. Type: `uint32_t`.
+      - POSITIVE_DELTA_MAX_WINDOW
   OrganizationRoles:
     description: role user has in organization
     type: string
@@ -205,15 +219,65 @@ definitions:
         items:
           type: number
           format: double
-
+  MaxBufferSize:
+    description: Max buffer size for attribute
+    type: object
+    properties:
+      bufferOffsetSize:
+        description: size of buffer offsets
+        type: number
+        format: uint64
+      bufferSize:
+        description: size of buffer
+        type: number
+        format: uint64
+  MapMaxBufferSizes:
+    description: Map for max buffer sizes
+    type: object
+    properties:
+      entries:
+        description: entries in map
+        type: array
+        items:
+          $ref: "#/definitions/MaxBufferSize"
+  Array:
+    description: Represents an open array
+    type: object
+    required:
+      - timestamp
+      - queryType
+      - uri
+    properties:
+      timestamp:
+        description: timestamp (epoch milliseconds) array is opened at
+        type: number
+        format: uint64
+        example: 1540471791873
+      encryptionKey:
+        description: Key to use for encryption
+        type: string
+      encryptionType:
+        description: Type of encryption used
+        $ref: "#/definitions/EncryptionType"
+      lastMaxBufferSizes:
+        description: Last max buffer size
+        $ref: "#/definitions/MapMaxBufferSizes"
+      lastMaxBufferSizesSubarray:
+        description: subarray's last max buffer size
+        $ref: "#/definitions/DomainArray"
+      queryType:
+        description: Array opened for query type
+        $ref: "#/definitions/Querytype"
+      uri:
+        description: Array uri
+        type: string
   Attribute:
     description: Attribute of array
     type: object
     required:
       - name
       - type
-      - compressor
-      - compressorLevel
+      - filterPipeline
       - cellValNum
     properties:
       name:
@@ -222,12 +286,8 @@ definitions:
         example: attribute1
       type:
         $ref: "#/definitions/Datatype"
-      compressor:
-        $ref: "#/definitions/Compressor"
-      compressorLevel:
-        description: Level setting for compression
-        type: integer
-        example: 3
+      filterPipeline:
+        $ref: "#/definitions/FilterPipeline"
       cellValNum:
         description: Attribute number of values per cell
         type: integer
@@ -310,6 +370,57 @@ definitions:
         description: Array of dimensions
         items:
           $ref: "#/definitions/Dimension"
+  Filter:
+    description: Filter
+    type: object
+    required:
+      - type
+    properties:
+      type:
+        description: Filter type
+        $ref: "#/definitions/FilterType"
+      data:
+        description: Filter data
+        type: object
+        properties:
+          int8:
+            type: integer
+            format: int8
+          uint8:
+            type: integer
+            format: uint8
+          int16:
+            type: integer
+            format: int16
+          uint16:
+            type: integer
+            format: uint16
+          int32:
+            type: integer
+            format: int32
+          uint32:
+            type: integer
+            format: uint32
+          int64:
+            type: integer
+            format: int64
+          uint64:
+            type: integer
+            format: uint64
+          float32:
+            type: integer
+            format: float32
+          float64:
+            type: integer
+            format: float64
+  FilterPipeline:
+    description: One or more filters to apply
+    type: object
+    properties:
+      filters:
+        type: array
+        items:
+          $ref: "#/definitions/Filter"
   ArraySchema:
     description: ArraySchema during creation or retrevial
     type: object
@@ -319,10 +430,8 @@ definitions:
       - tileOrder
       - cellOrder
       - capacity
-      - coordsCompression
-      - coordsCompressionLevel
-      - offsetCompression
-      - offsetCompressionLevel
+      - coordsFilterPipeline
+      - offsetFilterPipeline
       - domain
       - attributes
     properties:
@@ -353,22 +462,12 @@ definitions:
         type: integer
         format: uint64
         example: 100000
-      coordsCompression:
-        description: Type of compression for coordinates (enum)
-        $ref: "#/definitions/Compressor"
-        example: "GZIP"
-      coordsCompressionLevel:
-        description: Level of coordinates compression
-        type: integer
-        example: 3
-      offsetCompression:
-        description: Compression type of cell variable offsets (enum)
-        $ref: "#/definitions/Compressor"
-        example: "GZIP"
-      offsetCompressionLevel:
-        description: Compression level for cell variable offsets
-        type: integer
-        example: 3
+      coordsFilterPipeline:
+        description: Filter pipeline used for coordinates (enum)
+        $ref: "#/definitions/FilterPipeline"
+      offsetFilterPipeline:
+        description: Filter pipeline use for variable offsets (enum)
+        $ref: "#/definitions/FilterPipeline"
       domain:
         description: Domain of array
         $ref: "#/definitions/Domain"
@@ -462,8 +561,6 @@ definitions:
     type: object
     required:
       - type
-      - compressor
-      - compressorLevel
       - cellSize
       - dimNum
       - buffer
@@ -472,14 +569,6 @@ definitions:
         type: string
         $ref: "#/definitions/Datatype"
         example: "INT32"
-      compressor:
-        description: Type of compression for buffer (enum)
-        $ref: "#/definitions/Compressor"
-        example: "GZIP"
-      compressorLevel:
-        description: Level of buffer compression
-        type: integer
-        example: 3
       cellSize:
         description: Size of cells for writting
         type: integer
@@ -880,6 +969,7 @@ definitions:
       - buffers
       - layout
       - status
+      - array
     properties:
       type:
         $ref: "#/definitions/Querytype"
@@ -901,6 +991,9 @@ definitions:
       reader:
         description: reader contains data needed for continuation of reads
         $ref: "#/definitions/QueryReader"
+      array:
+        description: Represents an open array
+        $ref: "#/definitions/Array"
     x-go-type:
       import:
         package: "github.com/TileDB-Inc/TileDB-Go"

@@ -13,6 +13,29 @@ struct DomainArray {
   float64 @9 :List(Float64);
 }
 
+struct Array {
+  timestamp @0 :UInt64;
+  # timestamp array was opened
+
+  encryptionKey @1 :Data;
+  # Key used for encryption
+
+  encryptionType @2 :Text;
+  # Encryption type used for array
+
+  lastMaxBufferSizes @3 :MapMaxBufferSizes;
+  # Last max buffer sizes
+
+  lastMaxBufferSizesSubarray @4 :DomainArray;
+  # Last max buffer sizes subarray
+
+  queryType @5 :Text;
+  # Array opened for query type
+
+  uri @6 :Text;
+  # Array uri
+}
+
 struct ArraySchema {
 # ArraySchema during creation or retrevial
     arrayType @0 :Text;
@@ -27,28 +50,22 @@ struct ArraySchema {
     cellOrder @3 :Text;
     # Order of cells
 
-    coordsCompression @4 :Text;
+    coordsFilterPipeline @4 :FilterPipeline;
     # Type of compression for coordinates (enum)
 
-    coordsCompressionLevel @5 :Int32;
-    # Level of coordinates compression
-
-    domain @6 :Domain;
+    domain @5 :Domain;
     # Domain of array
 
-    offsetCompression @7 :Text;
+    offsetFilterPipeline @6 :FilterPipeline;
     # Compression type of cell variable offsets (enum)
 
-    offsetCompressionLevel @8 :Int32;
-    # Compression level for cell variable offsets
-
-    tileOrder @9 :Text;
+    tileOrder @7 :Text;
     # Tile order setting of array
 
-    uri @10 :Text;
+    uri @8 :Text;
     # URI of schema
 
-    version @11 :List(Int32);
+    version @9 :List(Int32);
     # file format version
 }
 
@@ -57,17 +74,14 @@ struct Attribute {
     cellValNum @0 :UInt32;
     # Attribute number of values per cell
 
-    compressor @1 :Text;
-    # Compressor type used for attribute compression (enum)
-
-    compressorLevel @2 :Int32;
-    # Level setting for compression
-
-    name @3 :Text;
+    name @1 :Text;
     # Attribute name
 
-    type @4 :Text;
+    type @2 :Text;
     # TileDB attribute datatype
+
+    filterPipeline @3 :FilterPipeline;
+    # TileDB FilterPipeline for Attribute
 }
 
 struct AttributeBuffer {
@@ -142,6 +156,31 @@ struct Error {
     message @1 :Text;
 }
 
+struct Filter {
+  type @0 :Text;
+  # filter type
+
+  data :union {
+    text @1 :Text;
+    bytes @2 :Data;
+    int8 @3 :Int8;
+    uint8 @4 :UInt8;
+    int16 @5 :Int16;
+    uint16 @6 :UInt16;
+    int32 @7 :Int32;
+    uint32 @8 :UInt32;
+    int64 @9 :Int64;
+    uint64 @10 :UInt64;
+    float32 @11 :Float32;
+    float64 @12 :Float64;
+  }
+  # filter data
+}
+
+struct FilterPipeline {
+  filters @0 :List(Filter);
+}
+
 struct Map(Key, Value) {
   entries @0 :List(Entry);
   struct Entry {
@@ -163,6 +202,22 @@ struct MapInt64 {
   struct Entry {
     key @0 :Text;
     value @1 :Int64;
+  }
+}
+
+struct MaxBufferSize {
+  bufferOffsetSize @0 :UInt64;
+  # size of buffer offsets
+
+  bufferSize @1 :UInt64;
+  # size of bufffer
+}
+
+struct MapMaxBufferSizes {
+  entries @0 :List(Entry);
+  struct Entry {
+    key @0 :Text;
+    value @1 :MaxBufferSize;
   }
 }
 
@@ -241,8 +296,11 @@ struct FragmentMetadata {
   # The sizes of the uncompressed variable tiles.
   # Meaningful only when there is compression for variable tiles.
 
-  version @27 :List(Int32);
+  version @27 :UInt32;
   # The version of the library that created this metadata.
+
+  timestamp @28 :UInt64;
+  # timestamp array was opened
 }
 
 struct GlobalWriteState {
@@ -262,29 +320,23 @@ struct Tile {
     cellSize @0 :UInt64;
     # Size of cells for writting
 
-    compressor @1 :Text;
-    # Type of compression for buffer (enum)
-
-    compressorLevel @2 :Int32;
-    # Level of buffer compression
-
-    dimNum @3 :UInt32;
+    dimNum @1 :UInt32;
     # number of dimensions
 
-    type @4 :Text;
+    type @2 :Text;
     # datatype of tile
 
     buffer :union {
-      int8 @5 :List(Int8);
-      uint8 @6 :List(UInt8);
-      int16 @7 :List(Int16);
-      uint16 @8 :List(UInt16);
-      int32 @9 :List(Int32);
-      uint32 @10 :List(UInt32);
-      int64 @11 :List(Int64);
-      uint64 @12 :List(UInt64);
-      float32 @13 :List(Float32);
-      float64 @14 :List(Float64);
+      int8 @3 :List(Int8);
+      uint8 @4 :List(UInt8);
+      int16 @5 :List(Int16);
+      uint16 @6 :List(UInt16);
+      int32 @7 :List(Int32);
+      uint32 @8 :List(UInt32);
+      int64 @9 :List(Int64);
+      uint64 @10 :List(UInt64);
+      float32 @11 :List(Float32);
+      float64 @12 :List(Float64);
     }
     # buffer of data
 }
@@ -360,6 +412,9 @@ struct Query {
 
     subarray @6 :DomainArray;
     # Limit dense operations to these dimensions
+
+    array @7 :Array;
+    # Represents an open array
 }
 
 struct NonEmptyDomain {
