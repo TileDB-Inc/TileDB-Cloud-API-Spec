@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.12
+  version: 0.0.13
 
 produces:
 - application/json
@@ -1741,12 +1741,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
   /tokens:
-    parameters:
-      - name: username
-        in: path
-        description: username to manipulate
-        required: true
-        type: string
     get:
       tags:
         - user
