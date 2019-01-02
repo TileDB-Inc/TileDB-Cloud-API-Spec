@@ -1136,6 +1136,22 @@ definitions:
         description: namespace array is in
         type: string
         example: "user1"
+      size:
+        description: size in bytes of array
+        type: number
+        format: uint64
+        example: 1024
+      lastAccessed:
+        description: Datetime array was last accessed in UTC
+        type: string
+        format: date-time
+      description:
+        description: description of array
+        type: string
+      name:
+        description: description of array
+        type: string
+        example: myarray1
 
   TokenRequest:
     description: A request from a user for an api token
