@@ -1153,6 +1153,18 @@ definitions:
         type: string
         example: myarray1
 
+  ArrayMetadataUpdate:
+    description: metadata of an array
+    type: object
+    properties:
+      description:
+        description: description of array
+        type: string
+      name:
+        description: description of array
+        type: string
+        example: myarray1
+
   TokenRequest:
     description: A request from a user for an api token
     properties:
@@ -1342,6 +1354,13 @@ paths:
       tags:
         - array
       operationId: registerArray
+      parameters:
+        - name: arrayMetadata
+          in: body
+          description: metadata associated with array
+          schema:
+            $ref: "#/definitions/ArrayMetadataUpdate"
+          required: true
       responses:
         204:
           description: schema registered successfully
