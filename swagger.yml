@@ -2,13 +2,14 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.13
+  version: 0.0.14
 
 produces:
 - application/json
 consumes:
 - application/json
 schemes:
+- http
 - https
 
 basePath: /v1
@@ -95,7 +96,7 @@ definitions:
       # Write
       - WRITE
   Querystatus:
-    description: STatus of query
+    description: Status of query
     type: string
     enum: &QUERYSTATUS
       # FAILED
@@ -1062,25 +1063,32 @@ definitions:
         maxLength: 20
         pattern: "^\\w+$"   # only allows alphanumeric characters
         description: username must be unique
+        example: "username"
       password:
         type: string
         minLength: 8
         description: password
+        example: "password"
       firstName:
         description: the user's real first name
         type: string
         minLength: 1
+        example: "Jane"
       lastName:
         description: the user's real last name
         type: string
         minLength: 1
+        example: "Doe"
       email:
+        description: the user's email
         type: string
+        example: "jane.doe@example.com"
       lastActivityDate:
         type: string
         format: date-time
         description: when the user last logged in (set by the server)
         readOnly: true
+        example: "1970-01-01 00:00:00"
       organizations:
         type: array
         description: Array of organizations a user is part of and their roles
@@ -1094,9 +1102,11 @@ definitions:
       username:
         description: username for user
         type: string
+        example: "username"
       organizationName:
         description: name of organization
         type: string
+        example: "MyOrganization"
       role:
         $ref: "#/definitions/OrganizationRoles"
 
@@ -1136,9 +1146,38 @@ definitions:
         description: namespace array is in
         type: string
         example: "user1"
+      size:
+        description: size in bytes of array
+        type: number
+        format: uint64
+        example: 1024
+      lastAccessed:
+        description: Datetime array was last accessed in UTC
+        type: string
+        format: date-time
+      description:
+        description: description of array
+        type: string
+      name:
+        description: description of array
+        type: string
+        example: myarray1
+
+  ArrayMetadataUpdate:
+    description: metadata of an array
+    type: object
+    properties:
+      description:
+        description: description of array
+        type: string
+      name:
+        description: description of array
+        type: string
+        example: myarray1
 
   TokenRequest:
     description: A request from a user for an api token
+    type: object
     properties:
       expires:
         description: Expiration date for token, if empty token defaults to 30 minutes
@@ -1219,6 +1258,10 @@ paths:
               stats:
                 description: string of stats from tiledb
                 type: string
+                example: 123
+          examples:
+            application/json:
+              stats: 123
         default:
           description: error response
           schema:
@@ -1309,6 +1352,51 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+  /arrays/{namespace}/{array}/metadata:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+    get:
+      description: get metadata on an array
+      tags:
+        - array
+      operationId: getArrayMetadata
+      responses:
+        200:
+          description: array metadata for an array
+          schema:
+            $ref: "#/definitions/ArrayMetadata"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      description: update metadata on an array
+      tags:
+        - array
+      operationId: updateArrayMetadata
+      parameters:
+        - name: arrayMetadata
+          in: body
+          description: array metadata to update
+          schema:
+            $ref: "#/definitions/ArrayMetadataUpdate"
+          required: true
+      responses:
+        204:
+          description: array metadata updated successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
   /arrays/{namespace}/{array}/register:
     parameters:
       - name: namespace
@@ -1326,6 +1414,13 @@ paths:
       tags:
         - array
       operationId: registerArray
+      parameters:
+        - name: arrayMetadata
+          in: body
+          description: metadata associated with array
+          schema:
+            $ref: "#/definitions/ArrayMetadataUpdate"
+          required: true
       responses:
         204:
           description: schema registered successfully
@@ -1729,7 +1824,7 @@ paths:
       description: update a organization
       operationId: updateOrganization
       parameters:
-        - name: organization
+        - name: organizationDetails
           in: body
           description: organization details to update
           schema:
