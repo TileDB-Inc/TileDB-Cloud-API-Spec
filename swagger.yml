@@ -1250,10 +1250,10 @@ definitions:
     properties:
       secret_access_key:
         type: string
-        description: aws secret access key
+        description: aws secret access key, never returned in get requests
       access_key:
         type: string
-        description: aws access key
+        description: aws access key, never returned in get requests
       service_role_arn:
         type: string
         description: aws service role to use for access
@@ -1737,6 +1737,21 @@ paths:
         description: namespace
         required: true
         type: string
+    get:
+      tags:
+        - user
+        - organization
+      description: Check if aws keys are set
+      operationId: checkAWSAccessCredentials
+      responses:
+        200:
+          description: AWS keys are set
+          schema:
+            $ref: "#/definitions/AWSAccessCredentials"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     post:
       tags:
         - user
