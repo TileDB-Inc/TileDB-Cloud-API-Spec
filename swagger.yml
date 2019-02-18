@@ -1251,7 +1251,7 @@ definitions:
       secret_access_key:
         type: string
         description: aws secret access key, never returned in get requests
-      access_key:
+      access_key_id:
         type: string
         description: aws access key, never returned in get requests
       service_role_arn:
