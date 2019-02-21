@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.15
+  version: 0.0.16
 
 produces:
 - application/json
@@ -21,7 +21,7 @@ securityDefinitions:
   ApiKeyAuth:
     type: apiKey
     in: header
-    name: X-TILEDB-REST-API-Key
+    name: X-TILEDB-REST-API-KEY
 
 security:
   - BasicAuth: []
