@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.16
+  version: 0.0.17
 
 produces:
 - application/json
@@ -1675,6 +1675,20 @@ paths:
           schema:
             $ref: "#/definitions/Error"
   /user:
+    get:
+      tags:
+        - user
+      description: get a user
+      operationId: getUser
+      responses:
+        200:
+          description: user details
+          schema:
+            $ref: "#/definitions/User"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     post:
       security: []
       tags:
@@ -1695,6 +1709,7 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
   /users/{username}:
     parameters:
       - name: username
@@ -1706,7 +1721,7 @@ paths:
       tags:
         - user
       description: get a user
-      operationId: getUser
+      operationId: getUserWithUsername
       responses:
         200:
           description: user details
