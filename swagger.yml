@@ -1079,6 +1079,10 @@ definitions:
     required:
       - username
     properties:
+      id:
+        type: string
+        description: unique id of user
+        example: "00000000-0000-0000-0000-000000000000"
       username:
         type: string
         minLength: 4
@@ -1122,6 +1126,14 @@ definitions:
     description: user in an organization
     type: object
     properties:
+      user_id:
+        type: string
+        description: unique id of user
+        example: "00000000-0000-0000-0000-000000000000"
+      organization_id:
+        type: string
+        description: unique id of organization
+        example: "00000000-0000-0000-0000-000000000000"
       username:
         description: username for user
         type: string
@@ -1139,6 +1151,10 @@ definitions:
     required:
       - name
     properties:
+      id:
+        type: string
+        description: unique id of organization
+        example: "00000000-0000-0000-0000-000000000000"
       name:
         type: string
         minLength: 4
@@ -1227,6 +1243,10 @@ definitions:
     description: A api token and its metadata
     type: object
     properties:
+      user_id:
+        type: string
+        description: unique id of organization
+        example: "00000000-0000-0000-0000-000000000000"
       token:
         description: A api token
         type: string
@@ -1407,7 +1427,7 @@ paths:
         - array
       operationId: updateArrayMetadata
       parameters:
-        - name: arrayMetadata
+        - name: array_metadata
           in: body
           description: array metadata to update
           schema:
@@ -1439,7 +1459,7 @@ paths:
         - array
       operationId: registerArray
       parameters:
-        - name: arrayMetadata
+        - name: array_metadata
           in: body
           description: metadata associated with array
           schema:
