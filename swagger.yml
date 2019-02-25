@@ -1714,7 +1714,7 @@ paths:
     parameters:
       - name: username
         in: path
-        description: username
+        description: username or id
         required: true
         type: string
     get:
@@ -1866,7 +1866,7 @@ paths:
     parameters:
       - name: organization
         in: path
-        description: organization name
+        description: organization name or id
         required: true
         type: string
     get:
