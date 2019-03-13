@@ -190,51 +190,61 @@ definitions:
     properties:
       int8:
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: int8
       uint8:
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: uint8
       int16:
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: int16
       uint16:
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: uint16
       int32:
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: int32
       uint32:
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: uint32
       int64:
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: int64
       uint64:
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: uint64
       float32:
         type: array
+        x-omitempty: true
         items:
           type: number
           format: float
       float64:
         type: array
+        x-omitempty: true
         items:
           type: number
           format: double
@@ -446,6 +456,7 @@ definitions:
     properties:
       filters:
         type: array
+        x-omitempty: true
         items:
           $ref: "#/definitions/Filter"
 
@@ -470,6 +481,7 @@ definitions:
       version:
         description: file format version
         type: array
+        x-omitempty: true
         items:
           type: integer
         example: [1,3,0]
@@ -502,6 +514,7 @@ definitions:
       attributes:
         description: Attributes of array
         type: array
+        x-omitempty: true
         items:
           $ref: "#/definitions/Attribute"
     x-go-type:
@@ -527,51 +540,61 @@ definitions:
           properties:
             int8:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int8
             uint8:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint8
             int16:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int16
             uint16:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint16
             int32:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int32
             uint32:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint32
             int64:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int64
             uint64:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint64
             float32:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: float32
             float64:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: float64
@@ -582,6 +605,7 @@ definitions:
         bufferOffset:
           description: offset buffer for variable length attributes
           type: array
+          x-omitempty: true
           items:
             type: integer
             format: uint64
@@ -615,51 +639,61 @@ definitions:
         properties:
           int8:
             type: array
+            x-omitempty: true
             items:
               type: integer
               format: int8
           uint8:
             type: array
+            x-omitempty: true
             items:
               type: integer
               format: uint8
           int16:
             type: array
+            x-omitempty: true
             items:
               type: integer
               format: int16
           uint16:
             type: array
+            x-omitempty: true
             items:
               type: integer
               format: uint16
           int32:
             type: array
+            x-omitempty: true
             items:
               type: integer
               format: int32
           uint32:
             type: array
+            x-omitempty: true
             items:
               type: integer
               format: uint32
           int64:
             type: array
+            x-omitempty: true
             items:
               type: integer
               format: int64
           uint64:
             type: array
+            x-omitempty: true
             items:
               type: integer
               format: uint64
           float32:
             type: array
+            x-omitempty: true
             items:
               type: integer
               format: float32
           float64:
             type: array
+            x-omitempty: true
             items:
               type: integer
               format: float64
@@ -691,71 +725,91 @@ definitions:
         properties:
           int8:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int8
           uint8:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint8
           int16:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int16
           uint16:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint16
           int32:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int32
           uint32:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint32
           int64:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int64
           uint64:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint64
           float32:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: float32
           float64:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: float64
@@ -771,6 +825,7 @@ definitions:
       fileSizes:
         description: Stores the size of each attribute file.
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: uint64
@@ -778,6 +833,7 @@ definitions:
       fileVarSizes:
         description: Stores the size of each variable attribute file.
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: uint64
@@ -799,6 +855,7 @@ definitions:
       nextTileOffsets:
         description: The offsets of the next tile for each attribute.
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: uint64
@@ -806,6 +863,7 @@ definitions:
       nextTileVarOffsets:
         description: The offsets of the next variable tile for each attribute.
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: uint64
@@ -823,8 +881,10 @@ definitions:
       tileOffsets:
         description:  The tile offsets in their corresponding attribute files.
         type: array
+        x-omitempty: true
         items:
           type: array
+          x-omitempty: true
           items:
             type: integer
             format: uint64
@@ -832,8 +892,10 @@ definitions:
       tileVarOffsets:
         description: The variable tile offsets in their corresponding attribute files.
         type: array
+        x-omitempty: true
         items:
           type: array
+          x-omitempty: true
           items:
             type: integer
             format: uint64
@@ -841,8 +903,10 @@ definitions:
       tileVarSizes:
         description: The sizes of the uncompressed variable tiles.
         type: array
+        x-omitempty: true
         items:
           type: array
+          x-omitempty: true
           items:
             type: integer
             format: uint64
@@ -850,6 +914,7 @@ definitions:
       version:
         description: The version of the library that created this metadata.
         type: array
+        x-omitempty: true
         items:
           type: integer
           format: uint64
@@ -911,71 +976,91 @@ definitions:
         properties:
           int8:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int8
           uint8:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint8
           int16:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int16
           uint16:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint16
           int32:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int32
           uint32:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint32
           int64:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: int64
           uint64:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: uint64
           float32:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: float32
           float64:
             type: array
+            x-omitempty: true
             items:
               type: array
+              x-omitempty: true
               items:
                 type: integer
                 format: float64
@@ -1305,6 +1390,7 @@ definitions:
       buckets:
         description: a whitelist of one or more buckets this key should access
         type: array
+        x-omitempty: true
         items:
           type: string
           description: A bucket or path of a bucket that is granted access by these credentials
@@ -1352,6 +1438,7 @@ paths:
           description: array metadata for all arrays in a namespace
           schema:
             type: array
+            x-omitempty: true
             items:
               $ref: "#/definitions/ArrayMetadata"
         default:
@@ -1602,6 +1689,7 @@ paths:
           description: get the max buffer size of a attribute
           schema:
             type: array
+            x-omitempty: true
             items:
               $ref: "#/definitions/MaxBufferSizeVar"
         default:
@@ -1643,6 +1731,7 @@ paths:
           description: get the max buffer size of a attribute
           schema:
             type: array
+            x-omitempty: true
             items:
               $ref: "#/definitions/MaxBufferSizeVar"
         default:
@@ -2120,6 +2209,7 @@ paths:
           description: Array of all user created tokens
           schema:
             type: array
+            x-omitempty: true
             items:
               $ref: "#/definitions/Token"
         default:
