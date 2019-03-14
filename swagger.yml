@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.19
+  version: 0.0.20
 
 produces:
 - application/json
@@ -183,6 +183,8 @@ definitions:
       - read
       # write
       - write
+      # edit metadata about array
+      - edit
 
   DomainArray:
     description: Domain object for an array of each type
@@ -1311,6 +1313,12 @@ definitions:
         description: description of array
         type: string
         example: myarray1
+      allowed_actions:
+        description: list of actions user is allowed to do on this array
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArrayActions"
 
   ArrayMetadataUpdate:
     description: metadata of an array
