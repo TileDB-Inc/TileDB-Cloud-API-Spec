@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.20
+  version: 0.0.21
 
 produces:
 - application/json
@@ -1284,6 +1284,10 @@ definitions:
         description: namespace being granted array access can be a user or organization
         type: string
         example: "MyOrganization"
+      namespace_type:
+        description: details on if the namespace is a organization or user
+        type: string
+        example: "organization"
 
   ArrayMetadata:
     description: metadata of an array
@@ -1618,6 +1622,24 @@ paths:
         description: name/uri of array that is url-encoded
         type: string
         required: true
+    get:
+      description: Get all sharing details of the array
+      tags:
+        - array
+      operationId: getArraySharingPolicies
+      responses:
+        200:
+          description: List of all specific sharing policies
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ArraySharing"
+        404:
+          description: Array does not exist or user does not have permissions to view array sharing policies
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     patch:
       description: Share an array with a user
       tags:
