@@ -1437,6 +1437,25 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /arrays:
+    get:
+      description: get all array metadata user has access to
+      tags:
+        - array
+      operationId: getAllArrayMetadata
+      responses:
+        200:
+          description: array metadata for all arrays user has access to
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/ArrayMetadata"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /arrays/{namespace}:
     parameters:
       - name: namespace
