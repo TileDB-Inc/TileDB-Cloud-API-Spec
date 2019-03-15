@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.21
+  version: 0.0.22
 
 produces:
 - application/json
@@ -1294,7 +1294,7 @@ definitions:
     type: object
     properties:
       uri:
-        description: uri of array (url encoded)
+        description: uri of array
         type: string
         example: "s3://bucket/array"
       namespace:
@@ -1336,7 +1336,7 @@ definitions:
         type: string
         example: myarray1
       uri:
-        description: uri of array (url encoded)
+        description: uri of array
         type: string
         example: "s3://bucket/array"
 
@@ -1432,6 +1432,25 @@ paths:
           examples:
             application/json:
               stats: "123"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays:
+    get:
+      description: get all array metadata user has access to
+      tags:
+        - array
+      operationId: getAllArrayMetadata
+      responses:
+        200:
+          description: array metadata for all arrays user has access to
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/ArrayMetadata"
         default:
           description: error response
           schema:
