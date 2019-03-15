@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.21
+  version: 0.0.22
 
 produces:
 - application/json
@@ -1294,7 +1294,7 @@ definitions:
     type: object
     properties:
       uri:
-        description: uri of array (url encoded)
+        description: uri of array
         type: string
         example: "s3://bucket/array"
       namespace:
@@ -1336,7 +1336,7 @@ definitions:
         type: string
         example: myarray1
       uri:
-        description: uri of array (url encoded)
+        description: uri of array
         type: string
         example: "s3://bucket/array"
 
