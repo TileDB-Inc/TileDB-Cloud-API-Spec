@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.22
+  version: 0.0.23
 
 produces:
 - application/json
@@ -379,10 +379,10 @@ definitions:
             format: uint64
           float32:
             type: integer
-            format: float32
+            format: float
           float64:
             type: integer
-            format: float64
+            format: double
 
   Domain:
     description: Domain of array
@@ -447,10 +447,10 @@ definitions:
             format: uint64
           float32:
             type: integer
-            format: float32
+            format: float
           float64:
             type: integer
-            format: float64
+            format: double
 
   FilterPipeline:
     description: One or more filters to apply
@@ -593,13 +593,13 @@ definitions:
               x-omitempty: true
               items:
                 type: integer
-                format: float32
+                format: float
             float64:
               type: array
               x-omitempty: true
               items:
                 type: integer
-                format: float64
+                format: double
             char:
               type: array
               items:
@@ -692,13 +692,13 @@ definitions:
             x-omitempty: true
             items:
               type: integer
-              format: float32
+              format: float
           float64:
             type: array
             x-omitempty: true
             items:
               type: integer
-              format: float64
+              format: double
 
   FragmentMetadata:
     description: FragmentMetadata for GLOBAL_ORDER writes
@@ -805,7 +805,7 @@ definitions:
               x-omitempty: true
               items:
                 type: integer
-                format: float32
+                format: float
           float64:
             type: array
             x-omitempty: true
@@ -814,7 +814,7 @@ definitions:
               x-omitempty: true
               items:
                 type: integer
-                format: float64
+                format: double
 
       dense:
         description: True if the fragment is dense, and false if it is sparse.
@@ -1056,7 +1056,7 @@ definitions:
               x-omitempty: true
               items:
                 type: integer
-                format: float32
+                format: float
           float64:
             type: array
             x-omitempty: true
@@ -1065,7 +1065,7 @@ definitions:
               x-omitempty: true
               items:
                 type: integer
-                format: float64
+                format: double
 
   QueryReader:
     description: Read struct (can't be called reader due to class name conflict)
