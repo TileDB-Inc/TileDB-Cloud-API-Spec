@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.23
+  version: 0.0.24
 
 produces:
 - application/json
@@ -1392,17 +1392,21 @@ definitions:
     description: Model representing aws keys or service role, service roles are currently ignored, but will be preferred option in the future
     type: object
     required:
-      - buckets
+      - secret_access_key
+      - access_key_id
     properties:
       secret_access_key:
         type: string
         description: aws secret access key, never returned in get requests
       access_key_id:
         type: string
-        description: aws access key, never returned in get requests
+        description: aws access key
       service_role_arn:
         type: string
         description: aws service role to use for access
+      name:
+        type: string
+        description: human readable name
       buckets:
         description: a whitelist of one or more buckets this key should access
         type: array
@@ -1411,6 +1415,17 @@ definitions:
           type: string
           description: A bucket or path of a bucket that is granted access by these credentials
           example: "s3://company-bucket-1/tiledb/"
+      created_at:
+        description: Time when udf dependencies was created (rfc3339)
+        type: string
+        format: date-time
+        readOnly: true
+      updated_at:
+        description: Time when udf dependencies was last updated (rfc3339)
+        type: string
+        format: date-time
+        readOnly: true
+
 
 paths:
   /.stats:
