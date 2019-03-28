@@ -1415,6 +1415,17 @@ definitions:
           type: string
           description: A bucket or path of a bucket that is granted access by these credentials
           example: "s3://company-bucket-1/tiledb/"
+      created_at:
+        description: Time when udf dependencies was created (rfc3339)
+        type: string
+        format: date-time
+        readOnly: true
+      updated_at:
+        description: Time when udf dependencies was last updated (rfc3339)
+        type: string
+        format: date-time
+        readOnly: true
+
 
 paths:
   /.stats:
