@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.24
+  version: 0.0.25
 
 produces:
 - application/json
@@ -1354,17 +1354,6 @@ definitions:
         type: string
         example: myToken
 
-  TokenRevocation:
-    description: A request to revoke a user api token, user can pass either the token name or the token itself
-    type: object
-    properties:
-      token:
-        description: Token to revoke
-        type: string
-      name:
-        description: Name of token to revoke
-        type: string
-
   Token:
     description: A api token and its metadata
     type: object
@@ -2285,19 +2274,18 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /tokens/revoke:
-    post:
+  /tokens/{token}:
+    parameters:
+      - name: token
+        in: path
+        description: token name or token itself
+        required: true
+        type: string
+    delete:
       tags:
         - user
       description: revoke an authorization token
       operationId: revokeToken
-      parameters:
-        - name: tokenRevocation
-          in: body
-          description: "revocation object"
-          schema:
-            $ref: "#/definitions/TokenRevocation"
-          required: false
       responses:
         204:
           description: revokation successfully
