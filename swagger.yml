@@ -1358,10 +1358,6 @@ definitions:
     description: A api token and its metadata
     type: object
     properties:
-      user_id:
-        type: string
-        description: unique id of organization
-        example: "00000000-0000-0000-0000-000000000000"
       token:
         description: A api token
         type: string
