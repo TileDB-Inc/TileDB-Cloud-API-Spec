@@ -1213,6 +1213,7 @@ definitions:
         example: "1970-01-01 00:00:00"
       organizations:
         type: array
+        x-omitempty: true
         description: Array of organizations a user is part of and their roles
         readOnly: true
         items:
@@ -1265,6 +1266,7 @@ definitions:
         type: string
       users:
         type: array
+        x-omitempty: true
         items:
           $ref: '#/definitions/OrganizationUser'
 
@@ -1275,6 +1277,7 @@ definitions:
       actions:
         description: List of permitted actions
         type: array
+        x-omitempty: true
         items:
           $ref: "#/definitions/ArrayActions"
         example:
@@ -1651,6 +1654,7 @@ paths:
           description: List of all specific sharing policies
           schema:
             type: array
+            x-omitempty: true
             items:
               $ref: "#/definitions/ArraySharing"
         404:
