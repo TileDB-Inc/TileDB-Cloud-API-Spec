@@ -306,55 +306,16 @@ struct FragmentMetadata {
   # timestamp array was opened
 }
 
-struct GlobalWriteState {
-# state of global writes
-    cellsWritten @0 :MapInt64;
-    # Cells written so far in global write
-
-    lastTiles @1 :Map(Text, List(Tile));
-    # last tiles written to disk
-
-    fragmentMetadata @2 :FragmentMetadata;
-}
-
-struct Tile {
-# last tile written
-
-    cellSize @0 :UInt64;
-    # Size of cells for writting
-
-    dimNum @1 :UInt32;
-    # number of dimensions
-
-    type @2 :Text;
-    # datatype of tile
-
-    buffer :union {
-      int8 @3 :List(Int8);
-      uint8 @4 :List(UInt8);
-      int16 @5 :List(Int16);
-      uint16 @6 :List(UInt16);
-      int32 @7 :List(Int32);
-      uint32 @8 :List(UInt32);
-      int64 @9 :List(Int64);
-      uint64 @10 :List(UInt64);
-      float32 @11 :List(Float32);
-      float64 @12 :List(Float64);
-    }
-    # buffer of data
-}
 
 struct Writer {
   # Write struct
-  globalWriteState @0 :GlobalWriteState;
+  checkCoordDups @0 :Bool;
 
-  checkCoordDups @1 :Bool;
+  dedupCoords @1 :Bool;
 
-  dedupCoords @2 :Bool;
+  initialized @2 :Bool;
 
-  initialized @3 :Bool;
-
-  fragmentUri @4 :Text;
+  fragmentUri @3 :Text;
 }
 
 struct ReadState {
