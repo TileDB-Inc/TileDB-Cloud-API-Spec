@@ -224,89 +224,6 @@ struct MapMaxBufferSizes {
   }
 }
 
-struct FragmentMetadata {
-  attributeIdxMap @0 :MapUInt32;
-  # Maps an attribute to an index used in the various vector class members.
-
-  attributeUriMap @1 :Map(Text, Text);
-  # Maps an attribute to its absolute URI within this fragment.
-
-  attributeVarUriMap @2 :Map(Text, Text);
-  # Maps an attribute to its absolute '_var' URI within this fragment.
-
-  boundingCoords :union {
-      int8 @3 :List(List(Int8));
-      uint8 @4 :List(List(UInt8));
-      int16 @5 :List(List(Int16));
-      uint16 @6 :List(List(UInt16));
-      int32 @7 :List(List(Int32));
-      uint32 @8 :List(List(UInt32));
-      int64 @9 :List(List(Int64));
-      uint64 @10 :List(List(UInt64));
-      float32 @11 :List(List(Float32));
-      float64 @12 :List(List(Float64));
-    }
-  # A vector storing the first and last coordinates of each tile.
-
-  dense @13 :Bool;
-  # True if the fragment is dense, and false if it is sparse.
-
-  domain @14 :DomainArray;
-  # The (expanded) domain in which the fragment is constrained. "Expanded"
-  # means that the domain is enlarged minimally to coincide with tile
-  # boundaries (if there is a tile grid imposed by tile extents). Note that the
-  # type of the domain must be the same as the type of the array coordinates.
-
-
-  fileSizes @15 :List(UInt64);
-  # Stores the size of each attribute file.
-
-  fileVarSizes @16 :List(UInt64);
-  # Stores the size of each variable attribute file.
-
-  fragmentUri @17 :Text;
-  # The uri of the fragment the metadata belongs to.
-
-  lastTileCellNum @18 :UInt64;
-  # Number of cells in the last tile (meaningful only in the sparse case).
-
-  mbrs @19 :Void;
-  # The MBRs (applicable only to the sparse case with irregular tiles).
-
-  nextTileOffsets @20 :List(UInt64);
-  # The offsets of the next tile for each attribute.
-
-  nextTileVarOffsets @21 :List(UInt64);
-  # The offsets of the next variable tile for each attribute.
-
-  nonEmptyDomain @22 :DomainArray;
-  # The non-empty domain in which the fragment is constrained. Note that the
-  # type of the domain must be the same as the type of the array coordinates.
-
-  tileIndexBase @23 :UInt64;
-  # The tile index base which is added to tile indices in setter functions.
-  # Only used in global order writes.
-
-  tileOffsets @24 :List(List(UInt64));
-  # The tile offsets in their corresponding attribute files. Meaningful only
-  # when there is compression.
-
-  tileVarOffsets @25 :List(List(UInt64));
-  # The variable tile offsets in their corresponding attribute files.
-  # Meaningful only for variable-sized tiles.
-
-  tileVarSizes @26 :List(List(UInt64));
-  # The sizes of the uncompressed variable tiles.
-  # Meaningful only when there is compression for variable tiles.
-
-  version @27 :UInt32;
-  # The version of the library that created this metadata.
-
-  timestamp @28 :UInt64;
-  # timestamp array was opened
-}
-
-
 struct Writer {
   # Write struct
   checkCoordDups @0 :Bool;
@@ -348,10 +265,7 @@ struct ReadState {
 struct QueryReader {
   # Read struct (can't be called reader due to class name conflict)
 
-  fragmentMetadata @0 :List(FragmentMetadata);
-  # The fragment metadata.
-
-  readState @1 :ReadState;
+  readState @0 :ReadState;
   # To handle incomplete read queries.
 }
 
