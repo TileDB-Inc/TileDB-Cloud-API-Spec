@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.25
+  version: 0.0.26
 
 produces:
 - application/json
@@ -1191,16 +1191,11 @@ definitions:
         minLength: 8
         description: password
         example: "password"
-      firstname:
-        description: the user's real first name
+      name:
+        description: the user's full, real name
         type: string
         minLength: 1
-        example: "Jane"
-      lastname:
-        description: the user's real last name
-        type: string
-        minLength: 1
-        example: "Doe"
+        example: "Jane Doe"
       email:
         description: the user's email
         type: string
