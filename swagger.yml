@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.26
+  version: 0.0.27
 
 produces:
 - application/json
@@ -1692,6 +1692,12 @@ paths:
         description: name/uri of array that is url-encoded
         type: string
         required: true
+      - name: Content-Type
+        in: header
+        description: Content Type of input and return mime
+        type: string
+        required: true
+        default: application/json
     get:
       description: get the non empty domain of an array
       tags:
@@ -1731,6 +1737,12 @@ paths:
         description: attribute to fetch max buffer on, all non-variable sized attributes returned if not passed
         type: string
         required: false
+      - name: Content-Type
+        in: header
+        description: Content Type of input and return mime
+        type: string
+        required: true
+        default: application/json
     get:
       description: get the max buffer size needed for a subarray and a given attribute (or all non-variable sized attribute)
       tags:
@@ -1773,6 +1785,12 @@ paths:
         description: attribute to fetch max buffer on, all variable sized attributes returned if not passed
         type: string
         required: false
+      - name: Content-Type
+        in: header
+        description: Content Type of input and return mime
+        type: string
+        required: true
+        default: application/json
     get:
       description: get the max buffer size needed for a subarray and a given attribute (or all variable sized attribute)
       tags:
@@ -1790,6 +1808,7 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
   /arrays/{namespace}/{array}/query/submit:
     parameters:
       - name: namespace
