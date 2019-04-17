@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.26
+  version: 0.0.27
 
 produces:
 - application/json
@@ -1200,6 +1200,9 @@ definitions:
         description: the user's email
         type: string
         example: "jane.doe@example.com"
+      logo:
+        description: the user's logo
+        type: string
       last_activity_date:
         type: string
         format: date-time
