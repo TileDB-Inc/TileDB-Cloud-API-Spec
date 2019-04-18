@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.27
+  version: 0.0.28
 
 produces:
 - application/json
@@ -1547,6 +1547,31 @@ paths:
       responses:
         204:
           description: schema created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/{namespace}/{array}/deregister:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+    delete:
+      description: deregister a array
+      tags:
+        - array
+      operationId: deregisterArray
+      responses:
+        204:
+          description: deregistered array successful
         default:
           description: error response
           schema:
