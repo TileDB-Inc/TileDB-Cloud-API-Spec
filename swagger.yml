@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.28
+  version: 0.0.29
 
 produces:
 - application/json
@@ -77,6 +77,23 @@ definitions:
       - STRING_UCS4
       # This can be any datatype. Must store (type tag, value) pairs.
       - ANY
+
+  ActivityEventType:
+    description: Type of activity logged
+    type: string
+    enum: &ACTIVITYEVENTTYPE
+      # read operation
+      - read
+      # write operation
+      - write
+      # create operation
+      - create
+      # delete operation
+      - delete
+      # register operation
+      - register
+      # deregister operation
+      - deregister
 
   Layout:
     description: Layout of array
@@ -1157,6 +1174,32 @@ definitions:
         format: uint64
         example: 4
 
+  ArrayActivityLog:
+    description: Actvity of an Array
+    type: object
+    properties:
+      event_at:
+        description: time event took place (RFC3339)
+        type: string
+        format: date-time
+      action:
+        description: Type of the event
+        $ref: "#/definitions/ActivityEventType"
+      username:
+        description: User who performed action
+        type: string
+        example: "user1"
+      bytes_sent:
+        description: Bytes sent to client
+        type: integer
+        format: uint64
+        example: 1073741824
+      bytes_received:
+        description: Bytes recieved from client
+        type: integer
+        format: uint64
+        example: 1073741824
+
   Error:
     type:  object
     required:
@@ -1547,6 +1590,48 @@ paths:
       responses:
         204:
           description: schema created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/{namespace}/{array}/activity:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: start
+        in: query
+        description: Start time of window of fetch logs, unix epoch in seconds
+        type: integer
+        format: uint64
+        required: false
+      - name: end
+        in: query
+        description: End time of window of fetch logs, unix epoch in seconds
+        type: integer
+        format: uint64
+        required: false
+    get:
+      description: get array activity logs
+      tags:
+        - array
+      operationId: arrayActivityLog
+      responses:
+        200:
+          description: log of array activity
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/ArrayActivityLog"
         default:
           description: error response
           schema:
