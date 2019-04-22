@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.29
+  version: 0.0.30
 
 produces:
 - application/json
@@ -1367,6 +1367,9 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/ArrayActions"
+      logo:
+        description: logo (base64 encoded) for the array. Optional
+        type: string
 
   ArrayMetadataUpdate:
     description: metadata of an array
