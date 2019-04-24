@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.30
+  version: 0.0.31
 
 produces:
 - application/json
@@ -1370,6 +1370,10 @@ definitions:
       logo:
         description: logo (base64 encoded) for the array. Optional
         type: string
+      type:
+        description: Array type (dense, key-value, sparse)
+        type: string
+        example: sparse
 
   ArrayMetadataUpdate:
     description: metadata of an array
