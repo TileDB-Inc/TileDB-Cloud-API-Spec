@@ -84,26 +84,13 @@ struct Attribute {
     # TileDB FilterPipeline for Attribute
 }
 
-struct AttributeBuffer {
-# Represents an attribute buffer
-    type @0 :Text;
-
-    buffer :union {
-      int8 @1 :List(Int8);
-      uint8 @2 :List(UInt8);
-      int16 @3 :List(Int16);
-      uint16 @4 :List(UInt16);
-      int32 @5 :List(Int32);
-      uint32 @6 :List(UInt32);
-      int64 @7 :List(Int64);
-      uint64 @8 :List(UInt64);
-      float32 @9 :List(Float32);
-      float64 @10 :List(Float64);
-      char @11 :Data;
-    }
-
-    # offset buffer for variable length attributes
-    bufferOffset @12 :List(UInt64);
+struct AttributeBufferHeader {
+# Represents an attribute buffer header information
+    attributeName @0 :Text;
+    type @1 :Text;
+    datatypeSizeInBytes @2 :UInt64;
+    bufferSizeInBytes @3 :UInt64;
+    offsetBufferSizeInBytes @4 :UInt64;
 }
 
 struct Dimension {
@@ -392,8 +379,8 @@ struct QueryReader {
 }
 
 struct Query {
-    buffers @0 :Map(Text, AttributeBuffer);
-    # map of buffers
+    buffers @0 :List(AttributeBufferHeader);
+    # array of buffers
 
     layout @1 :Text;
     # query write layout
@@ -415,6 +402,15 @@ struct Query {
 
     array @7 :Array;
     # Represents an open array
+
+    totalNumOfBytesInBuffers @8: UInt64;
+    # Total number of bytes in fixed size attribute buffers
+
+    totalNumOfBytesInVarBuffers @9: UInt64;
+    # Total number of bytes in variable size attribute buffers
+
+    totalNumOfBytesInOffsets @10: UInt64;
+    # Total number of bytes for offsets in variable size attribute buffers
 }
 
 struct NonEmptyDomain {
