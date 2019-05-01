@@ -89,11 +89,15 @@ struct Attribute {
 
 struct AttributeBufferHeader {
 # Represents an attribute buffer header information
-    attributeName @0 :Text;
-    type @1 :Text;
-    datatypeSizeInBytes @2 :UInt64;
-    bufferSizeInBytes @3 :UInt64;
-    offsetBufferSizeInBytes @4 :UInt64;
+
+    name @0 :Text;
+    # Attribute name
+
+    fixedLenBufferSizeInBytes @1 :UInt64;
+    # Number of bytes in the fixed-length attribute data buffer
+
+    varLenBufferSizeInBytes @2 :UInt64;
+    # Number of bytes in the var-length attribute data buffer
 }
 
 struct Dimension {
@@ -257,8 +261,8 @@ struct QueryReader {
 }
 
 struct Query {
-    buffers @0 :List(AttributeBufferHeader);
-    # array of buffers
+    attributeBufferHeaders @0 :List(AttributeBufferHeader);
+    # list of attribute buffer headers
 
     layout @1 :Text;
     # query write layout
@@ -281,14 +285,11 @@ struct Query {
     array @7 :Array;
     # Represents an open array
 
-    totalNumOfBytesInBuffers @8: UInt64;
+    totalFixedLengthBufferBytes @8: UInt64;
     # Total number of bytes in fixed size attribute buffers
 
-    totalNumOfBytesInVarBuffers @9: UInt64;
+    totalVarLenBufferBytes @9: UInt64;
     # Total number of bytes in variable size attribute buffers
-
-    totalNumOfBytesInOffsets @10: UInt64;
-    # Total number of bytes for offsets in variable size attribute buffers
 }
 
 struct NonEmptyDomain {
