@@ -546,34 +546,23 @@ definitions:
     description: Represents an attribute buffer header information
     type: object
     required:
-      - attributeName
-      - bufferSizeInBytes
-      - offsetBufferSizeInBytes
+      - name
+      - fixedLenBufferSizeInBytes
+      - varLenBufferSizeInBytes
 
     properties:
-      attributeName:
+      name:
         description: Attribute name
         type: string
-        example: attribute1
-      type:
-        description: Datatype of buffer
-        $ref: "#/definitions/Datatype"
-        example: "INT32" 
-      datatypeSizeInBytes:
-        description: Size of datatype in bytes.
+        example: "attribute1"
+      fixedLenBufferSizeInBytes:
+        description: Number of bytes in the fixed-length attribute data buffer (offsets for var-len attributes)
         type: integer
         format: uint64
-        example: 4
-      bufferSizeInBytes:
-        description: Total size of buffer in bytes.
+      varLenBufferSizeInBytes:
+        description: Number of bytes in the var-length attribute data buffer
         type: integer
         format: uint64
-        example: 1024
-      offsetBufferSizeInBytes:
-        description: Total size of offset buffer in bytes.
-        type: integer
-        format: uint64
-        example: 0
 
   Writer:
     type: object
@@ -709,13 +698,12 @@ definitions:
     type: object
     required:
       - type
-      - buffers
+      - attributeBufferHeaders
       - layout
       - status
       - array
-      - totalNumOfBytesInBuffers
-      - totalNumOfBytesInVarBuffers
-      - totalNumOfBytesInOffsets
+      - totalFixedLengthBufferBytes
+      - totalVarLenBufferBytes
     properties:
       type:
         $ref: "#/definitions/Querytype"
@@ -726,8 +714,8 @@ definitions:
       subarray:
         description: Limit dense operations to these dimensions
         $ref: "#/definitions/DomainArray"
-      buffers:
-        description: array of buffer headers
+      attributeBufferHeaders:
+        description: List of attribute buffer headers
         type: array
         x-omitempty: true
         items:
@@ -741,21 +729,14 @@ definitions:
       array:
         description: Represents an open array
         $ref: "#/definitions/Array"
-      totalNumOfBytesInBuffers:
+      totalFixedLengthBufferBytes:
         description: Total number of bytes in fixed size attribute buffers.
         type: integer
         format: uint64
-        example: 1024
-      totalNumOfBytesInVarBuffers:
+      totalVarLenBufferBytes:
         description: Total number of bytes in variable size attribute buffers.
         type: integer
         format: uint64
-        example: 0
-      totalNumOfBytesInOffsets:
-        description: Total number of bytes for offsets in variable size attribute buffers.
-        type: integer
-        format: uint64
-        example: 0
     x-go-type:
       import:
         package: "github.com/TileDB-Inc/TileDB-Go"
