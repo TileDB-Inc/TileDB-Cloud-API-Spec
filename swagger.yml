@@ -2044,7 +2044,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /api/arrays/{namespace}/{array}/sample:
+  /arrays/{namespace}/{array}/sample:
     parameters:
       - name: namespace
         in: path
