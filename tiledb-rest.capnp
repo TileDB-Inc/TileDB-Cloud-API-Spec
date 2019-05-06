@@ -227,28 +227,22 @@ struct Writer {
 }
 
 struct ReadState {
-
   initialized @0 :Bool;
   # True if the reader has been initialized.
 
   overflowed @1 :Bool;
   # `True` if the query produced results that could not fit in some buffer.
 
-  curSubarrayPartition @2 :DomainArray;
+  unsplittable @2 :Bool;
+  # True if the current subarray partition is unsplittable.
+
+  subarray @3 :DomainArray;
+  # The original subarray set by the user.
+
+  curSubarrayPartition @4 :DomainArray;
   # The current subarray the query is constrained on.
 
-  subarrayPartitions :union {
-    int8 @3 :List(List(Int8));
-    uint8 @4 :List(List(UInt8));
-    int16 @5 :List(List(Int16));
-    uint16 @6 :List(List(UInt16));
-    int32 @7 :List(List(Int32));
-    uint32 @8 :List(List(UInt32));
-    int64 @9 :List(List(Int64));
-    uint64 @10 :List(List(UInt64));
-    float32 @11 :List(List(Float32));
-    float64 @12 :List(List(Float64));
-  }
+  subarrayPartitions @5 :List(DomainArray);
   # A list of subarray partitions. The head of the list is the partition
   # to be split next.
 }
