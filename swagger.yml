@@ -1399,6 +1399,10 @@ definitions:
         description: uri of array
         type: string
         example: "s3://bucket/array"
+      access_credential_name:
+        description: access credential name
+        type: string
+        example: s3default
 
   TokenRequest:
     description: A request from a user for an api token
