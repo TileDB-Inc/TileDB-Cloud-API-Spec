@@ -191,11 +191,9 @@ struct Writer {
   # Write struct
   checkCoordDups @0 :Bool;
 
-  dedupCoords @1 :Bool;
+  checkCoordOOB @1 :Bool;
 
-  initialized @2 :Bool;
-
-  fragmentUri @3 :Text;
+  dedupCoords @2 :Bool;
 }
 
 struct ReadState {
