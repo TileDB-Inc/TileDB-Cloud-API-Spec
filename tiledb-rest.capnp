@@ -20,22 +20,10 @@ struct Array {
   timestamp @0 :UInt64;
   # timestamp array was opened
 
-  encryptionKey @1 :Data;
-  # Key used for encryption
-
-  encryptionType @2 :Text;
-  # Encryption type used for array
-
-  lastMaxBufferSizes @3 :MapMaxBufferSizes;
-  # Last max buffer sizes
-
-  lastMaxBufferSizesSubarray @4 :DomainArray;
-  # Last max buffer sizes subarray
-
-  queryType @5 :Text;
+  queryType @1 :Text;
   # Array opened for query type
 
-  uri @6 :Text;
+  uri @2 :Text;
   # Array uri
 }
 
@@ -199,22 +187,6 @@ struct MapInt64 {
   }
 }
 
-struct MaxBufferSize {
-  bufferOffsetSize @0 :UInt64;
-  # size of buffer offsets
-
-  bufferSize @1 :UInt64;
-  # size of bufffer
-}
-
-struct MapMaxBufferSizes {
-  entries @0 :List(Entry);
-  struct Entry {
-    key @0 :Text;
-    value @1 :MaxBufferSize;
-  }
-}
-
 struct Writer {
   # Write struct
   checkCoordDups @0 :Bool;
@@ -294,17 +266,4 @@ struct NonEmptyDomain {
 
   isEmpty @1 :Bool;
   # Is non-empty domain really empty?
-}
-
-struct MaxBufferSizeVar {
-  # used to return max buffer/var buffer sizes for an array
-
-  attribute @0 :Text;
-  # name of attribute
-
-  bufferSize @1 :UInt64;
-  # max size of a buffer for given subarray
-
-  bufferOffsetSize @2 :UInt64;
-  # max buffer offset for a given subarray
 }
