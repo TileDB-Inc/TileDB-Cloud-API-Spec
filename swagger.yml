@@ -525,12 +525,10 @@ definitions:
     properties:
       checkCoordDups:
         type: boolean
+      checkCoordOOB:
+        type: boolean
       dedupCoords:
         type: boolean
-      initialized:
-        type: boolean
-      fragmentUri:
-        type: string
 
   ReadState:
     description: state for reads
