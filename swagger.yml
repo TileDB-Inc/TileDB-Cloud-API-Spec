@@ -1827,6 +1827,10 @@ paths:
         type: string
         required: true
         default: application/json
+      - name: X-Payer
+        in: header
+        description: Name of organization or user who should be charged for this request
+        type: string
     get:
       description: get the non empty domain of an array
       tags:
@@ -1872,6 +1876,10 @@ paths:
         type: string
         required: true
         default: application/json
+      - name: X-Payer
+        in: header
+        description: Name of organization or user who should be charged for this request
+        type: string
     get:
       description: get the max buffer size needed for a subarray and a given attribute (or all non-variable sized attribute)
       tags:
@@ -1920,6 +1928,10 @@ paths:
         type: string
         required: true
         default: application/json
+      - name: X-Payer
+        in: header
+        description: Name of organization or user who should be charged for this request
+        type: string
     get:
       description: get the max buffer size needed for a subarray and a given attribute (or all variable sized attribute)
       tags:
@@ -1961,6 +1973,10 @@ paths:
         type: string
         required: true
         default: application/json
+      - name: X-Payer
+        in: header
+        description: Name of organization or user who should be charged for this request
+        type: string
     post:
       description: send a query to run against a specified array/URI registered to a group/project
       tags:
@@ -2014,6 +2030,10 @@ paths:
         type: string
         required: true
         default: application/json
+      - name: X-Payer
+        in: header
+        description: Name of organization or user who should be charged for this request
+        type: string
     post:
       description: send a query to run against a specified array/URI registered to a group/project
       tags:
