@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.0.31
+  version: 0.1.0
 
 produces:
 - application/json
@@ -132,15 +132,6 @@ definitions:
       # UNINITIALIZED
       - UNINITIALIZED
 
-  EncryptionType:
-    description: TileDB Encryption type
-    type: string
-    enum: &ENCRYPTIONTYPE
-      # No encryption
-      - NO_ENCRYPTION
-      # AES-256-GCM encryption
-      - AES_256_GCM
-
   FilterType:
     description: TileDB filter types
     type: string
@@ -268,29 +259,6 @@ definitions:
           type: number
           format: double
 
-  MaxBufferSize:
-    description: Max buffer size for attribute
-    type: object
-    properties:
-      bufferOffsetSize:
-        description: size of buffer offsets
-        type: number
-        format: uint64
-      bufferSize:
-        description: size of buffer
-        type: number
-        format: uint64
-
-  MapMaxBufferSizes:
-    description: Map for max buffer sizes
-    type: object
-    properties:
-      entries:
-        description: entries in map
-        type: array
-        items:
-          $ref: "#/definitions/MaxBufferSize"
-
   Array:
     description: Represents an open array
     type: object
@@ -304,18 +272,6 @@ definitions:
         type: number
         format: uint64
         example: 1540471791873
-      encryptionKey:
-        description: Key to use for encryption
-        type: string
-      encryptionType:
-        description: Type of encryption used
-        $ref: "#/definitions/EncryptionType"
-      lastMaxBufferSizes:
-        description: Last max buffer size
-        $ref: "#/definitions/MapMaxBufferSizes"
-      lastMaxBufferSizesSubarray:
-        description: subarray's last max buffer size
-        $ref: "#/definitions/DomainArray"
       queryType:
         description: Array opened for query type
         $ref: "#/definitions/Querytype"
@@ -480,7 +436,7 @@ definitions:
           $ref: "#/definitions/Filter"
 
   ArraySchema:
-    description: ArraySchema during creation or retrevial
+    description: ArraySchema during creation or retrieval
     type: object
     required:
       - version
@@ -542,437 +498,37 @@ definitions:
         alias: "tiledb"
       type: "ArraySchema"
 
-  AttributeBuffer:
-    description: Represents an attribute buffer
+  AttributeBufferHeader:
+    description: Represents an attribute buffer header information
     type: object
     required:
-      - buffer
-    properties:
-        type:
-          description: Datatype of buffer
-          type: string
-          $ref: "#/definitions/Datatype"
-          example: "INT32"
-        buffer:
-          description: value buffer
-          type: object
-          properties:
-            int8:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int8
-            uint8:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint8
-            int16:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int16
-            uint16:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint16
-            int32:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int32
-            uint32:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint32
-            int64:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int64
-            uint64:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint64
-            float32:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: float
-            float64:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: double
-            char:
-              type: array
-              items:
-                type: string
-        bufferOffset:
-          description: offset buffer for variable length attributes
-          type: array
-          x-omitempty: true
-          items:
-            type: integer
-            format: uint64
+      - name
+      - fixedLenBufferSizeInBytes
+      - varLenBufferSizeInBytes
 
-  Tile:
-    description: last tile written
-    type: object
-    required:
-      - type
-      - cellSize
-      - dimNum
-      - buffer
     properties:
-      type:
+      name:
+        description: Attribute name
         type: string
-        $ref: "#/definitions/Datatype"
-        example: "INT32"
-      cellSize:
-        description: Size of cells for writting
+        example: "attribute1"
+      fixedLenBufferSizeInBytes:
+        description: Number of bytes in the fixed-length attribute data buffer (offsets for var-len attributes)
         type: integer
         format: uint64
-        example: "10"
-      dimNum:
-        description: number of dimensions
+      varLenBufferSizeInBytes:
+        description: Number of bytes in the var-length attribute data buffer
         type: integer
         format: uint64
-        example: "10"
-      buffer:
-        description: buffer of data
-        type: object
-        properties:
-          int8:
-            type: array
-            x-omitempty: true
-            items:
-              type: integer
-              format: int8
-          uint8:
-            type: array
-            x-omitempty: true
-            items:
-              type: integer
-              format: uint8
-          int16:
-            type: array
-            x-omitempty: true
-            items:
-              type: integer
-              format: int16
-          uint16:
-            type: array
-            x-omitempty: true
-            items:
-              type: integer
-              format: uint16
-          int32:
-            type: array
-            x-omitempty: true
-            items:
-              type: integer
-              format: int32
-          uint32:
-            type: array
-            x-omitempty: true
-            items:
-              type: integer
-              format: uint32
-          int64:
-            type: array
-            x-omitempty: true
-            items:
-              type: integer
-              format: int64
-          uint64:
-            type: array
-            x-omitempty: true
-            items:
-              type: integer
-              format: uint64
-          float32:
-            type: array
-            x-omitempty: true
-            items:
-              type: integer
-              format: float
-          float64:
-            type: array
-            x-omitempty: true
-            items:
-              type: integer
-              format: double
-
-  FragmentMetadata:
-    description: FragmentMetadata for GLOBAL_ORDER writes
-    type: object
-    properties:
-      attributeIdxMap:
-        description: Maps an attribute to an index used in the various vector class members.
-        type: object
-        additionalProperties:
-          type: integer
-          format: uint32
-
-      attributeUriMap:
-        description: Maps an attribute to its absolute URI within this fragment.
-        type: object
-        additionalProperties:
-          type: string
-      attributeVarUriMap:
-        description: Maps an attribute to its absolute '_var' URI within this fragment.
-        type: object
-        additionalProperties:
-          type: string
-      boundingCoords:
-        description: A vector storing the first and last coordinates of each tile.
-        type: object
-        properties:
-          int8:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int8
-          uint8:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint8
-          int16:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int16
-          uint16:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint16
-          int32:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int32
-          uint32:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint32
-          int64:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int64
-          uint64:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint64
-          float32:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: float
-          float64:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: double
-
-      dense:
-        description: True if the fragment is dense, and false if it is sparse.
-        type: boolean
-
-      domain:
-        description: The (expanded) domain in which the fragment is constrained.
-        $ref: "#/definitions/DomainArray"
-
-      fileSizes:
-        description: Stores the size of each attribute file.
-        type: array
-        x-omitempty: true
-        items:
-          type: integer
-          format: uint64
-
-      fileVarSizes:
-        description: Stores the size of each variable attribute file.
-        type: array
-        x-omitempty: true
-        items:
-          type: integer
-          format: uint64
-
-      fragmentUri:
-        description: The uri of the fragment the metadata belongs to.
-        type: string
-
-      lastTileCellNum:
-        description: Number of cells in the last tile (meaningful only in the sparse case).
-        type: integer
-        format: uint64
-
-      mbrs:
-        # The MBRs (applicable only to the sparse case with irregular tiles).
-        description: ignored for now
-        type: object
-
-      nextTileOffsets:
-        description: The offsets of the next tile for each attribute.
-        type: array
-        x-omitempty: true
-        items:
-          type: integer
-          format: uint64
-
-      nextTileVarOffsets:
-        description: The offsets of the next variable tile for each attribute.
-        type: array
-        x-omitempty: true
-        items:
-          type: integer
-          format: uint64
-
-      nonEmptyDomain:
-        description: The non-empty domain in which the fragment is constrained.
-        $ref: "#/definitions/DomainArray"
-
-      tileIndexBase:
-        # Only used in global order writes.
-        description: The tile index base which is added to tile indices in setter functions.
-        type: integer
-        format: uint64
-
-      tileOffsets:
-        description:  The tile offsets in their corresponding attribute files.
-        type: array
-        x-omitempty: true
-        items:
-          type: array
-          x-omitempty: true
-          items:
-            type: integer
-            format: uint64
-
-      tileVarOffsets:
-        description: The variable tile offsets in their corresponding attribute files.
-        type: array
-        x-omitempty: true
-        items:
-          type: array
-          x-omitempty: true
-          items:
-            type: integer
-            format: uint64
-
-      tileVarSizes:
-        description: The sizes of the uncompressed variable tiles.
-        type: array
-        x-omitempty: true
-        items:
-          type: array
-          x-omitempty: true
-          items:
-            type: integer
-            format: uint64
-
-      version:
-        description: The version of the library that created this metadata.
-        type: array
-        x-omitempty: true
-        items:
-          type: integer
-          format: uint64
-
-  GlobalWriteState:
-    description: state of global writes
-    type: object
-    required:
-      - cellsWritten
-      - lastTiles
-    properties:
-      lastTiles:
-        description: last tiles written to disk
-        type: array
-        items:
-          $ref: "#/definitions/Tile"
-      cellsWritten:
-        description: Cells written so far in global write
-        type: object
-        additionalProperties:
-          type: integer
-          format: uint64
-      fragmentMetadata:
-        description: FragmentMetadata for GLOBAL_ORDER writes
-        $ref: "#/definitions/FragmentMetadata"
 
   Writer:
     type: object
     properties:
-      globalWriteState:
-        $ref: "#/definitions/GlobalWriteState"
       checkCoordDups:
+        type: boolean
+      checkCoordOOB:
         type: boolean
       dedupCoords:
         type: boolean
-      initialized:
-        type: boolean
-      fragmentUri:
-        type: string
 
   ReadState:
     description: state for reads
@@ -981,9 +537,18 @@ definitions:
       initialized:
         description: True if the reader has been initialized.
         type: boolean
+
       overflowed:
         description: True if the query produced results that could not fit in some buffer.
         type: boolean
+
+      unsplittable:
+        description: True if the current subarray partition is unsplittable.
+        type: boolean
+
+      subarray:
+        description: The original subarray set by the user.
+        $ref: "#/definitions/DomainArray"
 
       curSubarrayPartition:
         description: The current subarray the query is constrained on.
@@ -991,108 +556,15 @@ definitions:
 
       subarrayPartitions:
         description: A list of subarray partitions. The head of the list is the partition to be split next.
-        type: object
-        properties:
-          int8:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int8
-          uint8:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint8
-          int16:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int16
-          uint16:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint16
-          int32:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int32
-          uint32:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint32
-          int64:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: int64
-          uint64:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: uint64
-          float32:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: float
-          float64:
-            type: array
-            x-omitempty: true
-            items:
-              type: array
-              x-omitempty: true
-              items:
-                type: integer
-                format: double
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/DomainArray"
 
   QueryReader:
     description: Read struct (can't be called reader due to class name conflict)
     type: object
     properties:
-      fragmentMetadata:
-        description: The fragment metadata.
-        type: array
-        items:
-          $ref: '#/definitions/FragmentMetadata'
       readState:
         description: To handle incomplete read queries.
         $ref: '#/definitions/ReadState'
@@ -1101,10 +573,12 @@ definitions:
     type: object
     required:
       - type
-      - buffers
+      - attributeBufferHeaders
       - layout
       - status
       - array
+      - totalFixedLengthBufferBytes
+      - totalVarLenBufferBytes
     properties:
       type:
         $ref: "#/definitions/Querytype"
@@ -1115,11 +589,12 @@ definitions:
       subarray:
         description: Limit dense operations to these dimensions
         $ref: "#/definitions/DomainArray"
-      buffers:
-        description: map of buffers
-        type: object
-        additionalProperties:
-          $ref: "#/definitions/AttributeBuffer"
+      attributeBufferHeaders:
+        description: List of attribute buffer headers
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/AttributeBufferHeader"
       writer:
         description: writer contains data needed for continuation of global write order queries
         $ref: "#/definitions/Writer"
@@ -1129,6 +604,14 @@ definitions:
       array:
         description: Represents an open array
         $ref: "#/definitions/Array"
+      totalFixedLengthBufferBytes:
+        description: Total number of bytes in fixed size attribute buffers.
+        type: integer
+        format: uint64
+      totalVarLenBufferBytes:
+        description: Total number of bytes in variable size attribute buffers.
+        type: integer
+        format: uint64
     x-go-type:
       import:
         package: "github.com/TileDB-Inc/TileDB-Go"
@@ -1151,28 +634,6 @@ definitions:
         description: Is non-empty domain really empty?
         type: boolean
         example: False
-
-  MaxBufferSizeVar:
-    description: Used to return max buffer/var buffer sizes for an array
-    type: object
-    required:
-      - attribute
-      - bufferSize
-    properties:
-      attribute:
-        description: name of attribute
-        type: string
-        example: "attribute1"
-      bufferSize:
-        description: max size of a buffer for given subarray
-        type: integer
-        format: uint64
-        example: 100
-      bufferOffsetSize:
-        description: max buffer offset for a given subarray
-        type: integer
-        format: uint64
-        example: 4
 
   ArrayActivityLog:
     description: Actvity of an Array
@@ -1841,110 +1302,6 @@ paths:
           description: get the non empty domain of an array
           schema:
             $ref: "#/definitions/NonEmptyDomain"
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
-  /arrays/{namespace}/{array}/max_buffer_size:
-    parameters:
-      - name: namespace
-        in: path
-        description: namespace array is in (an organization name or user's username)
-        type: string
-        required: true
-      - name: array
-        in: path
-        description: name/uri of array that is url-encoded
-        type: string
-        required: true
-      - name: subarray
-        in: query
-        description: subarray to find max buffer size on
-        type: array
-        items:
-          type: number
-        required: true
-      - name: attribute
-        in: query
-        description: attribute to fetch max buffer on, all non-variable sized attributes returned if not passed
-        type: string
-        required: false
-      - name: Content-Type
-        in: header
-        description: Content Type of input and return mime
-        type: string
-        required: true
-        default: application/json
-      - name: X-Payer
-        in: header
-        description: Name of organization or user who should be charged for this request
-        type: string
-    get:
-      description: get the max buffer size needed for a subarray and a given attribute (or all non-variable sized attribute)
-      tags:
-        - array
-      operationId: getArrayMaxBufferSize
-      responses:
-        200:
-          description: get the max buffer size of a attribute
-          schema:
-            type: array
-            x-omitempty: true
-            items:
-              $ref: "#/definitions/MaxBufferSizeVar"
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
-  /arrays/{namespace}/{array}/max_buffer_size_var:
-    parameters:
-      - name: namespace
-        in: path
-        description: namespace array is in (an organization name or user's username)
-        type: string
-        required: true
-      - name: array
-        in: path
-        description: name/uri of array that is url-encoded
-        type: string
-        required: true
-      - name: subarray
-        in: query
-        description: subarray to find max variable-legnth buffer size on
-        type: array
-        items:
-          type: number
-        required: true
-      - name: attribute
-        in: query
-        description: attribute to fetch max buffer on, all variable sized attributes returned if not passed
-        type: string
-        required: false
-      - name: Content-Type
-        in: header
-        description: Content Type of input and return mime
-        type: string
-        required: true
-        default: application/json
-      - name: X-Payer
-        in: header
-        description: Name of organization or user who should be charged for this request
-        type: string
-    get:
-      description: get the max buffer size needed for a subarray and a given attribute (or all variable sized attribute)
-      tags:
-        - array
-      operationId: getArrayMaxBufferSizeVar
-      responses:
-        200:
-          description: get the max buffer size of a attribute
-          schema:
-            type: array
-            x-omitempty: true
-            items:
-              $ref: "#/definitions/MaxBufferSizeVar"
         default:
           description: error response
           schema:
