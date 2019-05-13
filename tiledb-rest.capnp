@@ -1,7 +1,7 @@
 @0xb57d9224b587d87f;
 
 using Cxx = import "/capnp/c++.capnp";
-$Cxx.namespace("tiledb::rest::capnp");
+$Cxx.namespace("tiledb::sm::serialization::capnp");
 
 struct DomainArray {
   int8 @0 :List(Int8);
