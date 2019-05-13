@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.1.0
+  version: 0.1.1
 
 produces:
 - application/json
@@ -193,6 +193,34 @@ definitions:
       - write
       # edit metadata about array
       - edit
+
+
+  NamespaceActions:
+    description: actions a user can take on an organization
+    type: string
+    enum: &NAMESPACEACTIONS
+       # Fetch details about namespace and read arrays in namespace
+      - read
+      # Write to arrays inside namespace
+      - write
+      # Create arrays inside namespace
+      - create
+      # Delete/Deregister arrays in namespace
+      - delete
+      # Edit array metadata
+      - edit
+      # View logs for array
+      - read_array_logs
+      # View logs for job
+      - read_job_logs
+      # View change logs for namespace
+      - read_object_logs
+      # Run job
+      - run_job
+      # Delete an organization
+      - delete_organization
+      # Edit organization details
+      - edit_organization
 
   DomainArray:
     description: Domain object for an array of each type
@@ -729,6 +757,12 @@ definitions:
         readOnly: true
         items:
           $ref: "#/definitions/OrganizationUser"
+      allowed_actions:
+        description: list of actions user is allowed to do on this organization
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/NamespaceActions"
 
   OrganizationUser:
     description: user in an organization
@@ -752,6 +786,12 @@ definitions:
         example: "MyOrganization"
       role:
         $ref: "#/definitions/OrganizationRoles"
+      allowed_actions:
+        description: list of actions user is allowed to do on this organization
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/NamespaceActions"
 
   Organization:
     description: Organization
@@ -780,6 +820,12 @@ definitions:
         x-omitempty: true
         items:
           $ref: '#/definitions/OrganizationUser'
+      allowed_actions:
+        description: list of actions user is allowed to do on this organization
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/NamespaceActions"
 
   ArraySharing:
     description: details for sharing a given array
