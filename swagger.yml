@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.1.1
+  version: 0.1.2
 
 produces:
 - application/json
@@ -700,9 +700,6 @@ definitions:
 
   Error:
     type:  object
-    required:
-      - message
-      - code
     properties:
       code:
         type: integer
