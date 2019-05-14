@@ -654,10 +654,8 @@ definitions:
       - isEmpty
     properties:
       nonEmptyDomain:
-        type: object
-        description: Non Empty Dmoain of array
-        additionalProperties:
-          $ref: "#/definitions/DomainArray"
+        description: Non Empty Domain of array
+        $ref: "#/definitions/DomainArray"
       isEmpty:
         description: Is non-empty domain really empty?
         type: boolean
