@@ -259,8 +259,8 @@ struct Query {
 struct NonEmptyDomain {
   # object representing a non-empty domain
 
-  nonEmptyDomain @0 :Map(Text, DomainArray);
-  # Non Empty Dmoain of array
+  nonEmptyDomain @0 :DomainArray;
+  # Non-empty domain of array
 
   isEmpty @1 :Bool;
   # Is non-empty domain really empty?
