@@ -265,3 +265,21 @@ struct NonEmptyDomain {
   isEmpty @1 :Bool;
   # Is non-empty domain really empty?
 }
+
+struct MaxBufferSize {
+  # object representing a max buffer size of an attribute
+
+  attribute @0: Text;
+  # name of attribute
+
+  offsetBytes @1: UInt64;
+  # max buffer size (in bytes) of offset buffer
+
+  dataBytes @2: UInt64;
+  # max buffer size (in bytes) of data buffer
+}
+
+struct MaxBufferSizes {
+  maxBufferSizes @0: List(MaxBufferSize);
+  # a list of max buffer sizes, one per attribute
+}

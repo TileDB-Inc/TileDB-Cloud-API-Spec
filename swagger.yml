@@ -661,6 +661,36 @@ definitions:
         type: boolean
         example: False
 
+  MaxBufferSize:
+    type: object
+    description: object representing max buffer size of an attribute
+    required:
+      - attribute
+      - offsetBytes
+      - dataBytes
+    properties:
+      attribute:
+        description: name of attribute
+        type: string
+      offsetBytes:
+        description: max buffer size (in bytes) of offset buffer
+        type: integer
+        format: uint64
+      dataBytes:
+        description: max buffer size (in bytes) of data buffer
+        type: integer
+        format: uint64
+
+  MaxBufferSizes:
+    type: object
+    description: a list of max buffer sizes, one per attribute
+    properties:
+      maxBufferSizes:
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/MaxBufferSize"
+
   ArrayActivityLog:
     description: Actvity of an Array
     type: object
