@@ -1378,6 +1378,48 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /arrays/{namespace}/{array}/max_buffer_sizes:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: subarray
+        in: query
+        description: CSV string of subarray to get max buffer sizes for
+        type: string
+        required: true
+      - name: Content-Type
+        in: header
+        description: Content Type of input and return mime
+        type: string
+        required: true
+        default: application/json
+      - name: X-Payer
+        in: header
+        description: Name of organization or user who should be charged for this request
+        type: string
+    get:
+      description: get the max buffer sizes of an array for a subarray
+      tags:
+        - array
+      operationId: getArrayMaxBufferSizes
+      responses:
+        200:
+          description: get the max buffer sizes of an array for a subarray
+          schema:
+            $ref: "#/definitions/MaxBufferSizes"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /arrays/{namespace}/{array}/query/submit:
     parameters:
       - name: namespace
