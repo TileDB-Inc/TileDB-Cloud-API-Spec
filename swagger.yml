@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.1.2
+  version: 0.1.3
 
 produces:
 - application/json
@@ -1119,6 +1119,8 @@ paths:
           description: get ArraySchema
           schema:
             $ref: "#/definitions/ArraySchema"
+        404:
+          description: Array not found
         default:
           description: error response
           schema:
@@ -1180,6 +1182,8 @@ paths:
             x-omitempty: true
             items:
               $ref: "#/definitions/ArrayActivityLog"
+        404:
+          description: Array not found
         default:
           description: error response
           schema:
@@ -1232,6 +1236,8 @@ paths:
           description: array metadata for an array
           schema:
             $ref: "#/definitions/ArrayMetadata"
+        404:
+          description: Array not found
         default:
           description: error response
           schema:
@@ -1373,6 +1379,8 @@ paths:
           description: get the non empty domain of an array
           schema:
             $ref: "#/definitions/NonEmptyDomain"
+        404:
+          description: Array not found
         default:
           description: error response
           schema:
@@ -1472,6 +1480,8 @@ paths:
             $ref: "#/definitions/Query"
         204:
           description: query completed successfully with no return
+        404:
+          description: Array not found
         default:
           description: error response
           schema:
@@ -1529,6 +1539,8 @@ paths:
             $ref: "#/definitions/Query"
         204:
           description: query completed successfully with no return
+        404:
+          description: Array not found
         default:
           description: error response
           schema:
@@ -1588,6 +1600,8 @@ paths:
                 - "test3"
                 - "test4"
                 - "test5"
+        404:
+          description: Array not found
         default:
           description: error response
           schema:
