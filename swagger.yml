@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.1.2
+  version: 0.1.3
 
 produces:
 - application/json
@@ -878,6 +878,10 @@ definitions:
     description: metadata of an array
     type: object
     properties:
+      id:
+        description: unique id of registered array
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
       uri:
         description: uri of array
         type: string
