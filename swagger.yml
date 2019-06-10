@@ -1165,12 +1165,14 @@ paths:
         type: integer
         format: uint64
         required: false
+        default: seven days ago
       - name: end
         in: query
         description: End time of window of fetch logs, unix epoch in seconds
         type: integer
         format: uint64
         required: false
+        default: current utc timestamp
     get:
       description: get array activity logs
       tags:
