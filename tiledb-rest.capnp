@@ -194,34 +194,95 @@ struct Writer {
   checkCoordOOB @1 :Bool;
 
   dedupCoords @2 :Bool;
+
+  subarray @3 :DomainArray;
+  # Old-style (single-range) subarray for dense writes
+}
+
+struct SubarrayRanges {
+  # A set of 1D ranges for a subarray
+
+  type @0 :Text;
+  # Datatype of the ranges
+
+  hasDefaultRange @1:Bool;
+  # True if the range is the default range
+
+  buffer @2 :Data;
+  # The bytes of the ranges
+}
+
+struct Subarray {
+  # A Subarray
+
+  layout @0 :Text;
+  # The layout of the subarray
+
+  ranges @1 :List(SubarrayRanges);
+  # List of 1D ranges, one per dimension
+}
+
+struct SubarrayPartitioner {
+  # The subarray partitioner
+
+  struct PartitionInfo {
+    subarray @0 :Subarray;
+    start @1 :UInt64;
+    end @2 :UInt64;
+    splitMultiRange @3 :Bool;
+  }
+
+  struct State {
+    start @0 :UInt64;
+    end @1 :UInt64;
+    singleRange @2 :List(Subarray);
+    multiRange @3 :List(Subarray);
+  }
+
+  subarray @0 :Subarray;
+  # The subarray the partitioner will iterate on to produce partitions.
+
+  budget @1 :List(AttributeBufferSize);
+  # Result size budget (in bytes) for all attributes.
+
+  current @2 :PartitionInfo;
+  # The current partition info
+
+  state @3 :State;
+  # The state information for the remaining partitions to be produced
+
+  memoryBudget @4 :UInt64;
+  # The memory budget for the fixed-sized attributes and the offsets of the var-sized attributes
+
+  memoryBudgetVar @5 :UInt64;
+  # The memory budget for the var-sized attributes
 }
 
 struct ReadState {
-  initialized @0 :Bool;
-  # True if the reader has been initialized.
-
-  overflowed @1 :Bool;
+  overflowed @0 :Bool;
   # `True` if the query produced results that could not fit in some buffer.
 
-  unsplittable @2 :Bool;
+  unsplittable @1 :Bool;
   # True if the current subarray partition is unsplittable.
 
-  subarray @3 :DomainArray;
-  # The original subarray set by the user.
+  initialized @2 :Bool;
+  # True if the reader has been initialized
 
-  curSubarrayPartition @4 :DomainArray;
-  # The current subarray the query is constrained on.
-
-  subarrayPartitions @5 :List(DomainArray);
-  # A list of subarray partitions. The head of the list is the partition
-  # to be split next.
+  subarrayPartitioner @3 :SubarrayPartitioner;
+  # The subarray partitioner
 }
 
 struct QueryReader {
   # Read struct (can't be called reader due to class name conflict)
 
-  readState @0 :ReadState;
-  # To handle incomplete read queries.
+  layout @0 :Text;
+  # The layout of the cells in the result of the subarray
+
+  subarray @1 :Subarray;
+  # The query subarray.
+
+  readState @2 :ReadState;
+  # Read state of reader
 }
 
 struct Query {
@@ -243,16 +304,13 @@ struct Query {
     reader @5 :QueryReader;
     # reader contains data needed for continuation of incomplete reads
 
-    subarray @6 :DomainArray;
-    # Limit dense operations to these dimensions
-
-    array @7 :Array;
+    array @6 :Array;
     # Represents an open array
 
-    totalFixedLengthBufferBytes @8: UInt64;
+    totalFixedLengthBufferBytes @7: UInt64;
     # Total number of bytes in fixed size attribute buffers
 
-    totalVarLenBufferBytes @9: UInt64;
+    totalVarLenBufferBytes @8: UInt64;
     # Total number of bytes in variable size attribute buffers
 }
 
@@ -266,20 +324,20 @@ struct NonEmptyDomain {
   # Is non-empty domain really empty?
 }
 
-struct MaxBufferSize {
-  # object representing a max buffer size of an attribute
+struct AttributeBufferSize {
+  # object representing a buffer size of an attribute
 
   attribute @0: Text;
   # name of attribute
 
   offsetBytes @1: UInt64;
-  # max buffer size (in bytes) of offset buffer
+  # size (in bytes) of offset buffer
 
   dataBytes @2: UInt64;
-  # max buffer size (in bytes) of data buffer
+  # size (in bytes) of data buffer
 }
 
 struct MaxBufferSizes {
-  maxBufferSizes @0: List(MaxBufferSize);
+  maxBufferSizes @0: List(AttributeBufferSize);
   # a list of max buffer sizes, one per attribute
 }
