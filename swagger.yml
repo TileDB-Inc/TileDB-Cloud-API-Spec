@@ -557,6 +557,99 @@ definitions:
         type: boolean
       dedupCoords:
         type: boolean
+      subarray:
+        $ref: "#/definitions/DomainArray"
+
+  SubarrayRanges:
+    description: A set of 1D ranges for a subarray
+    type: object
+    properties:
+      type:
+        $ref: "#/definitions/Datatype"
+      hasDefaultRange:
+        description: True if the range is the default range
+        type: boolean
+      buffer:
+        description: The bytes of the ranges
+        type: array
+        items:
+          type: integer
+          format: uint8
+
+  Subarray:
+    description: A Subarray
+    type: object
+    properties:
+      layout:
+        $ref: "#/definitions/Layout"
+      ranges:
+        description: List of 1D ranges, one per dimension
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/SubarrayRanges"
+
+  SubarrayPartitioner:
+    description: The subarray partitioner
+    type: object
+    properties:
+      subarray:
+        $ref: "#/definitions/Subarray"
+      budget:
+        description: Result size budget (in bytes) for all attributes.
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/AttributeBufferSize"
+      current:
+        description: The current partition info
+        type: object
+        properties:
+          subarray:
+            $ref: "#/definitions/Subarray"
+          start:
+            description: PartitionInfo start
+            type: integer
+            format: uint64
+          end:
+            description: PartitionInfo end
+            type: integer
+            format: uint64
+          splitMultiRange:
+            description: PartitionInfo splitMultiRange
+            type: boolean
+      state:
+        description: The state information for the remaining partitions to be produced
+        type: object
+        properties:
+          start:
+            description: State start
+            type: integer
+            format: uint64
+          end:
+            description: State end
+            type: integer
+            format: uint64
+          singleRange:
+            description: State singleRange
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/Subarray"
+          multiRange:
+            description: State multiRange
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/Subarray"
+      memoryBudget:
+        description: The memory budget for the fixed-sized attributes and the offsets of the var-sized attributes
+        type: integer
+        format: uint64
+      memoryBudgetVar:
+        description: The memory budget for the var-sized attributes
+        type: integer
+        format: uint64
 
   ReadState:
     description: state for reads
@@ -574,25 +667,17 @@ definitions:
         description: True if the current subarray partition is unsplittable.
         type: boolean
 
-      subarray:
-        description: The original subarray set by the user.
-        $ref: "#/definitions/DomainArray"
-
-      curSubarrayPartition:
-        description: The current subarray the query is constrained on.
-        $ref: "#/definitions/DomainArray"
-
-      subarrayPartitions:
-        description: A list of subarray partitions. The head of the list is the partition to be split next.
-        type: array
-        x-omitempty: true
-        items:
-          $ref: "#/definitions/DomainArray"
+      subarrayPartitioner:
+        $ref: "#/definitions/SubarrayPartitioner"
 
   QueryReader:
     description: Read struct (can't be called reader due to class name conflict)
     type: object
     properties:
+      layout:
+        $ref: "#/definitions/Layout"
+      subarray:
+        $ref: "#/definitions/Subarray"
       readState:
         description: To handle incomplete read queries.
         $ref: '#/definitions/ReadState'
@@ -614,9 +699,6 @@ definitions:
         $ref: "#/definitions/Layout"
       status:
         $ref: "#/definitions/Querystatus"
-      subarray:
-        description: Limit dense operations to these dimensions
-        $ref: "#/definitions/DomainArray"
       attributeBufferHeaders:
         description: List of attribute buffer headers
         type: array
@@ -661,9 +743,9 @@ definitions:
         type: boolean
         example: False
 
-  MaxBufferSize:
+  AttributeBufferSize:
     type: object
-    description: object representing max buffer size of an attribute
+    description: object representing buffer size of an attribute
     required:
       - attribute
       - offsetBytes
@@ -673,11 +755,11 @@ definitions:
         description: name of attribute
         type: string
       offsetBytes:
-        description: max buffer size (in bytes) of offset buffer
+        description: buffer size (in bytes) of offset buffer
         type: integer
         format: uint64
       dataBytes:
-        description: max buffer size (in bytes) of data buffer
+        description: buffer size (in bytes) of data buffer
         type: integer
         format: uint64
 
@@ -689,7 +771,7 @@ definitions:
         type: array
         x-omitempty: true
         items:
-          $ref: "#/definitions/MaxBufferSize"
+          $ref: "#/definitions/AttributeBufferSize"
 
   ArrayActivityLog:
     description: Actvity of an Array
