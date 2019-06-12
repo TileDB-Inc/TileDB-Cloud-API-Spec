@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.1.4
+  version: 0.1.5
 
 produces:
 - application/json
@@ -1249,18 +1249,16 @@ paths:
         required: true
       - name: start
         in: query
-        description: Start time of window of fetch logs, unix epoch in seconds
+        description: "Start time of window of fetch logs, unix epoch in seconds (default: seven days ago)"
         type: integer
         format: uint64
         required: false
-        default: seven days ago
       - name: end
         in: query
-        description: End time of window of fetch logs, unix epoch in seconds
+        description: "End time of window of fetch logs, unix epoch in seconds (default: current utc timestamp)"
         type: integer
         format: uint64
         required: false
-        default: current utc timestamp
     get:
       description: get array activity logs
       tags:
@@ -1836,7 +1834,7 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-    
+
   /credentials/{namespace}/aws/{name}:
     parameters:
       - name: namespace
