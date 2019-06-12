@@ -997,6 +997,9 @@ definitions:
       logo:
         description: logo (base64 encoded) for the array. Optional
         type: string
+      access_credentials_name:
+        description: the name of the access credentials to use. if unset, the default credentials will be used
+        type: string
       type:
         description: Array type (dense, key-value, sparse)
         type: string
@@ -1070,6 +1073,9 @@ definitions:
       name:
         type: string
         description: human readable name
+      is_default:
+        type: boolean
+        description: true if this is the default credential to be used within this namespace
       buckets:
         description: a whitelist of one or more buckets this key should access
         type: array
@@ -1803,7 +1809,9 @@ paths:
         200:
           description: AWS keys are set
           schema:
-            $ref: "#/definitions/AWSAccessCredentials"
+            type: array
+            items:
+              $ref: "#/definitions/AWSAccessCredentials"
         default:
           description: error response
           schema:
@@ -1824,6 +1832,34 @@ paths:
       responses:
         204:
           description: AWS keys added successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    
+  /credentials/{namespace}/aws/{name}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace
+        required: true
+        type: string
+      - name: name
+        in: path
+        description: name
+        required: true
+        type: string
+    get:
+      tags:
+        - user
+        - organization
+      description: Check if aws keys are set by name
+      operationId: checkAWSAccessCredentialsByName
+      responses:
+        200:
+          description: AWS keys are set
+          schema:
+            $ref: "#/definitions/AWSAccessCredentials"
         default:
           description: error response
           schema:
