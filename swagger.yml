@@ -1034,6 +1034,11 @@ definitions:
         description: Optional name for token, if the name already exists for the user it will be auto incremented (i.e. myToken-1)
         type: string
         example: myToken
+      scope:
+        description: "Optional scope to limit token, defaults to all permissions, current supported values are password_reset or *"
+        type: string
+        example: "*"
+        default: "*"
 
   Token:
     description: A api token and its metadata
@@ -1053,6 +1058,11 @@ definitions:
         description: datetime the token when token will expire
         type: string
         format: date-time
+      scope:
+        description: Optional scope to limit token, defaults to all permissions, current supported values are password_reset or *
+        type: string
+        example: "*"
+        default: "*"
 
   AWSAccessCredentials:
     description: Model representing aws keys or service role, service roles are currently ignored, but will be preferred option in the future
