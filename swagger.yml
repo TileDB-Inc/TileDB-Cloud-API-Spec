@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.1.5
+  version: 0.1.6
 
 produces:
 - application/json
@@ -193,6 +193,8 @@ definitions:
       - write
       # edit metadata about array
       - edit
+      # View logs for array
+      - read_array_logs      
 
 
   NamespaceActions:
