@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.1.5
+  version: 0.1.6
 
 produces:
 - application/json
@@ -1740,6 +1740,36 @@ paths:
       responses:
         204:
           description: user created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /user/password_reset:
+    post:
+      tags:
+        - user
+      description: reset user password
+      operationId: resetUserPassword
+      parameters:
+        - name: user
+          in: body
+          description: password to update for user requesting update
+          schema:
+            description: Password to update
+            type: object
+            properties:
+              password:
+                type: string
+                minLength: 8
+                description: password
+                example: "password"
+          required: true
+      responses:
+        204:
+          description: User password updated successfully
+        404:
+          description: User not found
         default:
           description: error response
           schema:
