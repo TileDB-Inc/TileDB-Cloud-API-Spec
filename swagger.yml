@@ -1040,6 +1040,11 @@ definitions:
         description: Optional name for token, if the name already exists for the user it will be auto incremented (i.e. myToken-1)
         type: string
         example: myToken
+      scope:
+        description: "Optional scope to limit token, defaults to all permissions, current supported values are password_reset or *"
+        type: string
+        example: "*"
+        default: "*"
 
   Token:
     description: A api token and its metadata
@@ -1059,6 +1064,11 @@ definitions:
         description: datetime the token when token will expire
         type: string
         format: date-time
+      scope:
+        description: Optional scope to limit token, defaults to all permissions, current supported values are password_reset or *
+        type: string
+        example: "*"
+        default: "*"
 
   AWSAccessCredentials:
     description: Model representing aws keys or service role, service roles are currently ignored, but will be preferred option in the future
@@ -1736,6 +1746,36 @@ paths:
       responses:
         204:
           description: user created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /user/password_reset:
+    post:
+      tags:
+        - user
+      description: reset user password
+      operationId: resetUserPassword
+      parameters:
+        - name: user
+          in: body
+          description: password to update for user requesting update
+          schema:
+            description: Password to update
+            type: object
+            properties:
+              password:
+                type: string
+                minLength: 8
+                description: password
+                example: "password"
+          required: true
+      responses:
+        204:
+          description: User password updated successfully
+        404:
+          description: User not found
         default:
           description: error response
           schema:
