@@ -985,7 +985,7 @@ definitions:
         description: description of array
         type: string
       name:
-        description: description of array
+        description: name of array
         type: string
         example: myarray1
       allowed_actions:
@@ -1004,6 +1004,10 @@ definitions:
         description: Array type (dense, key-value, sparse)
         type: string
         example: sparse
+      share_count:
+        description: number of unique namespaces this array is shared with
+        type: number
+        format: int32
 
   ArrayMetadataUpdate:
     description: metadata of an array
