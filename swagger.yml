@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.1.6
+  version: 0.1.7
 
 produces:
 - application/json
@@ -1089,7 +1089,7 @@ definitions:
       name:
         type: string
         description: human readable name
-      is_default:
+      default:
         type: boolean
         description: true if this is the default credential to be used within this namespace
       buckets:
