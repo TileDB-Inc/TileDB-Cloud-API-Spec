@@ -1963,6 +1963,29 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /organizations:
+    get:
+      tags:
+        - organization
+      description: get all organizations that the user is member of
+      operationId: getAllOrganizations
+      responses:
+        200:
+          description: array of organizations the user is member of
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/Organization"
+        400:
+          description: Error finding organizations
+        500:
+          description: Request user not found, or has empty context         
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /organizations/{organization}:
     parameters:
       - name: organization
