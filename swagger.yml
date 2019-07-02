@@ -807,8 +807,7 @@ definitions:
     properties:
       data:
         additionalProperties:
-          type: array
-          items: {}
+          type: object
 
   Error:
     type:  object
