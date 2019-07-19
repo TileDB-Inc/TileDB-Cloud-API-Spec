@@ -1125,6 +1125,64 @@ definitions:
         format: date-time
         readOnly: true
 
+  InvoiceStatus:
+    description: TileDB array type
+    type: string
+    enum: &INVOICESTATUSTYPE
+      # Invoice payment pending
+      - pending
+      # Invoice charged
+      - charged
+
+  InvoiceLine:
+    description: A single line of an invoice
+    type: object
+    properties:
+      name:
+        description: Description of line item
+        type: string
+      quantity:
+        description: Quantity of line item
+        type: integer
+        format: uint32
+      cost_per_quantity:
+        description: Cost  per single line item
+        type: number
+        format: float
+      cost_for_line_item:
+        description: Total cost of line item, ie quantity * cost_per_quantity
+        type: number
+        format: float
+
+  Invoice:
+    description: An invoice, comprised of one or more InvoiceLine(s)
+    type: object
+    properties:
+      start_date:
+        description: Start date of the period the invoice is referred to in UTC
+        type: string
+        format: date-time
+      end_date:
+        description: End date of the period the invoice is referred to in UTC
+        type: string
+        format: date-time
+      invoice_lines:
+        type: array
+        description: Array of invoice lines
+        items:
+          $ref: "#/definitions/InvoiceLine"      
+      total:
+        description: Total cost of invoice, the sum of all line items
+        type: number
+        format: float
+      billed_on_date:
+        description: Datetime the invoice was created in UTC
+        type: string
+        format: date-time
+      status:
+        description: Status of invoice
+        $ref: "#/definitions/InvoiceStatus"
+        example: charged
 
 paths:
   /.stats:
