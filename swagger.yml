@@ -1125,64 +1125,160 @@ definitions:
         format: date-time
         readOnly: true
 
+  InvoiceLineType:
+    description: List of values that InvoiceLineType can take.
+    type: string
+    enum: &INVOICELINESTATUS
+      # Invoice item
+      - invoiceitem
+      # Subscription
+      - subscription
+
   InvoiceStatus:
-    description: TileDB array type
+    description: List of values that InvoiceBillingStatus can take.
     type: string
     enum: &INVOICESTATUSTYPE
+      # Invoice draft
+      - draft
       # Invoice payment pending
-      - pending
+      - open
       # Invoice charged
-      - charged
+      - paid
+      # Invoice uncollectible
+      - uncollectible
+      # Invoice void
+      - void
+
+  InvoiceBillingReason:
+    description: List of values that InvoiceBillingReason can take.
+    type: string
+    enum: &INVOICEBILLINGREASON
+      # Manual
+      - manual
+      # Subscription
+      - subscription
+      # Subscription create
+      - subscription_create
+      # Subscription cycle
+      - subscription_cycle
+      # Subscription threshold
+      - subscription_threshold
+       # Subscription update
+      - subscription_update
+       # Subscription upcoming
+      - subscription_upcoming
 
   InvoiceLine:
     description: A single line of an invoice
     type: object
     properties:
-      name:
+      amount:        
+        description: Total amount for line item
+        type: number
+        format: float
+      currency:        
+        description: Currency of current balance, three-letter ISO currency code, in lowercase
+        type: string   
+      line_description:
         description: Description of line item
         type: string
       quantity:
         description: Quantity of line item
         type: integer
-        format: uint32
-      cost_per_quantity:
-        description: Cost  per single line item
-        type: number
-        format: float
-      cost_for_line_item:
-        description: Total cost of line item, ie quantity * cost_per_quantity
-        type: number
-        format: float
+        format: int64
+      start:
+        description: Start date of the period the line item is referred to in UTC
+        type: string
+        format: date-time
+      end:
+        description: End date of the period the line item is referred to in UTC
+        type: string
+        format: date-time        
+      type:
+        description: Type of line
+        $ref: "#/definitions/InvoiceLineType"
+        example: subscription
 
   Invoice:
     description: An invoice, comprised of one or more InvoiceLine(s)
     type: object
     properties:
-      start_date:
+      invoice_description:
+        description: Description of invoice
+        type: string
+      start:
         description: Start date of the period the invoice is referred to in UTC
         type: string
         format: date-time
-      end_date:
+      end:
         description: End date of the period the invoice is referred to in UTC
+        type: string
+        format: date-time
+      amount_due:
+        description: Amount due out of total
+        type: number
+        format: float
+      amount_paid:
+        description: Amount paid out of total
+        type: number
+        format: float
+      amount_remaining:
+        description: Amount remaining out of total
+        type: number
+        format: float
+      attempt_count:
+        description: Charging attempts
+        type: number
+        format: int64
+      attempted:
+        description: Attempted flag
+        type: boolean
+        example: true   
+      paid:
+        description: Paid flag
+        type: boolean
+        example: true        
+      tax:
+        description: Tax of invoice
+        type: number
+        format: float
+      subtotal:
+        description: Total minus Tax
+        type: number
+        format: float        
+      total:
+        description: Total cost of invoice, the sum of all line items
+        type: number
+        format: float
+      created:
+        description: Datetime the invoice was created in UTC
         type: string
         format: date-time
       invoice_lines:
         type: array
         description: Array of invoice lines
         items:
-          $ref: "#/definitions/InvoiceLine"      
-      total:
-        description: Total cost of invoice, the sum of all line items
-        type: number
-        format: float
-      billed_on_date:
-        description: Datetime the invoice was created in UTC
-        type: string
-        format: date-time
+          $ref: "#/definitions/InvoiceLine"          
       status:
         description: Status of invoice
         $ref: "#/definitions/InvoiceStatus"
         example: charged
+      billing_reason:
+        description: Billing reason
+        $ref: "#/definitions/InvoiceBillingReason"
+        example: charged        
+
+  CurrentInvoiceBalance:
+    description: Current invoice balance
+    type: object
+    properties:
+      amount:        
+        description: Current invoice balance
+        type: number
+        format: float
+      currency:        
+        description: Currency of current balance, three-letter ISO currency code, in lowercase
+        type: string       
 
 paths:
   /.stats:
@@ -2263,3 +2359,98 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /invoices/past/{namespace}/{limit}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace
+        type: string
+        required: true
+      - name: limit
+        in: path
+        description: limit
+        type: string
+        required: true        
+    get:
+      tags:
+        - invoice
+      operationId: getPastInvoices
+      responses:                    
+        200:
+          description: gets past invoices
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/Invoice"
+          examples:
+            application/json:                                   
+        404:
+          description: invoices not found
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              message: "Error try again"
+              code: 1
+
+  /invoices/current/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace
+        type: string
+        required: true
+    get:
+      tags:
+        - invoice
+      operationId: getCurrentInvoice
+      responses:                    
+        200:
+          description: gets current invoice
+          schema:
+            $ref: "#/definitions/Invoice"          
+          examples:
+            application/json:                                   
+        404:
+          description: invoice not found
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              message: "Error try again"
+              code: 1
+
+  /invoices/current/{namespace}/balance:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace
+        type: string
+        required: true
+    get:
+      tags:
+        - invoice
+      operationId: getCurrentInvoiceBalance
+      responses:                    
+        200:
+          description: gets current invoice balance
+          schema:
+            $ref: "#/definitions/CurrentInvoiceBalance"          
+          examples:
+            application/json:                                   
+        404:
+          description: invoice balance not found
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              message: "Error try again"
+              code: 1         
