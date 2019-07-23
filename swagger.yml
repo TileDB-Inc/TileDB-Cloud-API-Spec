@@ -223,6 +223,8 @@ definitions:
       - delete_organization
       # Edit organization details
       - edit_organization
+      # Edit billing details
+      - edit_billing
 
   DomainArray:
     description: Domain object for an array of each type
