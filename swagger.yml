@@ -1087,9 +1087,6 @@ definitions:
   AWSAccessCredentials:
     description: Model representing aws keys or service role, service roles are currently ignored, but will be preferred option in the future
     type: object
-    required:
-      - secret_access_key
-      - access_key_id
     properties:
       secret_access_key:
         type: string
