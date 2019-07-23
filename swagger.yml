@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.1.8
+  version: 0.2.0
 
 produces:
 - application/json
@@ -196,7 +196,7 @@ definitions:
       # edit metadata about array
       - edit
       # View logs for array
-      - read_array_logs      
+      - read_array_logs
 
 
   NamespaceActions:
@@ -804,6 +804,97 @@ definitions:
         type: integer
         format: uint64
         example: 1073741824
+      task_uuid:
+        description: uuid of associated array task
+        type: string
+        example:  "00000000-0000-0000-0000-000000000000"
+
+  ArrayTaskType:
+    description: Synchronous Task Type
+    type: string
+    enum: &ARRAYTASKTYPE
+      - SQL
+      - UDF
+      - QUERY
+
+  ArrayTask:
+    description: Synchronous Task to Run
+    type: object
+    properties:
+      id:
+        description: task id
+        type: string
+      name:
+        description: Optional task name
+        type: string
+        example: "subarray-multiplier"
+      description:
+        description: Optional task description (Task 's purpose)
+        type: string
+        example: "Return attr a1 in the subarray bounded by coordinates and multiply attr1 by 2"
+      array_metadata:
+        description: Metadata of the array used in the context of this task
+        $ref: "#/definitions/ArrayMetadata"
+      subarray:
+        description: A subarray to run the array task on
+        $ref: "#/definitions/DomainArray"
+        example:
+          - Dim1:
+              Int64:
+                0
+                10
+            Dim2:
+              Int64:
+                20
+                22
+            Dim3:
+              Int64:
+                10000
+                10100
+      memory:
+        description: memory per node
+        type: string
+        example: 512mi, or 2Gi
+      cpu:
+        description: cpu request per node
+        example: 4
+        type: number
+        format: float
+      namespace:
+        type: string
+        description: namespace task is tied to
+        example: "organization1"
+      status:
+        description: The status of an individual task
+        type: string
+        example: "SUCCESS"
+      start_time:
+        description: Start time RFC3339 for job
+        type: string
+        format: date-time
+      finish_time:
+        description: Finish time RFC3339 for job
+        type: string
+        format: date-time
+      cost:
+        description: Cost accumulated for task in 0.001 USD, example is 1 USD
+        type: integer
+        example: 1000
+      query_type:
+        description: If task type is query, whether its a read or write query
+        $ref: "#/definitions/QueryType"
+      udf_code:
+        description: Optional actual code that is going to be executed
+        type: string
+      udf_language:
+        description: Optional actual language used to express udf_code
+        type: string
+      sql_query:
+        description: Optional actual sql query that is going to be executed
+        type: string
+      type:
+        description: Type of task
+        $ref: "#/definitions/ArrayTaskType"
 
   ArraySample:
     type: object
@@ -917,7 +1008,7 @@ definitions:
         example: "00000000-0000-0000-0000-000000000000"
       role:
         description: role of requested user within this organization
-        $ref: "#/definitions/OrganizationRoles"  
+        $ref: "#/definitions/OrganizationRoles"
       name:
         type: string
         minLength: 4
@@ -931,7 +1022,7 @@ definitions:
       updated_at:
         description: Datetime organization was updated in UTC
         type: string
-        format: date-time        
+        format: date-time
       logo:
         description: Organization logo
         type: string
@@ -1996,7 +2087,7 @@ paths:
         400:
           description: Error finding organizations
         500:
-          description: Request user not found, or has empty context         
+          description: Request user not found, or has empty context
         default:
           description: error response
           schema:
