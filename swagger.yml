@@ -82,10 +82,12 @@ definitions:
     description: Type of activity logged
     type: string
     enum: &ACTIVITYEVENTTYPE
-      # read operation
-      - read
-      # write operation
-      - write
+      # max_buffer_sizes operation
+      - max_buffer_sizes
+      # non_empty_domain operation
+      - non_empty_domain
+      # query operation
+      - query
       # create operation
       - create
       # delete operation
