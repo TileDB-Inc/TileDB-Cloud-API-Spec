@@ -2388,7 +2388,7 @@ paths:
   /arrays/last_accessed:
     parameters:
       - name: namespace
-        in: path
+        in: query
         description: namespace
         type: string
         required: true     
