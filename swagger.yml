@@ -1847,13 +1847,7 @@ paths:
               message: "Error try again"
               code: 1
 
-  /arrays/{namespace}/last_accessed:
-    parameters:
-      - name: namespace
-        in: path
-        description: namespace
-        type: string
-        required: true     
+  /arrays/last_accessed:   
     get:
       tags:
         - array
