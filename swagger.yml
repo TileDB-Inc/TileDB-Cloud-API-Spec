@@ -896,6 +896,31 @@ definitions:
         description: Type of task
         $ref: "#/definitions/ArrayTaskType"
 
+  LastAccessedArray:
+    type: object
+    description: Information related to last access of an array 
+    properties:
+      array_id:
+        type: string
+        description: unique id of array
+        example: "00000000-0000-0000-0000-000000000000"
+      array_name:
+        type: string
+        description: name of the array
+        example: array1
+      namespace:
+        description: namespace being granted array access can be a user or organization
+        type: string
+        example: "MyOrganization"
+      accessed_time:
+        description: timestamp (epoch milliseconds) array is last accessed
+        type: number
+        format: uint64
+        example: 1540471791873      
+      access_type:
+        description: Type of the event
+        $ref: "#/definitions/ActivityEventType"       
+
   ArraySample:
     type: object
     description: Sample data from array
@@ -2359,3 +2384,33 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /arrays/last_accessed:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace
+        type: string
+        required: true     
+    get:
+      tags:
+        - array
+      operationId: getLastAccessedArrays
+      responses:                    
+        200:
+          description: gets last accessed arrays
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/LastAccessedArray"
+          examples:
+            application/json:                                   
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              message: "Error try again"
+              code: 1
