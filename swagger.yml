@@ -909,9 +909,9 @@ definitions:
         description: name of the array
         example: array1
       namespace:
-        description: namespace being granted array access can be a user or organization
+        description: namespace (unique id) of a user or organization
         type: string
-        example: "MyOrganization"
+        example: "00000000-0000-0000-0000-000000000000"
       accessed_time:
         description: timestamp (epoch milliseconds) array is last accessed
         type: number
