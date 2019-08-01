@@ -1847,6 +1847,36 @@ paths:
               message: "Error try again"
               code: 1
 
+  /arrays/{namespace}/last_accessed:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace
+        type: string
+        required: true     
+    get:
+      tags:
+        - array
+      operationId: getLastAccessedArrays
+      responses:                    
+        200:
+          description: gets last accessed arrays
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/LastAccessedArray"
+          examples:
+            application/json:                                   
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              message: "Error try again"
+              code: 1
+
   /user:
     get:
       tags:
@@ -2384,33 +2414,3 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-
-  /arrays/last_accessed:
-    parameters:
-      - name: namespace
-        in: query
-        description: namespace
-        type: string
-        required: true     
-    get:
-      tags:
-        - array
-      operationId: getLastAccessedArrays
-      responses:                    
-        200:
-          description: gets last accessed arrays
-          schema:
-            type: array
-            x-omitempty: true
-            items:
-              $ref: "#/definitions/LastAccessedArray"
-          examples:
-            application/json:                                   
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-          examples:
-            application/json:
-              message: "Error try again"
-              code: 1
