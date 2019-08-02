@@ -2294,6 +2294,11 @@ paths:
         description: namespace to filter
         type: string
         required: false
+      - name: created_by
+        in: query
+        description: username to filter
+        type: string
+        required: false        
       - name: array
         in: query
         description: name/uri of array that is url-encoded to filter
