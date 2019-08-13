@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: Tiledb Storage Platform API
-  version: 0.2.0
+  version: 0.2.1
 
 produces:
 - application/json
@@ -829,7 +829,7 @@ definitions:
         type: string
         example: "subarray-multiplier"
       description:
-        description: Optional task description (Task 's purpose)
+        description: Optional task description (Tasks purpose)
         type: string
         example: "Return attr a1 in the subarray bounded by coordinates and multiply attr1 by 2"
       array_metadata:
@@ -852,14 +852,15 @@ definitions:
                 10000
                 10100
       memory:
-        description: memory per node
-        type: string
-        example: 512mi, or 2Gi
+        description: memory allocated to task in bytes
+        type: integer
+        format: uint64
+        example: 1073741824
       cpu:
-        description: cpu request per node
-        example: 4
-        type: number
-        format: float
+        description: millicpu allocated to task
+        type: integer
+        format: uint64
+        example: 4000
       namespace:
         type: string
         description: namespace task is tied to
