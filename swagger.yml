@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
-  title: Tiledb Storage Platform API
-  version: 0.2.1
+  title: TileDB Storage Platform API
+  version: 0.2.2
 
 produces:
 - application/json
@@ -804,7 +804,7 @@ definitions:
         type: integer
         format: uint64
         example: 1073741824
-      task_uuid:
+      array_task_id:
         description: uuid of associated array task
         type: string
         example:  "00000000-0000-0000-0000-000000000000"
@@ -1070,6 +1070,7 @@ definitions:
         description: number of registered arrays for this organization
         type: number
         format: int32
+        x-omitempty: false
 
   ArraySharing:
     description: details for sharing a given array
