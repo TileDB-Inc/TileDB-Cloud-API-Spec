@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.2.2
+  version: 0.2.3
 
 produces:
 - application/json
@@ -817,6 +817,18 @@ definitions:
       - UDF
       - QUERY
 
+  ArrayTaskStatus:
+    description: Status of array task
+    type: string
+    enum: &ARRAYTASKSTATUS
+      # FAILED
+      - FAILED
+      # COMPLETED
+      - COMPLETED
+      # RUNNING
+      - RUNNING
+
+
   ArrayTask:
     description: Synchronous Task to Run
     type: object
@@ -867,8 +879,7 @@ definitions:
         example: "organization1"
       status:
         description: The status of an individual task
-        type: string
-        example: "SUCCESS"
+        $ref: "#/definitions/ArrayTaskStatus"
       start_time:
         description: Start time RFC3339 for job
         type: string
@@ -2317,6 +2328,11 @@ paths:
         description: end time for tasks to filter by
         type: integer
         format: uint64
+        required: false
+      - name: status
+        in: query
+        description: Filter to only return these statuses
+        type: string
         required: false
     get:
       tags:
