@@ -2329,6 +2329,11 @@ paths:
         type: integer
         format: uint64
         required: false
+      - name: status
+        in: query
+        description: Filter to only return these statuses
+        type: string
+        required: false
     get:
       tags:
         - tasks
