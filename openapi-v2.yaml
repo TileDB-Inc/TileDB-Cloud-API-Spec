@@ -1,0 +1,492 @@
+swagger: "2.0"
+info:
+  description: TileDB Storage Platform REST API
+  title: Tiledb Storage Platform API
+  version: 0.0.1
+
+produces:
+- application/json
+consumes:
+- application/json
+
+schemes:
+- http
+- https
+
+basePath: /v2
+
+securityDefinitions:
+  BasicAuth:
+    type: basic
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-TILEDB-REST-API-KEY
+
+security:
+  - BasicAuth: []
+  - ApiKeyAuth: []
+
+definitions:
+  Datatype:
+    description: TileDB data type
+    type: string
+    enum: &DATATYPE
+      # 32-bit signed integer
+      - INT32
+      # 64-bit signed integer
+      - INT64
+      # 32-bit floating point value
+      - FLOAT32
+      # 64-bit floating point value
+      - FLOAT64
+      # Character
+      - CHAR
+      # 8-bit signed integer
+      - INT8
+      # 8-bit unsigned integer
+      - UINT8
+      # 16-bit signed integer
+      - INT16
+      # 16-bit unsigned integer
+      - UINT16
+      # 32-bit unsigned integer
+      - UINT32
+      # 64-bit unsigned integer
+      - UINT64
+      # ASCII string
+      - STRING_ASCII
+      # UTF-8 string
+      - STRING_UTF8
+      # UTF-16 string
+      - STRING_UTF16
+      # UTF-32 string
+      - STRING_UTF32
+      # UCS2 string
+      - STRING_UCS2
+      # UCS4 string
+      - STRING_UCS4
+      # This can be any datatype. Must store (type tag, value) pairs.
+      - ANY
+
+  Layout:
+    description: Layout of array
+    type: string
+    enum: &LAYOUT
+      # Row-major layout
+      - row-major
+      # Column-major layout
+      - col-major
+      # Global-order layout
+      - global-order
+      # Unordered layout
+      - unordered
+
+  Querytype:
+    description: Type of query
+    type: string
+    enum: &QUERYTYPE
+      # READ
+      - READ
+      # Write
+      - WRITE
+
+  Querystatus:
+    description: Status of query
+    type: string
+    enum: &QUERYSTATUS
+      # FAILED
+      - FAILED
+      # COMPLETED
+      - COMPLETED
+      # INPROGRESS
+      - INPROGRESS
+      # INCOMPLETE
+      - INCOMPLETE
+      # UNINITIALIZED
+      - UNINITIALIZED
+
+  DomainArray:
+    description: Domain object for an array of each type
+    type: object
+    properties:
+      int8:
+        type: array
+        x-omitempty: true
+        items:
+          type: integer
+          format: int8
+      uint8:
+        type: array
+        x-omitempty: true
+        items:
+          type: integer
+          format: uint8
+      int16:
+        type: array
+        x-omitempty: true
+        items:
+          type: integer
+          format: int16
+      uint16:
+        type: array
+        x-omitempty: true
+        items:
+          type: integer
+          format: uint16
+      int32:
+        type: array
+        x-omitempty: true
+        items:
+          type: integer
+          format: int32
+      uint32:
+        type: array
+        x-omitempty: true
+        items:
+          type: integer
+          format: uint32
+      int64:
+        type: array
+        x-omitempty: true
+        items:
+          type: integer
+          format: int64
+      uint64:
+        type: array
+        x-omitempty: true
+        items:
+          type: integer
+          format: uint64
+      float32:
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: float
+      float64:
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: double
+
+  Array:
+    description: Represents an open array
+    type: object
+    required:
+      - timestamp
+      - queryType
+      - uri
+    properties:
+      timestamp:
+        description: timestamp (epoch milliseconds) array is opened at
+        type: number
+        format: uint64
+        example: 1540471791873
+      queryType:
+        description: Array opened for query type
+        $ref: "#/definitions/Querytype"
+      uri:
+        description: Array uri
+        type: string
+
+  AttributeBufferHeader:
+    description: Represents an attribute buffer header information
+    type: object
+    required:
+      - name
+      - fixedLenBufferSizeInBytes
+      - varLenBufferSizeInBytes
+
+    properties:
+      name:
+        description: Attribute name
+        type: string
+        example: "attribute1"
+      fixedLenBufferSizeInBytes:
+        description: Number of bytes in the fixed-length attribute data buffer (offsets for var-len attributes)
+        type: integer
+        format: uint64
+      varLenBufferSizeInBytes:
+        description: Number of bytes in the var-length attribute data buffer
+        type: integer
+        format: uint64
+
+  Writer:
+    type: object
+    properties:
+      checkCoordDups:
+        type: boolean
+      checkCoordOOB:
+        type: boolean
+      dedupCoords:
+        type: boolean
+      subarray:
+        $ref: "#/definitions/DomainArray"
+
+  SubarrayRanges:
+    description: A set of 1D ranges for a subarray
+    type: object
+    properties:
+      type:
+        $ref: "#/definitions/Datatype"
+      hasDefaultRange:
+        description: True if the range is the default range
+        type: boolean
+      buffer:
+        description: The bytes of the ranges
+        type: array
+        items:
+          type: integer
+          format: uint8
+
+  Subarray:
+    description: A Subarray
+    type: object
+    properties:
+      layout:
+        $ref: "#/definitions/Layout"
+      ranges:
+        description: List of 1D ranges, one per dimension
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/SubarrayRanges"
+
+  SubarrayPartitioner:
+    description: The subarray partitioner
+    type: object
+    properties:
+      subarray:
+        $ref: "#/definitions/Subarray"
+      budget:
+        description: Result size budget (in bytes) for all attributes.
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/AttributeBufferSize"
+      current:
+        description: The current partition info
+        type: object
+        properties:
+          subarray:
+            $ref: "#/definitions/Subarray"
+          start:
+            description: PartitionInfo start
+            type: integer
+            format: uint64
+          end:
+            description: PartitionInfo end
+            type: integer
+            format: uint64
+          splitMultiRange:
+            description: PartitionInfo splitMultiRange
+            type: boolean
+      state:
+        description: The state information for the remaining partitions to be produced
+        type: object
+        properties:
+          start:
+            description: State start
+            type: integer
+            format: uint64
+          end:
+            description: State end
+            type: integer
+            format: uint64
+          singleRange:
+            description: State singleRange
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/Subarray"
+          multiRange:
+            description: State multiRange
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/Subarray"
+      memoryBudget:
+        description: The memory budget for the fixed-sized attributes and the offsets of the var-sized attributes
+        type: integer
+        format: uint64
+      memoryBudgetVar:
+        description: The memory budget for the var-sized attributes
+        type: integer
+        format: uint64
+
+  ReadState:
+    description: state for reads
+    type: object
+    properties:
+      initialized:
+        description: True if the reader has been initialized.
+        type: boolean
+
+      overflowed:
+        description: True if the query produced results that could not fit in some buffer.
+        type: boolean
+
+      unsplittable:
+        description: True if the current subarray partition is unsplittable.
+        type: boolean
+
+      subarrayPartitioner:
+        $ref: "#/definitions/SubarrayPartitioner"
+
+  QueryReader:
+    description: Read struct (can't be called reader due to class name conflict)
+    type: object
+    properties:
+      layout:
+        $ref: "#/definitions/Layout"
+      subarray:
+        $ref: "#/definitions/Subarray"
+      readState:
+        description: To handle incomplete read queries.
+        $ref: '#/definitions/ReadState'
+
+  Query:
+    type: object
+    required:
+      - type
+      - attributeBufferHeaders
+      - layout
+      - status
+      - array
+      - totalFixedLengthBufferBytes
+      - totalVarLenBufferBytes
+    properties:
+      type:
+        $ref: "#/definitions/Querytype"
+      layout:
+        $ref: "#/definitions/Layout"
+      status:
+        $ref: "#/definitions/Querystatus"
+      attributeBufferHeaders:
+        description: List of attribute buffer headers
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/AttributeBufferHeader"
+      writer:
+        description: writer contains data needed for continuation of global write order queries
+        $ref: "#/definitions/Writer"
+      reader:
+        description: reader contains data needed for continuation of reads
+        $ref: "#/definitions/QueryReader"
+      array:
+        description: Represents an open array
+        $ref: "#/definitions/Array"
+      totalFixedLengthBufferBytes:
+        description: Total number of bytes in fixed size attribute buffers.
+        type: integer
+        format: uint64
+      totalVarLenBufferBytes:
+        description: Total number of bytes in variable size attribute buffers.
+        type: integer
+        format: uint64
+    x-go-type:
+      import:
+        package: "github.com/TileDB-Inc/TileDB-Go"
+        alias: "tiledb"
+      type: "Query"
+
+  AttributeBufferSize:
+    type: object
+    description: object representing buffer size of an attribute
+    required:
+      - attribute
+      - offsetBytes
+      - dataBytes
+    properties:
+      attribute:
+        description: name of attribute
+        type: string
+      offsetBytes:
+        description: buffer size (in bytes) of offset buffer
+        type: integer
+        format: uint64
+      dataBytes:
+        description: buffer size (in bytes) of data buffer
+        type: integer
+        format: uint64
+
+  Error:
+    type:  object
+    properties:
+      code:
+        type: integer
+        format: int64
+      message:
+        type: string
+
+paths:
+  /arrays/{namespace}/{array}/query/submit:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: type
+        in: query
+        description: type of query
+        required: true
+        type: string
+      - name: Content-Type
+        in: header
+        description: Content Type of input and return mime
+        type: string
+        required: true
+        default: application/json
+      - name: X-Payer
+        in: header
+        description: Name of organization or user who should be charged for this request
+        type: string
+      - name: open_at
+        description: open_at for array in unix epoch
+        in: query
+        type: integer
+        format: uint64
+      - name: read_all
+        in: query
+        description: If "true", resubmits incomplete queries until the query has completed. Defaults to "false".
+        type: string
+    post:
+      description: send a query to run against a specified array/URI registered to a group/project
+      tags:
+        - query
+      produces:
+        - application/json
+        - application/capnp
+      consumes:
+        - application/json
+        - application/capnp
+      operationId: submitQuery
+      parameters:
+        - name: query
+          in: body
+          description: query to run
+          schema:
+            $ref: "#/definitions/Query"
+          required: true
+      responses:
+        200:
+          description: query completed and results are returned in query object
+          schema:
+            type: file
+            format: byte
+            description: The first 8-bytes contains a little-endian ordered unsigned integer that contains the total byte size of the following Query object. If 'read_all' was set, this will repeat with 0-padding until reaching a Query object with a non-incomplete status.
+        204:
+          description: query completed successfully with no return
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
