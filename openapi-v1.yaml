@@ -1420,6 +1420,10 @@ paths:
         type: integer
         format: uint64
         required: false
+      - name: event_types
+        in: query
+        type: string
+        description: Event values can be one or more of the following read, write, create, delete, register, deregister, comma separated
     get:
       description: get array activity logs
       tags:
