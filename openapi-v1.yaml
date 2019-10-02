@@ -986,6 +986,7 @@ definitions:
       is_valid_email:
         description: user's email is validated to be correct
         type: boolean
+        readOnly: true
         example: false
       logo:
         description: the user's logo
