@@ -983,6 +983,11 @@ definitions:
         description: the user's email
         type: string
         example: "jane.doe@example.com"
+      is_valid_email:
+        description: user's email is validated to be correct
+        type: boolean
+        readOnly: true
+        example: false
       logo:
         description: the user's logo
         type: string
@@ -992,6 +997,9 @@ definitions:
         description: when the user last logged in (set by the server)
         readOnly: true
         example: "1970-01-01 00:00:00"
+      timezone:
+        type: string
+        example: Europe/Athens
       organizations:
         type: array
         x-omitempty: true
