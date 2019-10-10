@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.2.3
+  version: 0.2.4
 
 produces:
 - application/json
@@ -1434,6 +1434,10 @@ paths:
         in: query
         type: string
         description: Event values can be one or more of the following read, write, create, delete, register, deregister, comma separated
+      - name: task_id
+        in: query
+        type: string
+        description: Array task id To filter activity to
     get:
       description: get array activity logs
       tags:
