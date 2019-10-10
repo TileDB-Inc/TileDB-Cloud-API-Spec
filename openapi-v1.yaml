@@ -1968,6 +1968,20 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /user/confirm_email:
+    post:
+      tags:
+        - user
+      description: confirm user email
+      operationId: confirmEmail
+      responses:
+        204:
+          description: User email confirmed successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /users/{username}:
     parameters:
       - name: username
