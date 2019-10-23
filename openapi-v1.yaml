@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.2.4
+  version: 0.2.5
 
 produces:
 - application/json
@@ -1183,6 +1183,9 @@ definitions:
         description: uri of array
         type: string
         example: "s3://bucket/array"
+      access_credentials_name:
+        description: the name of the access credentials to use. if unset, the default credentials will be used
+        type: string
 
   TokenRequest:
     description: A request from a user for an api token
