@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.2.5
+  version: 0.2.6
 
 produces:
 - application/json
@@ -830,6 +830,13 @@ definitions:
       # RUNNING
       - RUNNING
 
+  ArrayTaskLog:
+    description: Array task stderr/stdout logs
+    type: object
+    properties:
+      array_task_id:
+        description: ID of associated task
+        type: string
 
   ArrayTask:
     description: Synchronous Task to Run
@@ -909,6 +916,12 @@ definitions:
       type:
         description: Type of task
         $ref: "#/definitions/ArrayTaskType"
+      activity:
+        description: Array activity logs for task
+        $ref: "#/definitions/ArrayActivityLog"
+      logs:
+        description: Array task stderr/stdout logs
+        $ref: "#/definitions/ArrayTaskLog"
 
   LastAccessedArray:
     type: object
