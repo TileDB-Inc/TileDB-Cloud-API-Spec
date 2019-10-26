@@ -1266,6 +1266,14 @@ definitions:
         format: date-time
         readOnly: true
 
+  SSOProvider:
+    description: Single sign on provider
+    type: string
+    enum: &SSOPROVIDER
+      # Github
+      - github
+      # Google
+      - google
 
 paths:
   /.stats:
