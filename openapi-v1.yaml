@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.2.6
+  version: 0.4.0
 
 produces:
 - application/json
@@ -98,6 +98,13 @@ definitions:
       - register
       # deregister operation
       - deregister
+
+  UDFType:
+    description: UDF Type
+    type: string
+    enum: &UDFTYPE
+      # python
+      - python
 
   Layout:
     description: Layout of array
@@ -1291,6 +1298,97 @@ definitions:
       # Google
       - google
 
+  DimensionCoordinate:
+    description: A single, typed coordinate for a dimension
+    type: object
+    properties:
+      int8:
+        type: integer
+        format: int8
+        x-omitempty: false
+      uint8:
+        type: integer
+        format: uint8
+        x-omitempty: false
+      int16:
+        type: integer
+        format: int16
+        x-omitempty: false
+      uint16:
+        type: integer
+        format: uint16
+        x-omitempty: false
+      int32:
+        type: integer
+        format: int32
+        x-omitempty: false
+      uint32:
+        type: integer
+        format: uint32
+        x-omitempty: false
+      int64:
+        type: integer
+        format: int64
+        x-omitempty: false
+      uint64:
+        type: integer
+        format: uint64
+        x-omitempty: false
+      float32:
+        type: number
+        format: float
+        x-omitempty: false
+      float64:
+        type: number
+        format: double
+        x-omitempty: false
+
+  UDFSubarrayRange:
+    description: A dimension range to query
+    type: object
+    properties:
+      dimension_id:
+        type: integer
+        description: The dimension index
+        x-omitempty: false
+      range_start:
+        $ref: "#/definitions/DimensionCoordinate"
+        description: The range start index
+        x-omitempty: false
+      range_end:
+        $ref: "#/definitions/DimensionCoordinate"
+        description: The range end index
+        x-omitempty: false
+
+  UDFSubarray:
+    description: Subarray bounds to query for a UDF to operate on
+    type: object
+    properties:
+      layout:
+        $ref: "#/definitions/Layout"
+      ranges:
+        description: List of ranges, 
+        type: array
+        items:
+          $ref: "#/definitions/UDFSubarrayRange"
+
+  UDF:
+    description: User-defined function
+    type: object
+    properties:
+      type:
+        $ref: "#/definitions/UDFType"
+        description: UDF Type
+      version:
+        type: string
+        description: Type-specific version
+      subarray:
+        $ref: "#/definitions/UDFSubarray"
+        description: Subarray ranges to query
+      exec:
+        type: string
+        description: Type-specific executable text
+
 paths:
   /.stats:
     get:
@@ -1710,6 +1808,50 @@ paths:
           description: get the max buffer sizes of an array for a subarray
           schema:
             $ref: "#/definitions/MaxBufferSizes"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/{namespace}/{array}/udf/submit:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: X-Payer
+        in: header
+        description: Name of organization or user who should be charged for this request
+        type: string
+
+    post:
+      description: send a UDF to run against a specified array/URI registered to a group/project
+      tags:
+        - udf
+      operationId: submitUDF
+      produces:
+        - application/octet-stream
+      consumes:
+        - application/json
+      parameters:
+        - name: udf
+          in: body
+          description: udf to run
+          schema:
+            $ref: "#/definitions/UDF"
+          required: true
+      responses:
+        200:
+          description: udf completed and the udf-type specific result is returned
+          schema:
+            type: string
+            format: binary
         default:
           description: error response
           schema:
