@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.4.0
+  version: 0.6.0
 
 produces:
 - application/json
@@ -1389,6 +1389,21 @@ definitions:
         type: string
         description: Type-specific executable text
 
+  SQLParameters:
+    description: Parameters for running sql query
+    type: object
+    properties:
+      name:
+        description: name of task, optional
+        type: string
+      query:
+        description: query to run
+        type: string
+      output_uri:
+        type: string
+        description: Output array uri
+        example: "s3://my_bucket/my_output_array"
+
 paths:
   /.stats:
     get:
@@ -2625,6 +2640,34 @@ paths:
       responses:
         204:
           description: revokation successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /sql/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace to run task under is in (an organization name or user's username)
+        type: string
+        required: true
+    post:
+      tags:
+        - sql
+        - tasks
+      description: Run a sql query
+      operationId: runSQL
+      parameters:
+        - name: sql
+          in: body
+          description: sql being submitted
+          schema:
+            $ref: "#/definitions/SQLParameters"
+          required: true
+      responses:
+        204:
+          description: SQL executed successfully
         default:
           description: error response
           schema:
