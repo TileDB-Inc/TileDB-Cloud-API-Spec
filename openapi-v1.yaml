@@ -928,7 +928,10 @@ definitions:
         $ref: "#/definitions/ArrayTaskType"
       activity:
         description: Array activity logs for task
-        $ref: "#/definitions/ArrayActivityLog"
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArrayActivityLog"
       logs:
         description: Array task stderr/stdout logs
         $ref: "#/definitions/ArrayTaskLog"
