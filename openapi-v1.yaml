@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.6.0
+  version: 0.6.1
 
 produces:
 - application/json
@@ -844,6 +844,9 @@ definitions:
       array_task_id:
         description: ID of associated task
         type: string
+      logs:
+        description: logs from array task
+        type: string
 
   ArrayTask:
     description: Synchronous Task to Run
@@ -1367,7 +1370,7 @@ definitions:
       layout:
         $ref: "#/definitions/Layout"
       ranges:
-        description: List of ranges, 
+        description: List of ranges,
         type: array
         items:
           $ref: "#/definitions/UDFSubarrayRange"
