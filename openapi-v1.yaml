@@ -1313,8 +1313,6 @@ definitions:
     description: Query parameter to get array metadatas
     type: string
     enum: &PUBLICSHAREFILTER
-      # Include
-      - include
       # Exclude
       - exclude
       # Only
@@ -1456,7 +1454,7 @@ paths:
       - name: public_share
         in: query
         type: string
-        description: Public share values can be one of include, exclude, only
+        description: Public share values can be one of exclude, only
     get:
       description: get all array metadata user has access to
       tags:
