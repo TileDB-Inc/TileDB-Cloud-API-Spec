@@ -480,6 +480,10 @@ paths:
       responses:
         200:
           description: query completed and results are returned in query object
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just completed query
           schema:
             type: file
             format: byte
