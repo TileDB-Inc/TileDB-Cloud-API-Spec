@@ -1877,12 +1877,16 @@ paths:
           headers:
             X-TILEDB-CLOUD-TASK-ID:
               type: string
-              description: Task ID for just completed query
+              description: Task ID for just completed request
           schema:
             type: string
             format: binary
         default:
           description: error response
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just request if task was started
           schema:
             $ref: "#/definitions/Error"
 
