@@ -1193,6 +1193,10 @@ definitions:
         description: number of unique namespaces this array is shared with
         type: number
         format: int32
+      tiledb_uri:
+        description: uri for access through TileDB cloud
+        type: string
+        x-omitempty: false
 
   ArrayMetadataUpdate:
     description: metadata of an array
