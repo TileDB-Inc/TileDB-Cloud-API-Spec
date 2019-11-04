@@ -1870,6 +1870,10 @@ paths:
       responses:
         200:
           description: udf completed and the udf-type specific result is returned
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just completed query
           schema:
             type: string
             format: binary
@@ -1931,6 +1935,10 @@ paths:
       responses:
         200:
           description: query completed and results are returned in query object
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just completed query
           schema:
             $ref: "#/definitions/Query"
         204:
@@ -1993,6 +2001,10 @@ paths:
       responses:
         200:
           description: query completed and results are returned in query object
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just completed query
           schema:
             $ref: "#/definitions/Query"
         204:
@@ -2674,6 +2686,10 @@ paths:
       responses:
         204:
           description: SQL executed successfully
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just completed query
         default:
           description: error response
           schema:
