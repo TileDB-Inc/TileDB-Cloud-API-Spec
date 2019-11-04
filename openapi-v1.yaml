@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.6.1
+  version: 0.6.2
 
 produces:
 - application/json
@@ -1193,6 +1193,11 @@ definitions:
         description: number of unique namespaces this array is shared with
         type: number
         format: int32
+      public_share:
+        description: Suggests if the array was shared to public by owner
+        type: boolean
+        x-omitempty: false
+        example: true
       tiledb_uri:
         description: uri for access through TileDB cloud
         type: string
@@ -1307,6 +1312,15 @@ definitions:
       - github
       # Google
       - google
+
+  PublicShareFilter:
+    description: Query parameter to get array metadatas
+    type: string
+    enum: &PUBLICSHAREFILTER
+      # Exclude
+      - exclude
+      # Only
+      - only
 
   DimensionCoordinate:
     description: A single, typed coordinate for a dimension
@@ -1440,6 +1454,11 @@ paths:
             $ref: "#/definitions/Error"
 
   /arrays:
+    parameters:
+      - name: public_share
+        in: query
+        type: string
+        description: Public share values can be one of exclude, only
     get:
       description: get all array metadata user has access to
       tags:
