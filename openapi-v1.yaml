@@ -2558,6 +2558,29 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /session:
+    parameters:
+      - name: remember_me
+        in: query
+        description: flag to create a token with expiration of 30 days, default is false
+        type: string
+        required: false
+    get:
+      tags:
+        - user
+      description: Get session token for user
+      operationId: getSession
+      responses:
+        200:
+          description: Session token
+          schema:
+            $ref: "#/definitions/Token"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /tasks:
     parameters:
       - name: namespace
