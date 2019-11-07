@@ -821,7 +821,11 @@ definitions:
         description: uuid of associated array task
         type: string
         example:  "00000000-0000-0000-0000-000000000000"
-
+      query_ranges:
+        description: json representation of the ranges used in the underlying query
+        type: string
+        example:  ""
+        
   ArrayTaskType:
     description: Synchronous Task Type
     type: string
