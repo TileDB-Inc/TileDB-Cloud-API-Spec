@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.6.4
+  version: 0.6.5
 
 produces:
 - application/json
@@ -539,11 +539,11 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/Attribute"
-    x-go-type:
-      import:
-        package: "github.com/TileDB-Inc/TileDB-Go"
-        alias: "tiledb"
-      type: "ArraySchema"
+    # x-go-type:
+    #   import:
+    #     package: "github.com/TileDB-Inc/TileDB-Go"
+    #     alias: "tiledb"
+    #   type: "ArraySchema"
 
   AttributeBufferHeader:
     description: Represents an attribute buffer header information
@@ -741,11 +741,11 @@ definitions:
         description: Total number of bytes in variable size attribute buffers.
         type: integer
         format: uint64
-    x-go-type:
-      import:
-        package: "github.com/TileDB-Inc/TileDB-Go"
-        alias: "tiledb"
-      type: "Query"
+    # x-go-type:
+    #   import:
+    #     package: "github.com/TileDB-Inc/TileDB-Go"
+    #     alias: "tiledb"
+    #   type: "Query"
 
   NonEmptyDomain:
     type: object
@@ -821,6 +821,22 @@ definitions:
         description: uuid of associated array task
         type: string
         example:  "00000000-0000-0000-0000-000000000000"
+      query_ranges:
+        description: ranges for query
+        x-omitempty: true
+        type: array
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              start:
+                description: range start
+                type: object
+              end:
+                description: range end
+                type: object
+        example:
 
   ArrayTaskType:
     description: Synchronous Task Type
