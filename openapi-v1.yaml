@@ -824,19 +824,8 @@ definitions:
       query_ranges:
         description: ranges for query
         x-omitempty: true
-        type: array
-        items:
-          type: array
-          items:
-            type: object
-            properties:
-              start:
-                description: range start
-                type: object
-              end:
-                description: range end
-                type: object
-        example:
+        type: string
+        example: "{\"rows\":[{\"start\": 1, \"end\": 1},{\"start\": 3, \"end\": 4}],\"cols\":[{\"start\": 1, \"end\": 4}]}"
 
   ArrayTaskType:
     description: Synchronous Task Type
