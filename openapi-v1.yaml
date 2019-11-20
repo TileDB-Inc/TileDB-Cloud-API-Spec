@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.6.5
+  version: 1.1.0
 
 produces:
 - application/json
@@ -539,11 +539,11 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/Attribute"
-    # x-go-type:
-    #   import:
-    #     package: "github.com/TileDB-Inc/TileDB-Go"
-    #     alias: "tiledb"
-    #   type: "ArraySchema"
+    x-go-type:
+      import:
+        package: "github.com/TileDB-Inc/TileDB-Go"
+        alias: "tiledb"
+      type: "ArraySchema"
 
   AttributeBufferHeader:
     description: Represents an attribute buffer header information
@@ -741,11 +741,11 @@ definitions:
         description: Total number of bytes in variable size attribute buffers.
         type: integer
         format: uint64
-    # x-go-type:
-    #   import:
-    #     package: "github.com/TileDB-Inc/TileDB-Go"
-    #     alias: "tiledb"
-    #   type: "Query"
+    x-go-type:
+      import:
+        package: "github.com/TileDB-Inc/TileDB-Go"
+        alias: "tiledb"
+      type: "Query"
 
   NonEmptyDomain:
     type: object
@@ -917,9 +917,9 @@ definitions:
         type: string
         format: date-time
       cost:
-        description: Cost accumulated for task in 0.001 USD, example is 1 USD
+        description: Cost accumulated for task in 0.01 USD, example is 1 USD
         type: integer
-        example: 1000
+        example: 100
       query_type:
         description: If task type is query, whether its a read or write query
         $ref: "#/definitions/Querytype"
@@ -2744,6 +2744,17 @@ paths:
             $ref: "#/definitions/SQLParameters"
           required: true
       responses:
+        200:
+          description: JSON results in array of objects form, if the query returns results
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just completed query
+          schema:
+            type: array
+            items:
+                  type: object
+                  additionalProperties: true
         204:
           description: SQL executed successfully
           headers:
