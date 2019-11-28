@@ -539,11 +539,11 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/Attribute"
-    # x-go-type:
-    #   import:
-    #     package: "github.com/TileDB-Inc/TileDB-Go"
-    #     alias: "tiledb"
-    #   type: "ArraySchema"
+    x-go-type:
+      import:
+        package: "github.com/TileDB-Inc/TileDB-Go"
+        alias: "tiledb"
+      type: "ArraySchema"
 
   AttributeBufferHeader:
     description: Represents an attribute buffer header information
@@ -741,11 +741,11 @@ definitions:
         description: Total number of bytes in variable size attribute buffers.
         type: integer
         format: uint64
-    # x-go-type:
-    #   import:
-    #     package: "github.com/TileDB-Inc/TileDB-Go"
-    #     alias: "tiledb"
-    #   type: "Query"
+    x-go-type:
+      import:
+        package: "github.com/TileDB-Inc/TileDB-Go"
+        alias: "tiledb"
+      type: "Query"
 
   NonEmptyDomain:
     type: object
