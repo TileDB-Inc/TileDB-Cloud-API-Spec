@@ -946,6 +946,38 @@ definitions:
         type: string
         x-omitempty: false
 
+  PaginationMetadata:
+    properties:
+      page:
+        description: pagination offset
+        type: number
+        example: 1
+      per_page:
+        description: pagination limit
+        type: number
+        example: 10
+      total_pages:
+        description: number of total pages with current limit
+        example: 14
+        type: number
+      total_items:
+        description: number of total available items
+        type: number
+        example: 138
+
+  ArrayTaskData:
+    description: Object including array tasks and metadata
+    type: object
+    properties:
+      array_tasks:
+        description: Array Tasks
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArrayTask"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
   LastAccessedArray:
     type: object
     description: Information related to last access of an array
@@ -2620,11 +2652,36 @@ paths:
         type: integer
         format: uint64
         required: false
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+      - name: type
+        in: query
+        description: task type, "QUERY", "SQL", "UDF"
+        required: false
+        type: string
       - name: status
         in: query
         description: Filter to only return these statuses
         type: string
         required: false
+      - name: search
+        in: query
+        description: search string that will look at name, namespace or description fields
+        required: false
+        type: string
+      - name: orderby
+        in: query
+        description: sort by which field valid values include start_time, name
+        required: false
+        type: string
     get:
       tags:
         - tasks
@@ -2633,10 +2690,7 @@ paths:
         200:
           description: Array of all tasks user has access too
           schema:
-            type: array
-            x-omitempty: true
-            items:
-              $ref: "#/definitions/ArrayTask"
+            $ref: "#/definitions/ArrayTaskData"
         default:
           description: error response
           schema:
