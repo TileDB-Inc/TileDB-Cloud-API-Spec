@@ -951,18 +951,22 @@ definitions:
       page:
         description: pagination offset
         type: number
+        format: uint64
         example: 1
       per_page:
         description: pagination limit
         type: number
+        format: uint64
         example: 10
       total_pages:
         description: number of total pages with current limit
-        example: 14
         type: number
+        format: uint64
+        example: 14
       total_items:
         description: number of total available items
         type: number
+        format: uint64
         example: 138
 
   ArrayTaskData:
