@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.6.5
+  version: 0.7.0
 
 produces:
 - application/json
@@ -874,7 +874,7 @@ definitions:
         example: "Return attr a1 in the subarray bounded by coordinates and multiply attr1 by 2"
       array_metadata:
         description: Metadata of the array used in the context of this task
-        $ref: "#/definitions/ArrayMetadata"
+        $ref: "#/definitions/ArrayInfo"
       subarray:
         description: A subarray to run the array task on
         $ref: "#/definitions/DomainArray"
@@ -1151,7 +1151,7 @@ definitions:
         type: string
         example: "organization"
 
-  ArrayMetadata:
+  ArrayInfo:
     description: metadata of an array
     type: object
     properties:
@@ -1213,7 +1213,7 @@ definitions:
         type: string
         x-omitempty: false
 
-  ArrayMetadataUpdate:
+  ArrayInfoUpdate:
     description: metadata of an array
     type: object
     properties:
@@ -1481,7 +1481,7 @@ paths:
             type: array
             x-omitempty: true
             items:
-              $ref: "#/definitions/ArrayMetadata"
+              $ref: "#/definitions/ArrayInfo"
         default:
           description: error response
           schema:
@@ -1506,7 +1506,7 @@ paths:
             type: array
             x-omitempty: true
             items:
-              $ref: "#/definitions/ArrayMetadata"
+              $ref: "#/definitions/ArrayInfo"
         default:
           description: error response
           schema:
@@ -1678,7 +1678,7 @@ paths:
         200:
           description: array metadata for an array
           schema:
-            $ref: "#/definitions/ArrayMetadata"
+            $ref: "#/definitions/ArrayInfo"
         default:
           description: error response
           schema:
@@ -1693,7 +1693,7 @@ paths:
           in: body
           description: array metadata to update
           schema:
-            $ref: "#/definitions/ArrayMetadataUpdate"
+            $ref: "#/definitions/ArrayInfoUpdate"
           required: true
       responses:
         204:
@@ -1725,7 +1725,7 @@ paths:
           in: body
           description: metadata associated with array
           schema:
-            $ref: "#/definitions/ArrayMetadataUpdate"
+            $ref: "#/definitions/ArrayInfoUpdate"
           required: true
       responses:
         204:
