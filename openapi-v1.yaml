@@ -539,11 +539,11 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/Attribute"
-    # x-go-type:
-    #   import:
-    #     package: "github.com/TileDB-Inc/TileDB-Go"
-    #     alias: "tiledb"
-    #   type: "ArraySchema"
+    x-go-type:
+      import:
+        package: "github.com/TileDB-Inc/TileDB-Go"
+        alias: "tiledb"
+      type: "ArraySchema"
 
   AttributeBufferHeader:
     description: Represents an attribute buffer header information
@@ -741,11 +741,11 @@ definitions:
         description: Total number of bytes in variable size attribute buffers.
         type: integer
         format: uint64
-    # x-go-type:
-    #   import:
-    #     package: "github.com/TileDB-Inc/TileDB-Go"
-    #     alias: "tiledb"
-    #   type: "Query"
+    x-go-type:
+      import:
+        package: "github.com/TileDB-Inc/TileDB-Go"
+        alias: "tiledb"
+      type: "Query"
 
   NonEmptyDomain:
     type: object
@@ -945,6 +945,42 @@ definitions:
         description: logs from array task
         type: string
         x-omitempty: false
+
+  PaginationMetadata:
+    properties:
+      page:
+        description: pagination offset
+        type: number
+        format: uint64
+        example: 1
+      per_page:
+        description: pagination limit
+        type: number
+        format: uint64
+        example: 10
+      total_pages:
+        description: number of total pages with current limit
+        type: number
+        format: uint64
+        example: 14
+      total_items:
+        description: number of total available items
+        type: number
+        format: uint64
+        example: 138
+
+  ArrayTaskData:
+    description: Object including array tasks and metadata
+    type: object
+    properties:
+      array_tasks:
+        description: Array Tasks
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArrayTask"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
 
   LastAccessedArray:
     type: object
@@ -2620,11 +2656,36 @@ paths:
         type: integer
         format: uint64
         required: false
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+      - name: type
+        in: query
+        description: task type, "QUERY", "SQL", "UDF"
+        required: false
+        type: string
       - name: status
         in: query
         description: Filter to only return these statuses
         type: string
         required: false
+      - name: search
+        in: query
+        description: search string that will look at name, namespace or description fields
+        required: false
+        type: string
+      - name: orderby
+        in: query
+        description: sort by which field valid values include start_time, name
+        required: false
+        type: string
     get:
       tags:
         - tasks
@@ -2633,10 +2694,7 @@ paths:
         200:
           description: Array of all tasks user has access too
           schema:
-            type: array
-            x-omitempty: true
-            items:
-              $ref: "#/definitions/ArrayTask"
+            $ref: "#/definitions/ArrayTaskData"
         default:
           description: error response
           schema:
