@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 0.7.0
+  version: 1.2.0
 
 produces:
 - application/json
@@ -102,6 +102,10 @@ definitions:
       - deregister
       # udf operations
       - udf
+      # get array metadata operation
+      - array_metadata_get
+      # update array metadata operation
+      - array_metadata_update
 
   UDFType:
     description: UDF Type
@@ -791,6 +795,36 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/AttributeBufferSize"
+
+  ArrayMetadataEntry:
+    type: object
+    description: key/value pair representing an array metadata map entry
+    properties:
+      key:
+        type: string
+      type:
+        type: string
+      value_num:
+        type: integer
+        format: uint32
+      value:
+        type: array
+        items:
+          type: integer
+          format: uint8
+      del:
+        type: boolean
+
+  ArrayMetadata:
+    type: object
+    description: user's TileDB array metadata
+    properties:
+      ranges:
+        description: List of metadata entries
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArrayMetadataEntry"
 
   ArrayActivityLog:
     description: Actvity of an Array
