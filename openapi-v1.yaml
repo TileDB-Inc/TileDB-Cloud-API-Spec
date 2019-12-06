@@ -2217,7 +2217,7 @@ paths:
           examples:
             application/json:
               key1: 25
-              "key2":
+              key2:
                 - 25
                 - 26
                 - 27
