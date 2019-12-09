@@ -951,9 +951,9 @@ definitions:
         type: string
         format: date-time
       cost:
-        description: Cost accumulated for task in 0.001 USD, example is 1 USD
+        description: Cost accumulated for task in 0.01 USD, example is 1 USD
         type: integer
-        example: 1000
+        example: 100
       query_type:
         description: If task type is query, whether its a read or write query
         $ref: "#/definitions/Querytype"
@@ -2836,6 +2836,17 @@ paths:
             $ref: "#/definitions/SQLParameters"
           required: true
       responses:
+        200:
+          description: JSON results in array of objects form, if the query returns results
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just completed query
+          schema:
+            type: array
+            items:
+                  type: object
+                  additionalProperties: true
         204:
           description: SQL executed successfully
           headers:
