@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 1.1.0
+  version: 1.2.0
 
 produces:
 - application/json
@@ -102,6 +102,10 @@ definitions:
       - deregister
       # udf operations
       - udf
+      # get array metadata operation
+      - array_metadata_get
+      # update array metadata operation
+      - array_metadata_update
 
   UDFType:
     description: UDF Type
@@ -792,6 +796,36 @@ definitions:
         items:
           $ref: "#/definitions/AttributeBufferSize"
 
+  ArrayMetadataEntry:
+    type: object
+    description: key/value pair representing an array metadata map entry
+    properties:
+      key:
+        type: string
+      type:
+        type: string
+      value_num:
+        type: integer
+        format: uint32
+      value:
+        type: array
+        items:
+          type: integer
+          format: uint8
+      del:
+        type: boolean
+
+  ArrayMetadata:
+    type: object
+    description: user's TileDB array metadata
+    properties:
+      ranges:
+        description: List of metadata entries
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArrayMetadataEntry"
+
   ArrayActivityLog:
     description: Actvity of an Array
     type: object
@@ -874,7 +908,7 @@ definitions:
         example: "Return attr a1 in the subarray bounded by coordinates and multiply attr1 by 2"
       array_metadata:
         description: Metadata of the array used in the context of this task
-        $ref: "#/definitions/ArrayMetadata"
+        $ref: "#/definitions/ArrayInfo"
       subarray:
         description: A subarray to run the array task on
         $ref: "#/definitions/DomainArray"
@@ -945,6 +979,42 @@ definitions:
         description: logs from array task
         type: string
         x-omitempty: false
+
+  PaginationMetadata:
+    properties:
+      page:
+        description: pagination offset
+        type: number
+        format: uint64
+        example: 1
+      per_page:
+        description: pagination limit
+        type: number
+        format: uint64
+        example: 10
+      total_pages:
+        description: number of total pages with current limit
+        type: number
+        format: uint64
+        example: 14
+      total_items:
+        description: number of total available items
+        type: number
+        format: uint64
+        example: 138
+
+  ArrayTaskData:
+    description: Object including array tasks and metadata
+    type: object
+    properties:
+      array_tasks:
+        description: Array Tasks
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArrayTask"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
 
   LastAccessedArray:
     type: object
@@ -1151,7 +1221,7 @@ definitions:
         type: string
         example: "organization"
 
-  ArrayMetadata:
+  ArrayInfo:
     description: metadata of an array
     type: object
     properties:
@@ -1213,7 +1283,7 @@ definitions:
         type: string
         x-omitempty: false
 
-  ArrayMetadataUpdate:
+  ArrayInfoUpdate:
     description: metadata of an array
     type: object
     properties:
@@ -1481,7 +1551,7 @@ paths:
             type: array
             x-omitempty: true
             items:
-              $ref: "#/definitions/ArrayMetadata"
+              $ref: "#/definitions/ArrayInfo"
         default:
           description: error response
           schema:
@@ -1506,7 +1576,7 @@ paths:
             type: array
             x-omitempty: true
             items:
-              $ref: "#/definitions/ArrayMetadata"
+              $ref: "#/definitions/ArrayInfo"
         default:
           description: error response
           schema:
@@ -1678,7 +1748,7 @@ paths:
         200:
           description: array metadata for an array
           schema:
-            $ref: "#/definitions/ArrayMetadata"
+            $ref: "#/definitions/ArrayInfo"
         default:
           description: error response
           schema:
@@ -1693,7 +1763,7 @@ paths:
           in: body
           description: array metadata to update
           schema:
-            $ref: "#/definitions/ArrayMetadataUpdate"
+            $ref: "#/definitions/ArrayInfoUpdate"
           required: true
       responses:
         204:
@@ -1725,7 +1795,7 @@ paths:
           in: body
           description: metadata associated with array
           schema:
-            $ref: "#/definitions/ArrayMetadataUpdate"
+            $ref: "#/definitions/ArrayInfoUpdate"
           required: true
       responses:
         204:
@@ -2620,11 +2690,36 @@ paths:
         type: integer
         format: uint64
         required: false
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+      - name: type
+        in: query
+        description: task type, "QUERY", "SQL", "UDF"
+        required: false
+        type: string
       - name: status
         in: query
         description: Filter to only return these statuses
         type: string
         required: false
+      - name: search
+        in: query
+        description: search string that will look at name, namespace or description fields
+        required: false
+        type: string
+      - name: orderby
+        in: query
+        description: sort by which field valid values include start_time, name
+        required: false
+        type: string
     get:
       tags:
         - tasks
@@ -2633,10 +2728,7 @@ paths:
         200:
           description: Array of all tasks user has access too
           schema:
-            type: array
-            x-omitempty: true
-            items:
-              $ref: "#/definitions/ArrayTask"
+            $ref: "#/definitions/ArrayTaskData"
         default:
           description: error response
           schema:
