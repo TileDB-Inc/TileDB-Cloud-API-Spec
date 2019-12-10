@@ -1052,10 +1052,7 @@ definitions:
   ArrayMetadataJson:
     type: object
     description: Metadata from array in Json format
-    properties:
-      data:
-        additionalProperties:
-          type: object
+    additionalProperties: true
 
   Error:
     type:  object
