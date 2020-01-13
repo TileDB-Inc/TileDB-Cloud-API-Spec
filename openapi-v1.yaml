@@ -215,7 +215,6 @@ definitions:
       # View logs for array
       - read_array_logs
 
-
   NamespaceActions:
     description: actions a user can take on an organization
     type: string
@@ -1015,6 +1014,26 @@ definitions:
           $ref: "#/definitions/ArrayTask"
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
+
+  ArrayTaskBrowserSidebar:
+    description: Object for ui array tasks browser page
+    type: object
+    properties:
+      organizations:
+        description: list of all unique organizations the user is part of that have array tasks
+        type: array
+        x-omitempty: false
+        items:
+          type: string
+      result_count_for_all:
+        description: A count of "all"
+        x-omitempty: false
+        type: integer
+      result_count_by_namespace:
+        description: A map that includes the result count by namespace
+        x-omitempty: false
+        additionalProperties:
+          type: integer
 
   LastAccessedArray:
     type: object
@@ -2785,6 +2804,51 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /tasks/sidebar:
+    parameters:
+      - name: start
+        in: query
+        description: Fetch tasks created after this time, unix epoch in seconds, default 7 days ago
+        type: integer
+        format: uint64
+      - name: end
+        in: query
+        description: Fetch tasks created before this time, unix epoch in seconds, default now
+        type: integer
+        format: uint64
+    get:
+      tags:
+        - array_tasks
+      operationId: getArrayTasksSidebar
+      responses:
+        200:
+          description: sidebar metadata for task definitions for all arrays user has access to
+          schema:
+            $ref: "#/definitions/ArrayTaskBrowserSidebar"
+
+          examples:
+            application/json:
+              organizations:
+                - organization1
+                - organization2
+                - organization3
+              result_count_for_all: 74
+              result_count_by_namespace:
+                mockuser: 14
+                organization1: 6
+                organization2: 52
+                organization3: 2
+        404:
+          description: array tasks not found
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              message: "Error try again"
+              code: 1
+
   /task/{id}:
     parameters:
       - name: id
@@ -2828,6 +2892,7 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
   /tokens:
     get:
       tags:
