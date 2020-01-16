@@ -1986,6 +1986,10 @@ paths:
         in: header
         description: Name of organization or user who should be charged for this request
         type: string
+      - name: Accept-Encoding
+        in: header
+        description: Encoding to use
+        type: string
 
     post:
       description: send a UDF to run against a specified array/URI registered to a group/project
