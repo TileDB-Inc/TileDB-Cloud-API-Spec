@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 1.2.0
+  version: 1.3.6
 
 produces:
 - application/json
@@ -1516,6 +1516,12 @@ definitions:
       exec:
         type: string
         description: Type-specific executable text
+      buffers:
+        description: List of buffers to fetch (attributes + coordinates)
+        type: array
+        x-omitempty: true
+        items:
+          type: string
 
   SQLParameters:
     description: Parameters for running sql query
