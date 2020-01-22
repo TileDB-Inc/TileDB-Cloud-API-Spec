@@ -244,6 +244,45 @@ definitions:
       # Edit billing details
       - edit_billing
 
+  PlanType:
+    description: Plan types
+    type: string
+    enum: &PLANTYPE
+      # Egress plan
+      - EGRESS
+      # Access plan
+      - ACCESS
+
+  PlanCurrency:
+    description: Currency of plan
+    type: string
+    enum: &PLANCURRENCY
+      # US Dollars
+      - USD
+
+  PlanUnitLabel:
+    description: Unit label
+    type: string
+    enum: &PLANUNITLABEL
+      # Kilobyte
+      - KB
+      # Seconds
+      - seconds
+
+  PlanAggregateUsage:
+    description: Specifies a usage aggregation strategy for plans of usage_type=metered
+    type: string
+    enum: &PLANAGGREGATEUSAGE
+      # For summing up all usage during a period
+      - sum
+
+  PlanInterval:
+    description: Interval for plan
+    type: string
+    enum: &PLANINTERVAL
+      # Month
+      - month
+
   DomainArray:
     description: Domain object for an array of each type
     type: object
@@ -860,6 +899,91 @@ definitions:
         type: string
         example: "{\"rows\":[{\"start\": 1, \"end\": 1},{\"start\": 3, \"end\": 4}],\"cols\":[{\"start\": 1, \"end\": 4}]}"
 
+  PlanInfoCreate:
+    description: Info for plans updated
+    type: object
+    properties:
+      egress_charge:
+        description: Price in cents per unitlabel
+        type: integer
+        format: uint64
+      access_charge:
+        description: Price in cents per unitlabel
+        type: integer
+        format: uint64
+
+  PlanInfoUpdate:
+    description: Info for plans updated
+    type: object
+    properties:
+      plan_id:
+        description: ID of plan
+        type: string
+      activated:
+        description: If plan is activated
+        type: boolean
+        example: false
+
+  Plan:
+    description: Plan created by converting an array to product
+    type: object
+    properties:
+      id:
+        description: ID of plan
+        type: string
+      product_id:
+        description: ID of product
+        type: string
+      array_id:
+        description: Unique id of registered array
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      uri:
+        description: URI of array
+        type: string
+        example: "s3://bucket/array"
+      namespace:
+        description: Namespace array is in
+        type: string
+        example: "user1"
+      plan_name:
+        description: Name of plan
+        type: string
+      plan_type:
+        description: Type of plan
+        $ref: "#/definitions/PlanType"
+      product_name:
+        description: Name of product
+        type: string
+      product_statement_descriptor:
+        description: Extra information about a product which will appear on your customer’s credit card statement
+        type: string
+      product_unit_label:
+        description: A label that represents units of this product in Stripe and on customers’ receipts and invoices
+        $ref: "#/definitions/PlanUnitLabel"
+      currency:
+        description: Currency of plan
+        $ref: "#/definitions/PlanCurrency"
+      aggregate_usage:
+        description: Specifies a usage aggregation strategy for plans of usage_type=metered
+        $ref: "#/definitions/PlanAggregateUsage"
+      interval:
+        description: The frequency with which a subscription should be billed
+        $ref: "#/definitions/PlanInterval"
+      divided_by:
+        description: Group of n product unit labels
+        type: integer
+        format: uint64
+        example: 1048576
+      charge:
+        description: Price in cents per unitlabel
+        type: integer
+        format: uint64
+      activated:
+        description: If plan is activated
+        type: boolean
+        example: false
+
   ArrayTaskType:
     description: Synchronous Task Type
     type: string
@@ -1416,6 +1540,8 @@ definitions:
       - github
       # Google
       - google
+      # Stripe
+      - stripe
 
   PublicShareFilter:
     description: Query parameter to get array metadatas
@@ -1561,6 +1687,105 @@ paths:
           examples:
             application/json:
               stats: "123"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /plans/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace plans are in (an organization name or user's username)
+        type: string
+        required: true
+    get:
+      description: get metadata on all plans in a namespace
+      tags:
+        - plan
+      operationId: getPlansInNamespace
+      responses:
+        200:
+          description: plan metadata for all plans in a namespace
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/Plan"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /plans/{namespace}/{array}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: Content-Type
+        in: header
+        description: Content Type of input and return mime
+        type: string
+        required: true
+        default: application/json
+    get:
+      description: get metadata on all plans for an array
+      tags:
+        - plan
+      operationId: getPlans
+      responses:
+        200:
+          description: plan metadata for all plans of an array
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/Plan"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      description: create plans for a specified URI in a namespace
+      tags:
+        - plan
+      operationId: createPlans
+      parameters:
+        - name: plan_info_create
+          in: body
+          description: plan details regarding creation
+          schema:
+            $ref: "#/definitions/PlanInfoCreate"
+          required: true
+      responses:
+        204:
+          description: plans created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      description: update plans for a specified URI in a namespace
+      tags:
+        - plan
+      operationId: updatePlans
+      parameters:
+        - name: plan_info_update
+          in: body
+          description: plan metadata to update
+          schema:
+            $ref: "#/definitions/PlanInfoUpdate"
+          required: true
+      responses:
+        204:
+          description: plan updated successfully
         default:
           description: error response
           schema:
