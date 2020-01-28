@@ -1143,6 +1143,13 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/NamespaceActions"
+      enabled_features:
+        description: List of extra/optional/beta features to enable for namespace
+        type: array
+        x-omitempty: true
+        readOnly: true
+        items:
+          type: string
 
   OrganizationUser:
     description: user in an organization
@@ -1222,6 +1229,14 @@ definitions:
         type: number
         format: int32
         x-omitempty: false
+      enabled_features:
+        description: List of extra/optional/beta features to enable for namespace
+        type: array
+        x-omitempty: true
+        readOnly: true
+        items:
+          type: string
+
 
   ArraySharing:
     description: details for sharing a given array
