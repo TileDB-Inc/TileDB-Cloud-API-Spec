@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 1.4.0
+  version: 1.5.0
 
 produces:
 - application/json
@@ -117,12 +117,30 @@ definitions:
       # update array metadata operation
       - array_metadata_update
 
-  UDFType:
+  UDFLanguage:
     description: UDF Type
     type: string
     enum: &UDFTYPE
       # python
       - python
+
+  UDFType:
+    description: UDF Type
+    type: string
+    enum: &UDFTYPE
+      # single_array
+      - single_array
+      # generic
+      - generic
+
+  UDFResultType:
+    description: Results type
+    type: string
+    enum: &UDFRESULTTYPE
+      # native (i.e. cloud pickle)
+      - native
+      # JSON
+      - json
 
   Layout:
     description: Layout of array
@@ -877,6 +895,7 @@ definitions:
       - SQL
       - UDF
       - QUERY
+      - GENERIC_UDF
 
   ArrayTaskStatus:
     description: Status of array task
@@ -1525,19 +1544,46 @@ definitions:
         items:
           $ref: "#/definitions/UDFSubarrayRange"
 
-  UDF:
+  GenericUDF:
     description: User-defined function
     type: object
     properties:
-      type:
-        $ref: "#/definitions/UDFType"
-        description: UDF Type
+      language:
+        $ref: "#/definitions/UDFLanguage"
+        description: UDF language
       version:
         type: string
         description: Type-specific version
       image_name:
         type: string
         description: Docker image name to use for udf
+        x-omitempty: true
+      exec:
+        type: string
+        description: Type-specific executable text
+      argument:
+        type: string
+        description: Argument to pass to udf function
+        x-omitempty: true
+      result_format:
+        $ref: "#/definitions/UDFResultType"
+        description: type of results (native, i.e cloud pickle or json)
+        x-omitempty: true
+
+  UDF:
+    description: User-defined function
+    type: object
+    properties:
+      language:
+        $ref: "#/definitions/UDFLanguage"
+        description: UDF language
+      version:
+        type: string
+        description: Type-specific version
+      image_name:
+        type: string
+        description: Docker image name to use for udf
+        x-omitempty: true
       subarray:
         $ref: "#/definitions/UDFSubarray"
         description: Subarray ranges to query
@@ -3013,5 +3059,52 @@ paths:
               description: Task ID for just completed query
         default:
           description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /udfs/generic/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: Accept-Encoding
+        in: header
+        description: Encoding to use
+        type: string
+
+    post:
+      description: send a generic UDF in the given namespace
+      tags:
+        - udf
+      operationId: submitGenericUDF
+      produces:
+        - application/octet-stream
+      consumes:
+        - application/json
+      parameters:
+        - name: udf
+          in: body
+          description: udf to run
+          schema:
+            $ref: "#/definitions/GenericUDF"
+          required: true
+      responses:
+        200:
+          description: udf completed and the udf-type specific result is returned
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just completed request
+          schema:
+            type: string
+            format: binary
+        default:
+          description: error response
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just request if task was started
           schema:
             $ref: "#/definitions/Error"
