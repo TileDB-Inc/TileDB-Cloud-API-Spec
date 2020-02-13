@@ -1546,6 +1546,23 @@ definitions:
         items:
           $ref: "#/definitions/UDFSubarrayRange"
 
+  UDFRanges:
+    description: Subarray bounds to query for a UDF to operate on
+    type: object
+    properties:
+      layout:
+        $ref: "#/definitions/Layout"
+      ranges:
+        description: List of ranges,
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          x-omitempty: true
+          items:
+            type: number
+
+
   GenericUDF:
     description: User-defined function
     type: object
@@ -1586,9 +1603,12 @@ definitions:
         type: string
         description: Docker image name to use for udf
         x-omitempty: true
+      ranges:
+        description: ranges to run against, generic format
+        $ref: "#/definitions/UDFRanges"
       subarray:
         $ref: "#/definitions/UDFSubarray"
-        description: Subarray ranges to query
+        description: Subarray ranges to query, this is deprecate and `ranges` should be used instead.
       exec:
         type: string
         description: Type-specific executable text
