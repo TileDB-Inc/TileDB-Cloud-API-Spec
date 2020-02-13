@@ -117,12 +117,21 @@ definitions:
       # update array metadata operation
       - array_metadata_update
 
-  UDFType:
+  UDFLanguage:
     description: UDF Type
     type: string
     enum: &UDFTYPE
       # python
       - python
+
+  UDFType:
+    description: UDF Type
+    type: string
+    enum: &UDFTYPE
+      # single_array
+      - single_array
+      # generic
+      - generic
 
   UDFResultType:
     description: Results type
@@ -1539,9 +1548,9 @@ definitions:
     description: User-defined function
     type: object
     properties:
-      type:
-        $ref: "#/definitions/UDFType"
-        description: UDF Type
+      language:
+        $ref: "#/definitions/UDFLanguage"
+        description: UDF language
       version:
         type: string
         description: Type-specific version
@@ -1559,16 +1568,15 @@ definitions:
       result_format:
         $ref: "#/definitions/UDFResultType"
         description: type of results (native, i.e cloud pickle or json)
-        default: native
         x-omitempty: true
 
   UDF:
     description: User-defined function
     type: object
     properties:
-      type:
-        $ref: "#/definitions/UDFType"
-        description: UDF Type
+      language:
+        $ref: "#/definitions/UDFLanguage"
+        description: UDF language
       version:
         type: string
         description: Type-specific version
