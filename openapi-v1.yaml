@@ -572,6 +572,9 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/Attribute"
+      allowsDuplicates:
+        description:  True if the array allows coordinate duplicates. Applicable only to sparse arrays.
+        type: boolean
     x-go-type:
       import:
         package: "github.com/TileDB-Inc/TileDB-Go"
