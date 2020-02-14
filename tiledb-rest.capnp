@@ -58,6 +58,10 @@ struct ArraySchema {
 
     version @9 :List(Int32);
     # file format version
+
+    allowsDuplicates @10 :Bool;
+    # True if the array allows coordinate duplicates.
+    # Applicable only to sparse arrays.
 }
 
 struct Attribute {
