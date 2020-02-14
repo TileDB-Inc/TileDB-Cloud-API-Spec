@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 1.5.0
+  version: 1.5.1
 
 produces:
 - application/json
@@ -122,7 +122,7 @@ definitions:
   UDFLanguage:
     description: UDF Type
     type: string
-    enum: &UDFTYPE
+    enum: &UDFLANGUAGE
       # python
       - python
 
@@ -1570,6 +1570,10 @@ definitions:
     description: User-defined function
     type: object
     properties:
+      registered_udf:
+        type: string
+        description: name of registered udf to run, format is {namespace}/{udf_name}. Can not be used with exec
+        example: TileDB-Inc/csv_ingestor
       language:
         $ref: "#/definitions/UDFLanguage"
         description: UDF language
@@ -1583,6 +1587,10 @@ definitions:
       exec:
         type: string
         description: Type-specific executable text
+      exec_raw:
+        type: string
+        x-omitempty: true
+        description: optional raw text to store of serialized function, used for showing in UI
       argument:
         type: string
         description: Argument to pass to udf function
@@ -1596,6 +1604,10 @@ definitions:
     description: User-defined function
     type: object
     properties:
+      registered_udf:
+        type: string
+        description: name of registered udf to run, format is {namespace}/{udf_name}. Can not be used with exec
+        example: TileDB-Inc/quickstart_median
       language:
         $ref: "#/definitions/UDFLanguage"
         description: UDF language
@@ -1615,12 +1627,57 @@ definitions:
       exec:
         type: string
         description: Type-specific executable text
+      exec_raw:
+        type: string
+        x-omitempty: true
+        description: optional raw text to store of serialized function, used for showing in UI
       buffers:
         description: List of buffers to fetch (attributes + coordinates)
         type: array
         x-omitempty: true
         items:
           type: string
+
+  UDFRegistration:
+    description: User-defined function
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of udf
+      language:
+        $ref: "#/definitions/UDFLanguage"
+        description: UDF language
+      version:
+        type: string
+        description: Type-specific version
+      image_name:
+        type: string
+        description: Docker image name to use for udf
+        x-omitempty: true
+      type:
+        $ref: "#/definitions/UDFType"
+        description: UDF type
+      exec:
+        type: string
+        description: Type-specific executable text
+      exec_raw:
+        type: string
+        x-omitempty: true
+        description: optional raw text to store of serialized function, used for showing in UI
+
+  UDFListingData:
+    description: Object including udfs and metadata
+    type: object
+    properties:
+      udfs:
+        description: Registered UDFs
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/UDFRegistration"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
 
   SQLParameters:
     description: Parameters for running sql query
@@ -3131,5 +3188,126 @@ paths:
             X-TILEDB-CLOUD-TASK-ID:
               type: string
               description: Task ID for just request if task was started
+          schema:
+            $ref: "#/definitions/Error"
+
+  /udfs:
+    parameters:
+    - name: namespace
+      in: query
+      description: namespace to filter
+      type: string
+      required: false
+    - name: created_by
+      in: query
+      description: username to filter
+      type: string
+      required: false
+    - name: page
+      in: query
+      description: pagination offset
+      type: integer
+      required: false
+    - name: per_page
+      in: query
+      description: pagination limit
+      type: integer
+      required: false
+    - name: type
+      in: query
+      description: udf type, "generic", "single_array"
+      required: false
+      type: string
+    - name: search
+      in: query
+      description: search string that will look at name, namespace or description fields
+      required: false
+      type: string
+    - name: orderby
+      in: query
+      description: sort by which field valid values include created_at, last_used, name
+      required: false
+      type: string
+    get:
+      description: get a all UDFs accessible to the user
+      tags:
+        - udf
+      operationId: getUDFs
+      responses:
+        200:
+          description: registered udfs
+          schema:
+            $ref: "#/definitions/UDFListingData"
+        404:
+          description: udf not found
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /udfs/register/{namespace}/{name}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: name
+        in: path
+        description: name to register udf under
+        type: string
+        required: true
+    get:
+      description: get a specific UDF in the given namespace
+      tags:
+        - udf
+      operationId: getUDF
+      responses:
+        200:
+          description: udf registered successfully
+          schema:
+            $ref: "#/definitions/UDFRegistration"
+        404:
+          description: udf not found
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      description: register a UDF in the given namespace
+      tags:
+        - udf
+      operationId: registerUDF
+      parameters:
+        - name: udf
+          in: body
+          description: udf to register
+          schema:
+            $ref: "#/definitions/UDFRegistration"
+          required: true
+      responses:
+        204:
+          description: udf registered successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      description: updated an existing registerd UDF in the given namespace
+      tags:
+        - udf
+      operationId: updatedRegisteredUDF
+      parameters:
+        - name: udf
+          in: body
+          description: udf to update
+          schema:
+            $ref: "#/definitions/UDFRegistration"
+          required: true
+      responses:
+        204:
+          description: udf updated successfully
+        default:
+          description: error response
           schema:
             $ref: "#/definitions/Error"
