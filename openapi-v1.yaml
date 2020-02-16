@@ -244,6 +244,15 @@ definitions:
       - edit
       # View logs for array
       - read_array_logs
+      
+  UDFActions:
+    description: actions a user can take on an udf
+    type: string
+    enum: &UDFACTIONS
+      # Fetch udf and run jobs
+      - fetch_udf
+      # Share udf with others
+      - share_udf
 
   NamespaceActions:
     description: actions a user can take on an organization
@@ -1285,6 +1294,28 @@ definitions:
         example:
           - read
           - write
+      namespace:
+        description: namespace being granted array access can be a user or organization
+        type: string
+        example: "MyOrganization"
+      namespace_type:
+        description: details on if the namespace is a organization or user
+        type: string
+        example: "organization"
+
+  UDFSharing:
+    description: details for sharing a given udf
+    type: object
+    properties:
+      actions:
+        description: List of permitted actions
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/UDFActions"
+        example:
+          - fetch
+          - share
       namespace:
         description: namespace being granted array access can be a user or organization
         type: string
@@ -3307,6 +3338,59 @@ paths:
       responses:
         204:
           description: udf updated successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /udf/{namespace}/{name}/share:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: name
+        in: path
+        description: name of registered ud
+        type: string
+        required: true
+    get:
+      description: Get all sharing details of the udf
+      tags:
+        - udf
+      operationId: getUDFSharingPolicies
+      responses:
+        200:
+          description: List of all specific sharing policies
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/UDFSharing"
+        404:
+          description: UDF does not exist or user does not have permissions to view array sharing policies
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      description: Share a UDF with a user
+      tags:
+        - udf
+      operationId: shareUDF
+      parameters:
+        - name: udf_sharing
+          in: body
+          description: Namespace and list of permissions to share with. An empty list of permissions will remove the namespace, if permissions already exist they will be deleted then new ones added. In the event of a failure, the new polcies will be rolled back to prevent partial policies, and its likely the udf will not be shared with the namespace at all
+          schema:
+            $ref: "#/definitions/UDFSharing"
+          required: true
+      responses:
+        204:
+          description: UDF shared successfully
+        404:
+          description: UDF does not exist or user does not have permissions to share udf
         default:
           description: error response
           schema:
