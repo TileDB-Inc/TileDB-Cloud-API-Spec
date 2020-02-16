@@ -3245,7 +3245,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /udfs/register/{namespace}/{name}:
+  /udf/{namespace}/{name}:
     parameters:
       - name: namespace
         in: path
