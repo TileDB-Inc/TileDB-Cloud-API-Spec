@@ -244,7 +244,7 @@ definitions:
       - edit
       # View logs for array
       - read_array_logs
-      
+
   UDFActions:
     description: actions a user can take on an udf
     type: string
@@ -1700,6 +1700,9 @@ definitions:
         type: string
         x-omitempty: true
         description: optional raw text to store of serialized function, used for showing in UI
+      readme:
+        type: string
+        description: Markdown readme of udfs
 
   UDFListingData:
     description: Object including udfs and metadata
