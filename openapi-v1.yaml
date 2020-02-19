@@ -1637,6 +1637,10 @@ definitions:
         x-omitempty: true
         items:
           type: string
+      result_format:
+        $ref: "#/definitions/UDFResultType"
+        description: type of results (native, i.e cloud pickle or json)
+        x-omitempty: true
 
   UDFRegistration:
     description: User-defined function
