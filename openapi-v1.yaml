@@ -1421,11 +1421,7 @@ definitions:
         description: Unique id of subscription as defined by Stripe
         type: string
         example: "subscriptionID"
-      stripe_customer_id:
-        description: Unique id of customer as defined by Stripe in the connnected customer account
-        type: string
-        example: "customerID"
-      owner_namespace:
+      owner_namespace_uuid:
         description: Unique id of the array (product) owner
         type: string
         example: "00000000-0000-0000-0000-000000000000"
@@ -1433,7 +1429,7 @@ definitions:
         description: Name of the array (product) owner
         type: string
         example: "OwnerName"
-      customer_namespace:
+      customer_namespace_uuid:
         description: Unique id of the array (product) user (customer)
         type: string
         example: "00000000-0000-0000-0000-000000000000"
