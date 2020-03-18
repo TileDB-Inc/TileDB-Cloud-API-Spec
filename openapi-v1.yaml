@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 1.5.2
+  version: 1.5.4
 
 produces:
 - application/json
@@ -1869,6 +1869,39 @@ definitions:
         description: Output array uri
         example: "s3://my_bucket/my_output_array"
 
+  NotebookStatus:
+    description: Status details of a notebook server
+    type: object
+    properties:
+      namespace:
+        description: namespace of notebook
+        type: string
+      uptime:
+        description: duration notebook has been running in seconds
+        type: integer
+        format: uint64
+        example: 120
+      cpu_usage:
+        description: current cpu usage in millicpu
+        type: integer
+        format: uint64
+        example: 4000
+      memory_usage:
+        description: memory usage in bytes
+        type: integer
+        format: uint64
+        example: 1073741824
+      memory_limit:
+        description: memory allocated to notebook server in bytes
+        type: integer
+        format: uint64
+        example: 1073741824
+      cpu_count:
+        description: millicpu allocated to notebook server
+        type: integer
+        format: uint64
+        example: 4000
+
 paths:
   /.stats:
     get:
@@ -3535,6 +3568,30 @@ paths:
           description: UDF shared successfully
         404:
           description: UDF does not exist or user does not have permissions to share udf
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /notebooks/server/{namespace}/status:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace notebook is in (an organization name or user's username)
+        type: string
+        required: true
+    get:
+      description: Get status of the notebook server
+      tags:
+        - notebook
+      operationId: getNotebookServerStatus
+      responses:
+        200:
+          description: status of running notebook
+          schema:
+              $ref: "#/definitions/NotebookStatus"
+        404:
+          description: Notebook is not running
         default:
           description: error response
           schema:
