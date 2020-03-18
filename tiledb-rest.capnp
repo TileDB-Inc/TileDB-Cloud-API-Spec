@@ -120,6 +120,9 @@ struct Dimension {
 
     domain @13 :DomainArray;
     # extent of domain
+
+    filterPipeline @14 :FilterPipeline;
+    # TileDB FilterPipeline for Dimension
 }
 
 struct Domain {

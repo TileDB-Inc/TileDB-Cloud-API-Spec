@@ -445,6 +445,9 @@ definitions:
           float64:
             type: integer
             format: double
+      filterPipeline:
+        x-omit-empty: true
+        $ref: "#/definitions/FilterPipeline"
 
   Domain:
     description: Domain of array
