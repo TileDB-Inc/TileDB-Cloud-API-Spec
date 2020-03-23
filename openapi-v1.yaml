@@ -1636,6 +1636,8 @@ definitions:
       - github
       # Google
       - google
+      # Stripe
+      - stripe
 
   PublicShareFilter:
     description: Query parameter to get array metadatas
