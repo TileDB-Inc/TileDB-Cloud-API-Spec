@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 1.5.4
+  version: 1.6.1
 
 produces:
 - application/json
@@ -3595,6 +3595,28 @@ paths:
           description: status of running notebook
           schema:
               $ref: "#/definitions/NotebookStatus"
+        404:
+          description: Notebook is not running
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /notebooks/server/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace notebook is in (an organization name or user's username)
+        type: string
+        required: true
+    delete:
+      description: Shutdown a notebook server
+      tags:
+        - notebook
+      operationId: shutdownNotebookServer
+      responses:
+        204:
+          description: Notebook shutdown successfully
         404:
           description: Notebook is not running
         default:
