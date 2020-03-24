@@ -2599,6 +2599,11 @@ paths:
         description: name/uri of array that is url-encoded
         type: string
         required: true
+      - name: length
+        in: query
+        description: (optional) limit character length of returned values
+        type: integer
+        required: false
     get:
       description: get metadata from the array in json format
       tags:
