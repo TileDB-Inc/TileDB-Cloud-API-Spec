@@ -1347,8 +1347,8 @@ definitions:
     description: Unit label
     type: string
     enum: &PRICINGUNITLABEL
-      # Kilobyte
-      - KB
+      # Byte
+      - byte
       # Second
       - second
 
@@ -1382,7 +1382,7 @@ definitions:
         description: Name of pricing
         type: string
       pricing_type:
-        description: Type of  pricing
+        description: Type of pricing
         $ref: "#/definitions/PricingType"
       product_name:
         description: Name of product
@@ -1428,30 +1428,16 @@ definitions:
         description: Unique id of the array (product) owner
         type: string
         example: "00000000-0000-0000-0000-000000000000"
-      owner_name:
-        description: Name of the array (product) owner
-        type: string
-        example: "OwnerName"
       customer_namespace_uuid:
         description: Unique id of the array (product) user (customer)
         type: string
         example: "00000000-0000-0000-0000-000000000000"
-      pricing_id:
-        description: Unique id of plan as defined by Stripe
-        type: string
-        example: "planID"
-      array_uuid:
-        description: Unique id of registered array
-        type: string
-        example: "00000000-0000-0000-0000-000000000000"
-      array_name:
-        description: Name of registered array
-        type: string
-        example: "ArrayName"
-      cancelled:
-        description: If subscription is cancelled
-        type: boolean
-        example: false
+      pricing:
+        description: list of pricing used by this subscription
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/Pricing"
 
   ArrayInfo:
     description: metadata of an array
@@ -1498,7 +1484,7 @@ definitions:
         items:
           $ref: "#/definitions/Pricing"
       subscriptions:
-        description: list of pricing created for this array
+        description: list of subscriptions created for this array
         type: array
         x-omitempty: true
         items:
