@@ -1724,7 +1724,6 @@ definitions:
           items:
             type: number
 
-
   GenericUDF:
     description: User-defined function
     type: object
@@ -1892,6 +1891,156 @@ definitions:
         type: integer
         format: uint64
         example: 4000
+
+  InvitationType:
+    description: List of values that InvitationType can take
+    type: string
+    enum: &INVITATIONTYPE
+      # Array share
+      - ARRAY_SHARE
+      # Join Organization
+      - JOIN_ORGANIZATION
+
+  InvitationStatus:
+    description: List of values that InvitationStatus can take
+    type: string
+    enum: &INVITATIONSTATUS
+      # Pending
+      - PENDING
+      # Accepted
+      - ACCEPTED
+
+  InvitationArrayShareEmail:
+    description: Encapsulates information regarding inviting people using email to share array, same permissions for all invitees
+    type: object
+    required:
+      - invitee_email
+    properties:
+      actions:
+        description: List of permitted actions
+        type: array
+        items:
+          $ref: "#/definitions/ArrayActions"
+        example:
+          - read
+          - write
+      invitee_email:
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+          format: email
+
+  InvitationOrganizationJoinEmail:
+    description: Encapsulates information regarding inviting people using email to join organization, same permissions for all invitees
+    type: object
+    required:
+      - invitee_email
+    properties:
+      actions:
+        description: List of permitted actions
+        type: array
+        items:
+          $ref: "#/definitions/NamespaceActions"
+        example:
+          - read
+          - write
+      organization_role:
+        description: Role of the invited namespace in the joined organization
+        $ref: "#/definitions/OrganizationRoles"
+        x-omitempty: false
+      invitee_email:
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+          format: email
+
+  Invitation:
+    description: Invitations to share or collaborate
+    type: object
+    properties:
+      id:
+        description: Unique id of invitation added to magic link
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      invitation_type:
+        description: Type of invitation
+        $ref: "#/definitions/InvitationType"
+        example: array_share
+        x-omitempty: false
+      owner_namespace_uuid:
+        description: Namespace of the owner of the invitation (user or organization)
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      user_namespace_uuid:
+        description: Unique id of the user accepted the invitation
+        type: string
+        x-omitempty: false
+        example: "00000000-0000-0000-0000-000000000000"
+      organization_user_uuid:
+        description: Unique id of the organization user accepted the invitation
+        type: string
+        x-omitempty: false
+        example: "00000000-0000-0000-0000-000000000000"
+      organization_name:
+        description: Name of the organization, does not persist in database
+        type: string
+        example: "organization_name"
+      organization_role:
+        description: Role of the invited namespace in the joined organization
+        $ref: "#/definitions/OrganizationRoles"
+        x-omitempty: false
+      array_uuid:
+        description: Unique id of the array
+        type: string
+        x-omitempty: false
+        example: "00000000-0000-0000-0000-000000000000"
+      array_name:
+        description: Name of the array, does not persist in database
+        type: string
+        example: "array_name"
+      email:
+        description: Email of the individual we send the invitation to
+        type: string
+        example: "jane@doe.com"
+      actions:
+        description: A comma separated list of ArrayActions or NamespaceActions
+        type: string
+        example: "read,write"
+      status:
+        description: Status of invitation
+        $ref: "#/definitions/InvitationStatus"
+        example: PENDING
+        x-omitempty: false
+      created_at:
+        description: Datetime the invitation was created in UTC
+        type: string
+        format: date-time
+        x-omitempty: false
+      expires_at:
+        description: Datetime the invitation is expected to expire in UTC
+        type: string
+        format: date-time
+        x-omitempty: false
+      accepted_at:
+        description: Datetime the invitation was accepted in UTC
+        type: string
+        format: date-time
+        x-omitempty: false
+
+  InvitationData:
+    description: Object including invitations and metadata
+    type: object
+    properties:
+      invitations:
+        description: List of invitations
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/Invitation"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
 
 paths:
   /.stats:
@@ -3610,6 +3759,218 @@ paths:
           description: Notebook shutdown successfully
         404:
           description: Notebook is not running
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /invitations:
+    parameters:
+      - name: organization
+        in: query
+        description: name or id of organization to filter
+        type: string
+        required: false
+      - name: array
+        in: query
+        description: name/uri of array that is url-encoded to filter
+        type: string
+        required: false
+      - name: start
+        in: query
+        description: start time for tasks to filter by
+        type: integer
+        format: uint64
+        required: false
+      - name: end
+        in: query
+        description: end time for tasks to filter by
+        type: integer
+        format: uint64
+        required: false
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+      - name: type
+        in: query
+        description: invitation type, "ARRAY_SHARE", "JOIN_ORGANIZATION"
+        required: false
+        type: string
+      - name: status
+        in: query
+        description: Filter to only return "PENDING", "ACCEPTED"
+        type: string
+        required: false
+      - name: orderby
+        in: query
+        description: sort by which field valid values include timestamp, array_name, organization_name
+        required: false
+        type: string
+    get:
+      tags:
+        - invitation
+      description: Fetch a list of invitations
+      operationId: fetchInvitations
+      responses:
+        200:
+          description: List of invitations and pagination metadata
+          schema:
+            $ref: "#/definitions/InvitationData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /invitations/{invitation}:
+    parameters:
+      - name: invitation
+        in: path
+        description: the id of invitation about to be accepted
+        type: string
+        required: true
+    post:
+      tags:
+        - invitation
+      description: Accepts invitation
+      operationId: acceptInvitation
+      responses:
+        204:
+          description: Invitation was accepted successfully
+        404:
+          description: Could not find invitation identifier
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /invitations/{invitation}/{namespace}/{array}/share:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: invitation
+        in: path
+        description: the id of invitation about to be cancelled
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+    delete:
+      description: Cancels array sharing invitation
+      tags:
+        - invitation
+      operationId: cancelShareArrayByInvite
+      responses:
+        204:
+          description: Invitation cancelled successfully
+        404:
+          description: No invitation was found to cancel
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /invitations/{invitation}/{organization}/join:
+    parameters:
+      - name: invitation
+        in: path
+        description: the id of invitation about to be cancelled
+        type: string
+        required: true
+      - name: organization
+        in: path
+        description: name or uuid of organization
+        type: string
+        required: true
+    delete:
+      description: Cancels join organization invitation
+      tags:
+        - invitation
+      operationId: cancelJoinOrganization
+      responses:
+        204:
+          description: Invitation cancelled successfully
+        404:
+          description: No invitation was found to cancel
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /invitations/{namespace}/{array}/share:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+    post:
+      tags:
+        - invitation
+      description: Sends email to multiple recipients with sharing information regarding an array
+      operationId: shareArrayByInvite
+      parameters:
+        - name: email_invite
+          in: body
+          description: list of email recipients
+          schema:
+            $ref: "#/definitions/InvitationArrayShareEmail"
+          required: true
+      responses:
+        204:
+          description: Email sent successfully to user for email confirmation link
+        404:
+          description: Could not reach one or more recipients
+          schema:
+            $ref: "#/definitions/InvitationArrayShareEmail"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /invitations/{organization}/join:
+    parameters:
+      - name: organization
+        in: path
+        description: name or uuid of organization
+        type: string
+        required: true
+    post:
+      tags:
+        - invitation
+      description: Sends email to multiple recipients with joining information regarding an organization
+      operationId: joinOrganization
+      parameters:
+        - name: email_invite
+          in: body
+          description: list of email recipients
+          schema:
+            $ref: "#/definitions/InvitationOrganizationJoinEmail"
+          required: true
+      responses:
+        204:
+          description: Email sent successfully to user for email confirmation link
+        404:
+          description: Could not reach one or more recipients
+          schema:
+            $ref: "#/definitions/InvitationOrganizationJoinEmail"
         default:
           description: error response
           schema:
