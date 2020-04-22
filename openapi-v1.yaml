@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 1.6.1
+  version: 1.8.0
 
 produces:
 - application/json
@@ -1118,6 +1118,39 @@ definitions:
     type: object
     description: Metadata from array in Json format
     additionalProperties: true
+
+  ArrayBrowserData:
+    description: Object including array info and pagination metadata 
+    type: object
+    properties:
+      arrays:
+        description: Array Info
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArrayInfo"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
+  ArrayBrowserSidebar:
+    description: Object for ui array tasks browser page
+    type: object
+    properties:
+      namespaces:
+        description: list of all unique namespaces to display
+        type: array
+        x-omitempty: false
+        items:
+          type: string
+      result_count_for_all:
+        description: A count of "all" of category
+        x-omitempty: false
+        type: integer
+      result_count_by_namespace:
+        description: A map that includes the result count by namespace
+        x-omitempty: false
+        additionalProperties:
+          type: integer
 
   Error:
     type:  object
@@ -3971,6 +4004,67 @@ paths:
           description: Could not reach one or more recipients
           schema:
             $ref: "#/definitions/InvitationOrganizationJoinEmail"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/browser/shared:
+    parameters:
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+      - name: search
+        in: query
+        description: search string that will look at name, namespace or description fields
+        required: false
+        type: string
+      - name: namespace
+        in: query
+        description: namespace
+        required: false
+        type: string
+      - name: orderby
+        in: query
+        description: sort by which field valid values include last_accessed, size, name
+        required: false
+        type: string
+      - name: permissions
+        in: query
+        description: permissions valid values include read, read_write, write, admin
+        required: false
+        type: string
+    get:
+      tags:
+        - arrays
+      description: Fetch a list of all arrays that have been shared with the user
+      responses:
+        200:
+          description: Array of array info that has been shared with the user
+          schema:
+            $ref: "#/definitions/ArrayBrowserData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/browser/shared/sidebar:
+    get:
+      tags:
+        - arrays
+      description: Fetch a list of all arrays that have been shared with the user
+      responses:
+        200:
+          description: Array of array info that has been shared with the user
+          schema:
+            $ref: "#/definitions/ArrayBrowserSidebar"
         default:
           description: error response
           schema:
