@@ -118,6 +118,8 @@ definitions:
       - array_metadata_get
       # update array metadata operation
       - array_metadata_update
+      # estimated_result_sizes
+      - estimated_result_sizes
 
   UDFLanguage:
     description: UDF Type
@@ -2683,6 +2685,72 @@ paths:
             X-TILEDB-CLOUD-TASK-ID:
               type: string
               description: Task ID for just completed query
+          schema:
+            $ref: "#/definitions/Query"
+        204:
+          description: query completed successfully with no return
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/{namespace}/{array}/query/est_result_sizes:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: type
+        in: query
+        description: type of query
+        required: true
+        type: string
+      - name: Content-Type
+        in: header
+        description: Content Type of input and return mime
+        type: string
+        required: true
+        default: application/json
+      - name: X-Payer
+        in: header
+        description: Name of organization or user who should be charged for this request
+        type: string
+      - name: open_at
+        description: open_at for array in unix epoch
+        in: query
+        type: integer
+        format: uint64
+    post:
+      description: send a query to run against a specified array/URI registered to a group/project
+      tags:
+        - query
+      produces:
+        - application/json
+        - application/capnp
+      consumes:
+        - application/json
+        - application/capnp
+      operationId: getEstResultSizes
+      parameters:
+        - name: query
+          in: body
+          description: query to run
+          schema:
+            $ref: "#/definitions/Query"
+          required: true
+      responses:
+        200:
+          description: query est result size computed and results are returned in query object
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just computed query result size
           schema:
             $ref: "#/definitions/Query"
         204:
