@@ -329,6 +329,14 @@ struct NonEmptyDomain {
 
   isEmpty @1 :Bool;
   # Is non-empty domain really empty?
+  
+  sizes @2 :List(UInt64);
+  # Number of elements in DomainArray for var length
+}
+
+struct NonEmptyDomainList {
+  # object representing non-empty domain for heterogeneous or string dimensions
+  nonEmptyDomains @0 :List(NonEmptyDomain);
 }
 
 struct AttributeBufferSize {
@@ -345,7 +353,7 @@ struct AttributeBufferSize {
 }
 
 struct MaxBufferSizes {
-  maxBufferSizes @0: List(AttributeBufferSize);
+  maxBufferSizes @0 :List(AttributeBufferSize);
   # a list of max buffer sizes, one per attribute
 }
 
