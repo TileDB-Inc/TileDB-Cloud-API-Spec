@@ -4070,7 +4070,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-
   /arrays/browser/public:
     parameters:
       - name: page
@@ -4121,10 +4120,71 @@ paths:
     get:
       tags:
         - arrays
-      description: Fetch a list of all arrays that have been shared publically
+      description: Fetch a sidebar of all arrays that have been shared publically
       responses:
         200:
           description: Array of array info that has been shared publically
+          schema:
+            $ref: "#/definitions/ArrayBrowserSidebar"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/browser/owned:
+    parameters:
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+      - name: search
+        in: query
+        description: search string that will look at name, namespace or description fields
+        required: false
+        type: string
+      - name: namespace
+        in: query
+        description: namespace
+        required: false
+        type: string
+      - name: orderby
+        in: query
+        description: sort by which field valid values include last_accessed, size, name
+        required: false
+        type: string
+      - name: permissions
+        in: query
+        description: permissions valid values include read, read_write, write, admin
+        required: false
+        type: string
+    get:
+      tags:
+        - arrays
+      description: Fetch a list of all arrays that are owned directly by user or user's organizations
+      responses:
+        200:
+          description: Array of array info that are owned directly by user or user's organizations
+          schema:
+            $ref: "#/definitions/ArrayBrowserData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/browser/owned/sidebar:
+    get:
+      tags:
+        - arrays
+      description: Fetch a sidebar for arrays that are owned directly by user or user's organizations
+      responses:
+        200:
+          description: Array of array info that are owned directly by user or user's organizations
           schema:
             $ref: "#/definitions/ArrayBrowserSidebar"
         default:
