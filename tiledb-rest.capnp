@@ -371,3 +371,21 @@ struct ArrayMetadata {
   entries @0 :List(MetadataEntry);
   # list of metadata values
 }
+
+struct EstimatedResultSize {
+  # object representing estimated
+  struct ResultSize {
+    # Result size 
+    sizeFixed @0 :Float64;
+    sizeVar @1 :Float64;
+  }
+  
+  struct MemorySize {
+    # Memory Size
+    sizeFixed @0 :UInt64;
+    sizeVar @1 :UInt64;
+  }
+
+  resultSizes @0 :Map(Text, ResultSize);
+  memorySizes @1 :Map(Text, MemorySize);
+}
