@@ -217,6 +217,12 @@ struct SubarrayRanges {
 
   buffer @2 :Data;
   # The bytes of the ranges
+
+  bufferSizes @3 :List(UInt64);
+  # The list of sizes per range
+
+  bufferStartSizes @4 :List(UInt64);
+  # The list of start sizes per range
 }
 
 struct Subarray {
@@ -329,7 +335,7 @@ struct NonEmptyDomain {
 
   isEmpty @1 :Bool;
   # Is non-empty domain really empty?
-  
+
   sizes @2 :List(UInt64);
   # Number of elements in DomainArray for var length
 }
