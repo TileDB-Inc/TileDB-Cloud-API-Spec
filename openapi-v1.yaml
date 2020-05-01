@@ -1949,6 +1949,7 @@ definitions:
     description: Encapsulates information regarding inviting people using email to share array, same permissions for all invitees
     type: object
     required:
+      - actions
       - invitee_email
     properties:
       actions:
@@ -1971,6 +1972,7 @@ definitions:
     type: object
     required:
       - invitee_email
+      - organization_role
     properties:
       actions:
         description: List of permitted actions
