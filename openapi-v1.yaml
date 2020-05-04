@@ -589,11 +589,11 @@ definitions:
       allowsDuplicates:
         description:  True if the array allows coordinate duplicates. Applicable only to sparse arrays.
         type: boolean
-    x-go-type:
-      import:
-        package: "github.com/TileDB-Inc/TileDB-Go"
-        alias: "tiledb"
-      type: "ArraySchema"
+    # x-go-type:
+    #   import:
+    #     package: "github.com/TileDB-Inc/TileDB-Go"
+    #     alias: "tiledb"
+    #   type: "ArraySchema"
 
   AttributeBufferHeader:
     description: Represents an attribute buffer header information
@@ -791,11 +791,11 @@ definitions:
         description: Total number of bytes in variable size attribute buffers.
         type: integer
         format: uint64
-    x-go-type:
-      import:
-        package: "github.com/TileDB-Inc/TileDB-Go"
-        alias: "tiledb"
-      type: "Query"
+    # x-go-type:
+    #   import:
+    #     package: "github.com/TileDB-Inc/TileDB-Go"
+    #     alias: "tiledb"
+    #   type: "Query"
 
   NonEmptyDomain:
     type: object
@@ -1792,6 +1792,9 @@ definitions:
         $ref: "#/definitions/UDFResultType"
         description: type of results (native, i.e cloud pickle or json)
         x-omitempty: true
+      task_name:
+        description: name of task, optional
+        type: string
 
   UDF:
     description: User-defined function
@@ -1834,6 +1837,9 @@ definitions:
         $ref: "#/definitions/UDFResultType"
         description: type of results (native, i.e cloud pickle or json)
         x-omitempty: true
+      task_name:
+        description: name of task, optional
+        type: string
 
   UDFRegistration:
     description: User-defined function
