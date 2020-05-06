@@ -1566,6 +1566,9 @@ definitions:
       access_credentials_name:
         description: the name of the access credentials to use. if unset, the default credentials will be used
         type: string
+      logo:
+        description: logo (base64 encoded) for the array. Optional
+        type: string
 
   TokenRequest:
     description: A request from a user for an api token
