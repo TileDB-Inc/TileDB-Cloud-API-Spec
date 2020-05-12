@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 1.8.0
+  version: 2.0.0
 
 produces:
 - application/json
