@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 2.0.0
+  version: 2.0.2
 
 produces:
 - application/json
@@ -589,11 +589,11 @@ definitions:
       allowsDuplicates:
         description:  True if the array allows coordinate duplicates. Applicable only to sparse arrays.
         type: boolean
-    # x-go-type:
-    #   import:
-    #     package: "github.com/TileDB-Inc/TileDB-Go"
-    #     alias: "tiledb"
-    #   type: "ArraySchema"
+    x-go-type:
+      import:
+        package: "github.com/TileDB-Inc/TileDB-Go"
+        alias: "tiledb"
+      type: "ArraySchema"
 
   AttributeBufferHeader:
     description: Represents an attribute buffer header information
@@ -791,11 +791,11 @@ definitions:
         description: Total number of bytes in variable size attribute buffers.
         type: integer
         format: uint64
-    # x-go-type:
-    #   import:
-    #     package: "github.com/TileDB-Inc/TileDB-Go"
-    #     alias: "tiledb"
-    #   type: "Query"
+    x-go-type:
+      import:
+        package: "github.com/TileDB-Inc/TileDB-Go"
+        alias: "tiledb"
+      type: "Query"
 
   NonEmptyDomain:
     type: object
