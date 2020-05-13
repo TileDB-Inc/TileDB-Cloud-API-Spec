@@ -998,9 +998,10 @@ definitions:
         type: string
         format: date-time
       cost:
-        description: Cost accumulated for task in 0.01 USD, example is 1 USD
-        type: integer
-        example: 100
+        description: Cost accumulated for task in USD, example is $0.12
+        type: number
+        format: double
+        example: 0.12
       query_type:
         description: If task type is query, whether its a read or write query
         $ref: "#/definitions/Querytype"
