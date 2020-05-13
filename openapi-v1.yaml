@@ -229,8 +229,8 @@ definitions:
       - owner
       # Admin almost all rights but can't delete organization
       - admin
-      # User
-      - user
+      # Read and write User
+      - read_write
       # Read Only User
       - read_only
 
