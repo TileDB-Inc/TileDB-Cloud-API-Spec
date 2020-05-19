@@ -240,12 +240,16 @@ definitions:
     enum: &ARRAYACTIONS
       # Read
       - read
-      # write
+      # Write
       - write
-      # edit metadata about array
+      # Edit metadata about array
       - edit
       # View logs for array
       - read_array_logs
+      # Permission to get array info
+      - read_array_info
+      # Permission to fetch the array schema
+      - read_array_schema
 
   UDFActions:
     description: actions a user can take on an udf
