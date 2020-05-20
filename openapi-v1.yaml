@@ -1889,6 +1889,13 @@ definitions:
       readme:
         type: string
         description: Markdown readme of udfs
+      tags:
+        description: optional tags for udf
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-]
 
   UDFListingData:
     description: Object including udfs and metadata
@@ -3637,7 +3644,7 @@ paths:
         type: string
 
     post:
-      description: send a generic UDF in the given namespace
+      description: submit a generic UDF in the given namespace
       tags:
         - udf
       operationId: submitGenericUDF
@@ -3706,6 +3713,11 @@ paths:
     - name: orderby
       in: query
       description: sort by which field valid values include created_at, last_used, name
+      required: false
+      type: string
+    - name: tag
+      in: query
+      description: tag to search for, more than one can be included
       required: false
       type: string
     get:
@@ -4142,12 +4154,6 @@ paths:
         description: tag to search for, more than one can be included
         required: false
         type: string
-      - name: tag_behavior
-        in: query
-        description: when multiple tags are included should the search be "and" or "or", defaults to "and" for more exclusive searching
-        required: false
-        type: string
-        default: "and"
     get:
       tags:
         - array
@@ -4214,12 +4220,6 @@ paths:
         description: tag to search for, more than one can be included
         required: false
         type: string
-      - name: tag_behavior
-        in: query
-        description: when multiple tags are included should the search be "and" or "or", defaults to "and" for more exclusive searching
-        required: false
-        type: string
-        default: "and"
     get:
       tags:
         - array
