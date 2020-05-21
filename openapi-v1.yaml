@@ -1552,6 +1552,13 @@ definitions:
         description: uri for access through TileDB cloud
         type: string
         x-omitempty: false
+      tags:
+        description: optional tags for array
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-]
 
   ArrayInfoUpdate:
     description: metadata of an array
@@ -1574,6 +1581,13 @@ definitions:
       logo:
         description: logo (base64 encoded) for the array. Optional
         type: string
+      tags:
+        description: optional tags for array
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-]
 
   TokenRequest:
     description: A request from a user for an api token
@@ -1879,6 +1893,13 @@ definitions:
       readme:
         type: string
         description: Markdown readme of udfs
+      tags:
+        description: optional tags for udf
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-]
 
   UDFListingData:
     description: Object including udfs and metadata
@@ -3627,7 +3648,7 @@ paths:
         type: string
 
     post:
-      description: send a generic UDF in the given namespace
+      description: submit a generic UDF in the given namespace
       tags:
         - udf
       operationId: submitGenericUDF
@@ -3696,6 +3717,11 @@ paths:
     - name: orderby
       in: query
       description: sort by which field valid values include created_at, last_used, name
+      required: false
+      type: string
+    - name: tag
+      in: query
+      description: tag to search for, more than one can be included
       required: false
       type: string
     get:
@@ -4127,6 +4153,11 @@ paths:
         description: permissions valid values include read, read_write, write, admin
         required: false
         type: string
+      - name: tag
+        in: query
+        description: tag to search for, more than one can be included
+        required: false
+        type: string
     get:
       tags:
         - array
@@ -4188,6 +4219,11 @@ paths:
         description: permissions valid values include read, read_write, write, admin
         required: false
         type: string
+      - name: tag
+        in: query
+        description: tag to search for, more than one can be included
+        required: false
+        type: string
     get:
       tags:
         - array
@@ -4247,6 +4283,11 @@ paths:
       - name: permissions
         in: query
         description: permissions valid values include read, read_write, write, admin
+        required: false
+        type: string
+      - name: tag
+        in: query
+        description: tag to search for, more than one can be included
         required: false
         type: string
     get:
