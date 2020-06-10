@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 2.0.2
+  version: 2.0.4
 
 produces:
 - application/json
@@ -1236,6 +1236,8 @@ definitions:
         readOnly: true
         items:
           type: string
+      notebook_settings:
+        $ref: "#/definitions/NotebookSettings"
 
   OrganizationUser:
     description: user in an organization
@@ -1322,6 +1324,8 @@ definitions:
         readOnly: true
         items:
           type: string
+      notebook_settings:
+        $ref: "#/definitions/NotebookSettings"
 
   ArraySharing:
     description: details for sharing a given array
@@ -2113,6 +2117,14 @@ definitions:
           $ref: "#/definitions/Invitation"
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
+
+  NotebookSettings:
+    description: Settings for a namespace's notebooks
+    type: object
+    properties:
+      default_s3_path:
+        description: default s3 path to store newly created notebooks
+        type: string
 
 paths:
   /.stats:
