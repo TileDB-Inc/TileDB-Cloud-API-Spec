@@ -1559,6 +1559,14 @@ definitions:
         items:
           type: string
           description: tag must be lowercase characters or hypen [a-z-]
+      license_id:
+        type: string
+        x-omitempty: true
+        description: License identifier from SPDX License List or Custom
+      license_text:
+        type: string
+        x-omitempty: true
+        description: License text
 
   ArrayInfoUpdate:
     description: metadata of an array
@@ -1588,6 +1596,14 @@ definitions:
         items:
           type: string
           description: tag must be lowercase characters or hypen [a-z-]
+      license_id:
+        type: string
+        x-omitempty: true
+        description: License identifier from SPDX License List or Custom
+      license_text:
+        type: string
+        x-omitempty: true
+        description: License text
 
   TokenRequest:
     description: A request from a user for an api token
@@ -1893,6 +1909,14 @@ definitions:
       readme:
         type: string
         description: Markdown readme of udfs
+      license_id:
+        type: string
+        x-omitempty: true
+        description: License identifier from SPDX License List or Custom
+      license_text:
+        type: string
+        x-omitempty: true
+        description: License text
       tags:
         description: optional tags for udf
         x-omitempty: false
