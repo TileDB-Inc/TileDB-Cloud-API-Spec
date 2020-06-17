@@ -1127,7 +1127,7 @@ definitions:
     additionalProperties: true
 
   ArrayBrowserData:
-    description: Object including array info and pagination metadata 
+    description: Object including array info and pagination metadata
     type: object
     properties:
       arrays:
@@ -1236,6 +1236,11 @@ definitions:
         readOnly: true
         items:
           type: string
+      unpaid_subscription:
+        description: A notice that the user has an unpaid subscription
+        type: boolean
+        readOnly: true
+        x-omitempty: false
       notebook_settings:
         $ref: "#/definitions/NotebookSettings"
 
@@ -1324,6 +1329,11 @@ definitions:
         readOnly: true
         items:
           type: string
+      unpaid_subscription:
+        description: A notice that the user has an unpaid subscription
+        type: boolean
+        readOnly: true
+        x-omitempty: false
       notebook_settings:
         $ref: "#/definitions/NotebookSettings"
 
