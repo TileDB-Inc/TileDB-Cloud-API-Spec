@@ -1805,9 +1805,9 @@ definitions:
     description: User-defined function
     type: object
     properties:
-      registered_udf:
+      udf_info_name:
         type: string
-        description: name of registered udf to run, format is {namespace}/{udf_name}. Can not be used with exec
+        description: name of UDFInfo to run, format is {namespace}/{udf_name}. Can not be used with exec
         example: TileDB-Inc/csv_ingestor
       language:
         $ref: "#/definitions/UDFLanguage"
@@ -1842,9 +1842,9 @@ definitions:
     description: User-defined function
     type: object
     properties:
-      registered_udf:
+      udf_info_name:
         type: string
-        description: name of registered udf to run, format is {namespace}/{udf_name}. Can not be used with exec
+        description: name of UDFInfo to run, format is {namespace}/{udf_name}. Can not be used with exec
         example: TileDB-Inc/quickstart_median
       language:
         $ref: "#/definitions/UDFLanguage"
@@ -1883,8 +1883,8 @@ definitions:
         description: name of task, optional
         type: string
 
-  UDFRegistration:
-    description: User-defined function
+  UDFInfo:
+    description: User-defined function that can persist in db, used and shared multiple times
     type: object
     properties:
       name:
@@ -1933,12 +1933,12 @@ definitions:
     description: Object including udfs and metadata
     type: object
     properties:
-      udfs:
-        description: Registered UDFs
+      udf_info_list:
+        description: List of UDFInfo
         type: array
         x-omitempty: true
         items:
-          $ref: "#/definitions/UDFRegistration"
+          $ref: "#/definitions/UDFInfo"
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
 
@@ -3764,10 +3764,10 @@ paths:
       description: get a all UDFs accessible to the user
       tags:
         - udf
-      operationId: getUDFs
+      operationId: getUDFInfoList
       responses:
         200:
-          description: registered udfs
+          description: UDFInfo list
           schema:
             $ref: "#/definitions/UDFListingData"
         404:
@@ -3793,12 +3793,12 @@ paths:
       description: get a specific UDF in the given namespace
       tags:
         - udf
-      operationId: getUDF
+      operationId: getUDFInfo
       responses:
         200:
-          description: udf registered successfully
+          description: UDFInfo was retrieved successfully
           schema:
-            $ref: "#/definitions/UDFRegistration"
+            $ref: "#/definitions/UDFInfo"
         404:
           description: udf not found
         default:
@@ -3809,13 +3809,13 @@ paths:
       description: register a UDF in the given namespace
       tags:
         - udf
-      operationId: registerUDF
+      operationId: registerUDFInfo
       parameters:
         - name: udf
           in: body
           description: udf to register
           schema:
-            $ref: "#/definitions/UDFRegistration"
+            $ref: "#/definitions/UDFInfo"
           required: true
       responses:
         204:
@@ -3828,13 +3828,13 @@ paths:
       description: updated an existing registerd UDF in the given namespace
       tags:
         - udf
-      operationId: updatedRegisteredUDF
+      operationId: updateUDFInfo
       parameters:
         - name: udf
           in: body
           description: udf to update
           schema:
-            $ref: "#/definitions/UDFRegistration"
+            $ref: "#/definitions/UDFInfo"
           required: true
       responses:
         204:
@@ -3853,14 +3853,14 @@ paths:
         required: true
       - name: name
         in: path
-        description: name of registered ud
+        description: name of UDFInfo
         type: string
         required: true
     get:
       description: Get all sharing details of the udf
       tags:
         - udf
-      operationId: getUDFSharingPolicies
+      operationId: getUDFInfoSharingPolicies
       responses:
         200:
           description: List of all specific sharing policies
@@ -3879,7 +3879,7 @@ paths:
       description: Share a UDF with a user
       tags:
         - udf
-      operationId: shareUDF
+      operationId: shareUDFInfo
       parameters:
         - name: udf_sharing
           in: body
