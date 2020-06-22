@@ -3759,7 +3759,9 @@ paths:
       in: query
       description: tag to search for, more than one can be included
       required: false
-      type: string
+      type: array
+      items:
+        type: string
     get:
       description: get a all UDFs accessible to the user
       tags:
@@ -4193,7 +4195,9 @@ paths:
         in: query
         description: tag to search for, more than one can be included
         required: false
-        type: string
+        type: array
+        items:
+          type: string
     get:
       tags:
         - array
@@ -4259,7 +4263,9 @@ paths:
         in: query
         description: tag to search for, more than one can be included
         required: false
-        type: string
+        type: array
+        items:
+          type: string
     get:
       tags:
         - array
@@ -4325,7 +4331,9 @@ paths:
         in: query
         description: tag to search for, more than one can be included
         required: false
-        type: string
+        type: array
+        items:
+          type: string
     get:
       tags:
         - array
