@@ -5,10 +5,8 @@ services:
   - docker
 before_install:
   - docker pull node
-  - docker pull lezsakdomi/capnproto-cplusplus
 script:
   - docker run -it --volume ${PWD}/openapi-v1.yaml:/spec/openapi.yaml node /bin/bash -c 'npm install --save swagger-cli && ./node_modules/swagger-cli/swagger-cli.js validate /spec/openapi.yaml'
   - docker logs $(docker ps -lq)
   - docker run -it --volume ${PWD}/openapi-v2.yaml:/spec/openapi.yaml node /bin/bash -c 'npm install --save swagger-cli && ./node_modules/swagger-cli/swagger-cli.js validate /spec/openapi.yaml'
   - docker logs $(docker ps -lq)
-  - docker run --rm -v ${SPEC_PATH}:/tmp lezsakdomi/capnproto-cplusplus capnp compile -oc++ /tmp/tiledb-rest.capnp
