@@ -1432,10 +1432,10 @@ definitions:
         description: Name of product
         type: string
       product_statement_descriptor:
-        description: Extra information about a product which will appear on your customer’s credit card statement
+        description: Extra information about a product which will appear on the credit card statement of the customer
         type: string
       product_unit_label:
-        description: A label that represents units of this product in Stripe and on customers’ receipts and invoices
+        description: A label that represents units of this product in Stripe and receipts and invoices of the customer
         $ref: "#/definitions/PricingUnitLabel"
       currency:
         description: Currency of pricing
