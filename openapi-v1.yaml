@@ -1893,6 +1893,47 @@ definitions:
         description: name of task, optional
         type: string
 
+  UDFImage:
+    description: Defines a set of images related to a specific name
+    type: object
+    properties:
+      id:
+        description: Unique id of set of images
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      name:
+        type: string
+        description: name of udf
+      language:
+        $ref: "#/definitions/UDFLanguage"
+        description: UDF language
+
+  UDFImageVersion:
+    description: Defines an image that belongs to a set of images having a version
+    type: object
+    properties:
+      id:
+        description: Unique id of a versioned image
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      udf_image_uuid:
+        description: Unique id of the udf image set
+        type: string
+        x-omitempty: false
+        example: "00000000-0000-0000-0000-000000000000"
+      docker_image:
+        type: string
+        description: Uri of docker image related to current entry
+      version:
+        description: Image-specific version
+        type: number
+        format: uint64
+        example: 2
+      latest:
+        description: If current image is latest version
+        type: boolean
+        example: true
+
   UDFInfo:
     description: User-defined function that can persist in db, used and shared multiple times
     type: object
