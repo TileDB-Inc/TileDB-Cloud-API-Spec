@@ -1916,6 +1916,9 @@ definitions:
         description: Unique id of a versioned image
         type: string
         example: "00000000-0000-0000-0000-000000000000"
+      name:
+        type: string
+        description: name of UDFImageVersion
       udf_image_uuid:
         description: Unique id of the udf image set
         type: string
@@ -1929,12 +1932,16 @@ definitions:
         type: number
         format: uint64
         example: 2
+      default:
+        description: If current image is default version
+        type: boolean
+        example: true
       latest:
         description: If current image is latest version
         type: boolean
         example: true
 
-  UDFInfo:
+  UDFInfoUpdate:
     description: User-defined function that can persist in db, used and shared multiple times
     type: object
     properties:
@@ -1979,6 +1986,76 @@ definitions:
         items:
           type: string
           description: tag must be lowercase characters or hypen [a-z-]
+
+  UDFInfo:
+    description: User-defined function that can persist in db, used and shared multiple times
+    type: object
+    properties:
+      id:
+        description: Unique id of udf
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      name:
+        type: string
+        description: name of udf
+      language:
+        $ref: "#/definitions/UDFLanguage"
+        description: UDF language
+      type:
+        $ref: "#/definitions/UDFType"
+        description: UDF type
+      readme:
+        type: string
+        description: Markdown readme of udfs
+      license_id:
+        type: string
+        x-omitempty: true
+        description: License identifier from SPDX License List or Custom
+      license_text:
+        type: string
+        x-omitempty: true
+        description: License text
+      tags:
+        description: optional tags for udf
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-]
+
+  UDFInfoVersion:
+    description: Version of User-defined function that can persist in db
+    type: object
+    properties:
+      id:
+        description: Unique id of a versioned udf
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      udf_image_uuid:
+        description: Unique id of the versioned image used by current udf version
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      name:
+        type: string
+        description: name of udf version
+      version:
+        type: string
+        description: Type-specific version
+      image_name:
+        type: string
+        description: Docker image name to use for udf
+        x-omitempty: true
+      exec:
+        type: string
+        description: Type-specific executable text
+      exec_raw:
+        type: string
+        x-omitempty: true
+        description: optional raw text to store of serialized function, used for showing in UI
+      default:
+        description: If current image version is default version
+        type: boolean
+        example: true
 
   UDFListingData:
     description: Object including udfs and metadata
@@ -3868,7 +3945,7 @@ paths:
           in: body
           description: udf to register
           schema:
-            $ref: "#/definitions/UDFInfo"
+            $ref: "#/definitions/UDFInfoUpdate"
           required: true
       responses:
         204:
@@ -3887,7 +3964,7 @@ paths:
           in: body
           description: udf to update
           schema:
-            $ref: "#/definitions/UDFInfo"
+            $ref: "#/definitions/UDFInfoUpdate"
           required: true
       responses:
         204:
