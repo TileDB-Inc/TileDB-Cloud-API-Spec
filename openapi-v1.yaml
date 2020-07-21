@@ -2000,6 +2000,59 @@ definitions:
         format: uint64
         example: 4000
 
+  Favorite:
+    title: Favorite
+    type: object
+    x-examples: {}
+    x-tags:
+      - favorites
+    properties:
+      id:
+        type: string
+        description: |
+          unique uuid of the favorite
+      object_type:
+        $ref: '#/definitions/FavoriteType'
+      namespace:
+        type: string
+        description: "The namespace the favorite is in. It won't be persisted in DB"
+      name:
+        type: string
+        description: Name of the object. It wont be persisted in DB
+      created_at:
+        type: string
+        description: Datetime when favorite was created
+      updated_at:
+        type: string
+        description: Datetime when favorite was last updated
+      deleted_at:
+        type: string
+        description: Datetime when favorite was deleted
+      object_uuid:
+        type: string
+        description: The uuid of the object referring to
+      user_uuid:
+        type: string
+        description: The uuid of the user the favorite belongs to
+
+  FavoriteUpdate:
+    title: FavoriteUpdate
+    type: object
+    properties:
+      name:
+        type: string
+      namespace:
+        type: string
+      object_type:
+        $ref: '#/definitions/FavoriteType'
+
+  FavoriteType:
+    description: List of values that FavoriteType can take
+    type: string
+    enum: &FAVORITETYPE
+      # Array
+      - ARRAY
+
   InvitationType:
     description: List of values that InvitationType can take
     type: string
@@ -4372,3 +4425,64 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /favorites:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - favorites
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Favorite'
+      operationId: get-favorites
+      parameters:
+        - type: string
+          in: query
+          name: type
+          description: The type of the desired favorites e.g. arrays
+    parameters: []
+    post:
+      summary: ''
+      operationId: post-favorite
+      responses:
+        '200':
+          description: OK
+      description: Add a new favorite
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/FavoriteUpdate'
+      tags:
+        - favorites
+  '/favorites/{id}':
+    get:
+      summary: Your GET endpoint
+      tags:
+        - favorites
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Favorite'
+      operationId: get-favorite
+      description: ''
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: The uuid of the favorite
+    delete:
+      summary: ''
+      operationId: delete-favorite-id
+      responses:
+        '200':
+          description: OK
+      description: Delete a favorite
+      tags:
+        - favorites
