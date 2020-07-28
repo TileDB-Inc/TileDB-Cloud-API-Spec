@@ -1204,6 +1204,11 @@ definitions:
         type: boolean
         readOnly: true
         example: false
+      stripe_connect:
+        description: Denotes that the user is able to apply pricing to arrays by means of Stripe Connect
+        type: boolean
+        readOnly: true
+        example: false
       logo:
         description: the user's logo
         type: string
@@ -1562,6 +1567,11 @@ definitions:
         type: boolean
         x-omitempty: false
         example: true
+      namespace_subscribed:
+        description: Depends on the namespace asking, denotes the existence of subscription of namespace to this array
+        type: boolean
+        readOnly: true
+        example: false
       tiledb_uri:
         description: uri for access through TileDB cloud
         type: string
