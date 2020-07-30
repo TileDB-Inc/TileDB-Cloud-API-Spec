@@ -1209,6 +1209,10 @@ definitions:
         type: boolean
         readOnly: true
         example: false
+      company:
+        description: the user's company
+        type: string
+        example: TileDB
       logo:
         description: the user's logo
         type: string
