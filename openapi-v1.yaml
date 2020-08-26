@@ -395,6 +395,12 @@ definitions:
         description: Attribute number of values per cell
         type: integer
         example: 1
+      fillValue:
+        description: The default fill value
+        type: array
+        items:
+          type: integer
+          format: uint8
 
   Dimension:
     description: Dimension of array
