@@ -2016,9 +2016,6 @@ definitions:
       namespace:
         type: string
         description: The namespace the favorite is in. It won't be persisted in DB
-      object_uuid:
-        type: string
-        description: The uuid of the object referring to
       name:
         type: string
         description: Name of the object. It wont be persisted in DB
