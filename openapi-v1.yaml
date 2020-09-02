@@ -2138,6 +2138,44 @@ definitions:
         format: uint64
         example: 4000
 
+  Favorite:
+    title: Favorite
+    type: object
+    x-examples: {}
+    x-tags:
+      - favorites
+    properties:
+      id:
+        type: string
+        description: |
+          unique uuid of the favorite
+      object_type:
+        $ref: '#/definitions/FavoriteType'
+      namespace:
+        type: string
+        description: The namespace the favorite is in. It won't be persisted in DB
+      name:
+        type: string
+        description: Name of the object. It wont be persisted in DB
+
+  FavoriteUpdate:
+    title: FavoriteUpdate
+    type: object
+    properties:
+      name:
+        type: string
+      namespace:
+        type: string
+      object_type:
+        $ref: '#/definitions/FavoriteType'
+
+  FavoriteType:
+    description: List of values that FavoriteType can take
+    type: string
+    enum: &FAVORITETYPE
+      # Array
+      - ARRAY
+
   InvitationType:
     description: List of values that InvitationType can take
     type: string
@@ -4510,3 +4548,60 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /favorites:
+    get:
+      tags:
+        - favorites
+      description: Fetch all favorites of connected user
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Favorite'
+      operationId: getFavorites
+      parameters:
+        - type: string
+          in: query
+          name: type
+          description: The type of the desired favorites e.g. arrays
+    post:
+      tags:
+        - favorites
+      description: Add a new favorite
+      operationId: postFavorite
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/FavoriteUpdate'
+  /favorites/{id}:
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: The uuid of the favorite
+    get:
+      tags:
+        - favorites
+      description: Fetch specific favorite of a user
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Favorite'
+      operationId: getFavorite
+    delete:
+      tags:
+        - favorites
+      description: Delete specific favorite
+      operationId: deleteFavoriteId
+      responses:
+        '200':
+          description: OK
