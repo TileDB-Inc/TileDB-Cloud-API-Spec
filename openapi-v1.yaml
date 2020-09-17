@@ -1258,6 +1258,9 @@ definitions:
         x-omitempty: false
       notebook_settings:
         $ref: "#/definitions/NotebookSettings"
+      default_namespace_charged:
+        description: Override the default namespace charged for actions when no namespace is specified
+        type: string
 
   OrganizationUser:
     description: user in an organization
