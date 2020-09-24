@@ -2958,7 +2958,7 @@ paths:
           required: true
       responses:
         200:
-          description: query completed and results are returned in json format      
+          description: query completed and results are returned in json format
           headers:
             X-TILEDB-CLOUD-TASK-ID:
               type: string
@@ -2968,6 +2968,54 @@ paths:
           examples:
             application/json:
               data: "{\"a1\":[0,1,2,3,0,1,2,3]}"
+
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/{namespace}/{array}/query/get_file:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: Content-Type
+        in: header
+        description: Content Type of input and return mime
+        type: string
+        required: true
+        default: application/json
+      - name: X-Payer
+        in: header
+        description: Name of organization or user who should be charged for this request
+        type: string
+    get:
+      description: send a query to run against a specified array/URI registered to a group/project, returns file bytes
+      tags:
+        - query
+      produces:
+        - application/x-ipynb+json
+      operationId: getFile
+      responses:
+        200:
+          description: query completed and result bytes are returned
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just completed query
+          schema:
+            type: string
+            format: binary
+          examples:
+            application/x-ipynb+json:
+              data: "abcd"
 
         default:
           description: error response
