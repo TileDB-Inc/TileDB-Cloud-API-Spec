@@ -4268,6 +4268,38 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /notebooks/{namespace}/{array}/rename:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of notebook (array) that is url-encoded
+        type: string
+        required: true
+    patch:
+      description: update name on a notebok, moving related s3 object to new location
+      tags:
+        - notebook
+      operationId: updateNotebookName
+      parameters:
+        - name: notebook_metadata
+          in: body
+          description: notebook (array) metadata to update
+          schema:
+            $ref: "#/definitions/ArrayInfoUpdate"
+          required: true
+      responses:
+        204:
+          description: notebook name updated successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /invitations:
     parameters:
       - name: organization
