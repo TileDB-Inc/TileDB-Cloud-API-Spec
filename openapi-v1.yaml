@@ -2816,6 +2816,11 @@ paths:
         in: header
         description: Encoding to use
         type: string
+      - name: v2
+        in: query
+        description: flag to indicate if v2 array udfs should be used, currently in beta testing. Setting any value will enable v2 array udfs
+        type: string
+        required: false
 
     post:
       description: send a UDF to run against a specified array/URI registered to a group/project
