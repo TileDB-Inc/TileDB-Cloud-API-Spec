@@ -4166,6 +4166,18 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+    delete:
+      description: delete a registerd UDF, this will remove all sharing and can not be undone
+      tags:
+        - udf
+      operationId: deleteUDFInfo
+      responses:
+        202:
+          description: UDF delete successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /udf/{namespace}/{name}/share:
     parameters:
