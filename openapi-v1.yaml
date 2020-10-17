@@ -1399,6 +1399,22 @@ definitions:
         type: string
         example: "organization"
 
+  FileType:
+    description: File types represented as TileDB arrays
+    type: string
+    enum: &FILETYPE
+      # Notebook
+      - notebook
+
+  FilePropertyName:
+    description: File property assigned to a specific file (array)
+    type: string
+    enum: &FILEPROPERTYNAME
+      # Image name
+      - image
+      # Size
+      - size
+
   PricingType:
     description: Pricing types
     type: string
@@ -1519,6 +1535,16 @@ definitions:
         description: unique id of registered array
         type: string
         example: "00000000-0000-0000-0000-000000000000"
+      file_type:
+        description: File type stored /wrapped by this array
+        x-omitempty: true
+        $ref: "#/definitions/FileType"
+      file_properties:
+        type: object
+        description: map of file properties created for this array
+        x-omitempty: true
+        additionalProperties:
+          type: string
       uri:
         description: uri of array
         type: string
@@ -1620,6 +1646,16 @@ definitions:
         description: uri of array
         type: string
         example: "s3://bucket/array"
+      file_type:
+        description: File type stored /wrapped by this array
+        x-omitempty: true
+        $ref: "#/definitions/FileType"
+      file_properties:
+        type: object
+        description: map of file properties created for this array
+        x-omitempty: true
+        additionalProperties:
+          type: string
       access_credentials_name:
         description: the name of the access credentials to use. if unset, the default credentials will be used
         type: string
