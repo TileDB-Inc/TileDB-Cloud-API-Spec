@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 2.0.13
+  version: 2.1.1
 
 produces:
 - application/json
@@ -4614,6 +4614,20 @@ paths:
         type: array
         items:
           type: string
+      - name: file_type
+        in: query
+        description: file_type to search for, more than one can be included
+        required: false
+        type: array
+        items:
+          type: string
+      - name: exclude_file_type
+        in: query
+        description: file_type to exclude matching array in results, more than one can be included
+        required: false
+        type: array
+        items:
+          type: string
     get:
       tags:
         - array
@@ -4689,6 +4703,20 @@ paths:
         type: array
         items:
           type: string
+      - name: file_type
+        in: query
+        description: file_type to search for, more than one can be included
+        required: false
+        type: array
+        items:
+          type: string
+      - name: exclude_file_type
+        in: query
+        description: file_type to exclude matching array in results, more than one can be included
+        required: false
+        type: array
+        items:
+          type: string
     get:
       tags:
         - array
@@ -4760,6 +4788,20 @@ paths:
       - name: exclude_tag
         in: query
         description: tags to exclude matching array in results, more than one can be included
+        required: false
+        type: array
+        items:
+          type: string
+      - name: file_type
+        in: query
+        description: file_type to search for, more than one can be included
+        required: false
+        type: array
+        items:
+          type: string
+      - name: exclude_file_type
+        in: query
+        description: file_type to exclude matching array in results, more than one can be included
         required: false
         type: array
         items:
