@@ -882,6 +882,15 @@ definitions:
         items:
           $ref: "#/definitions/ArrayMetadataEntry"
 
+  TileDBConfig:
+    type: object
+    description: user's TileDB config
+    properties:
+      configs:
+        type: object
+        additionalProperties:
+          type: string
+
   ArrayActivityLog:
     description: Actvity of an Array
     type: object
@@ -2698,6 +2707,70 @@ paths:
       responses:
         204:
           description: schema registered successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/{namespace}/{array}/consolidate:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+    post:
+      description: consolidate an array at a specified URI
+      tags:
+        - array
+      operationId: consolidateArray
+      parameters:
+        - name: tiledb_config
+          in: body
+          description: tiledb configuration
+          schema:
+            $ref: "#/definitions/TileDBConfig"
+          required: true
+      responses:
+        204:
+          description: array consolidated successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/{namespace}/{array}/vacuum:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+    post:
+      description: vacuum an array at a specified URI
+      tags:
+        - array
+      operationId: vacuumArray
+      parameters:
+        - name: tiledb_config
+          in: body
+          description: tiledb configuration
+          schema:
+            $ref: "#/definitions/TileDBConfig"
+          required: true
+      responses:
+        204:
+          description: array vacuumed successfully
         default:
           description: error response
           schema:
