@@ -1265,8 +1265,9 @@ definitions:
         type: boolean
         readOnly: true
         x-omitempty: false
-      notebook_settings:
-        $ref: "#/definitions/NotebookSettings"
+      default_s3_path:
+        description: default s3 path to store newly created notebooks
+        type: string
       default_namespace_charged:
         description: Override the default namespace charged for actions when no namespace is specified
         type: string
@@ -1361,8 +1362,9 @@ definitions:
         type: boolean
         readOnly: true
         x-omitempty: false
-      notebook_settings:
-        $ref: "#/definitions/NotebookSettings"
+      default_s3_path:
+        description: default s3 path to store newly created notebooks
+        type: string
 
   ArraySharing:
     description: details for sharing a given array
@@ -2407,13 +2409,6 @@ definitions:
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
 
-  NotebookSettings:
-    description: Settings for a namespace's notebooks
-    type: object
-    properties:
-      default_s3_path:
-        description: default s3 path to store newly created notebooks
-        type: string
 
 paths:
   /.stats:
