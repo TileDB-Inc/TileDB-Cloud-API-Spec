@@ -1995,7 +1995,24 @@ definitions:
         description: store results for later retrieval
         type: boolean
 
-  UDF:
+  UDFArrayDetails:
+    description: Contains array details for multi-array query including uri, ranges buffers
+    type: object
+    properties:
+      uri:
+        description: array to set ranges and buffers on, must be in tiledb:// format
+        type: string
+      ranges:
+        description: ranges to run against, generic format
+        $ref: "#/definitions/QueryRanges"
+      buffers:
+        description: List of buffers to fetch (attributes + dimensions)
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+
+  MultiArrayUDF:
     description: User-defined function
     type: object
     properties:
@@ -2013,12 +2030,6 @@ definitions:
         type: string
         description: Docker image name to use for udf
         x-omitempty: true
-      ranges:
-        description: ranges to run against, generic format
-        $ref: "#/definitions/QueryRanges"
-      subarray:
-        $ref: "#/definitions/UDFSubarray"
-        description: Subarray ranges to query, this is deprecate and `ranges` should be used instead.
       exec:
         type: string
         description: Type-specific executable text
@@ -2026,12 +2037,6 @@ definitions:
         type: string
         x-omitempty: true
         description: optional raw text to store of serialized function, used for showing in UI
-      buffers:
-        description: List of buffers to fetch (attributes + coordinates)
-        type: array
-        x-omitempty: true
-        items:
-          type: string
       result_format:
         $ref: "#/definitions/ResultFormat"
         description: type of results (native, i.e cloud pickle or json or arrow)
@@ -2050,6 +2055,24 @@ definitions:
       store_results:
         description: store results for later retrieval
         type: boolean
+      ranges:
+        description: ranges to run against, generic format. Deprecated please set arrays with UDFArrayDetails
+        $ref: "#/definitions/QueryRanges"
+      subarray:
+        $ref: "#/definitions/UDFSubarray"
+        description: Subarray ranges to query, this is deprecate and `ranges` in UDFArrayDetails should be used instead.
+      buffers:
+        description: List of buffers to fetch (attributes + dimensions). Deprecated please set arrays with UDFArrayDetails
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+      arrays:
+        description: Array ranges/buffer into to run UDF on
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/UDFArrayDetails"
 
   UDFImage:
     description: Defines a set of images related to a specific name
@@ -2982,7 +3005,7 @@ paths:
           in: body
           description: udf to run
           schema:
-            $ref: "#/definitions/UDF"
+            $ref: "#/definitions/MultiArrayUDF"
           required: true
       responses:
         200:
@@ -4238,6 +4261,53 @@ paths:
           description: udf to run
           schema:
             $ref: "#/definitions/GenericUDF"
+          required: true
+      responses:
+        200:
+          description: udf completed and the udf-type specific result is returned
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just completed request
+          schema:
+            type: string
+            format: binary
+        default:
+          description: error response
+          headers:
+            X-TILEDB-CLOUD-TASK-ID:
+              type: string
+              description: Task ID for just request if task was started
+          schema:
+            $ref: "#/definitions/Error"
+
+  /udfs/arrays/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: Accept-Encoding
+        in: header
+        description: Encoding to use
+        type: string
+
+    post:
+      description: submit a multi-array UDF in the given namespace
+      tags:
+        - udf
+      operationId: submitMultiArrayUDF
+      produces:
+        - application/octet-stream
+      consumes:
+        - application/json
+      parameters:
+        - name: udf
+          in: body
+          description: udf to run
+          schema:
+            $ref: "#/definitions/MultiArrayUDF"
           required: true
       responses:
         200:
