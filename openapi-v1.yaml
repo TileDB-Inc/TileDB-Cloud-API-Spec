@@ -1939,7 +1939,7 @@ definitions:
         description: optional raw text to store of serialized function, used for showing in UI
       argument:
         type: string
-        description: Argument to pass to udf function
+        description: Argument(s) to pass to udf function, tuple or list of args/kwargs which can be in native or json format
         x-omitempty: true
       result_format:
         $ref: "#/definitions/UDFResultType"
@@ -1993,6 +1993,10 @@ definitions:
       task_name:
         description: name of task, optional
         type: string
+      argument:
+        type: string
+        description: Argument(s) to pass to udf function, tuple or list of args/kwargs which can be in native or json format
+        x-omitempty: true
 
   UDFImage:
     description: Defines a set of images related to a specific name
