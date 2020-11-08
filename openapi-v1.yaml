@@ -1365,6 +1365,11 @@ definitions:
       default_s3_path:
         description: default s3 path to store newly created notebooks
         type: string
+      stripe_connect:
+        description: Denotes that the organization is able to apply pricing to arrays by means of Stripe Connect
+        type: boolean
+        readOnly: true
+        example: false
 
   ArraySharing:
     description: details for sharing a given array
