@@ -1425,6 +1425,8 @@ definitions:
       - image
       # Size
       - size
+      # Code block
+      - code_block
 
   PricingType:
     description: Pricing types
