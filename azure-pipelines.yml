@@ -1,0 +1,19 @@
+pool:
+  vmImage: 'ubuntu-latest'
+strategy:
+  matrix:
+    node_12_x:
+      node_version: 12.x
+
+steps:
+- task: NodeTool@0 
+  inputs:
+    versionSpec: $(node_version)
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm install -g @apidevtools/swagger-cli
+    swagger-cli validate openapi-v1.yaml
+    swagger-cli validate openapi-v2.yaml
+  displayName: 'npm install, swagger-cli install, validate spec files'
