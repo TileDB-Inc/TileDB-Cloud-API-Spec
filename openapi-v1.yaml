@@ -2597,6 +2597,10 @@ paths:
         in: query
         type: string
         description: Array task id To filter activity to
+      - name: has_task_id
+        in: query
+        type: boolean
+        description: Excludes activity log results that does not contain an array task uuid 
     get:
       description: get array activity logs
       tags:
