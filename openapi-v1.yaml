@@ -766,6 +766,10 @@ definitions:
       varOffsetsAddExtraElement:
         description: True if an extra element will be added to the end of the offsets buffer.
         type: boolean
+      varOffsetsBitsize:
+        description: The offsets bitsize (32 or 64) to be used.
+        type: integer
+        format: uint32
 
   Query:
     type: object
