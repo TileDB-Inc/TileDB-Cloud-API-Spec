@@ -1431,6 +1431,8 @@ definitions:
     enum: &FILETYPE
       # Notebook
       - notebook
+     # UDF
+      - user_defined_function
 
   FilePropertyName:
     description: File property assigned to a specific file (array)
@@ -2144,53 +2146,6 @@ definitions:
         items:
           type: string
           description: tag must be lowercase characters or hypen [a-z-]
-
-  UDFInfoVersion:
-    description: Version of User-defined function that can persist in db
-    type: object
-    properties:
-      id:
-        description: Unique id of a versioned udf
-        type: string
-        example: "00000000-0000-0000-0000-000000000000"
-      udf_image_uuid:
-        description: Unique id of the versioned image used by current udf version
-        type: string
-        example: "00000000-0000-0000-0000-000000000000"
-      name:
-        type: string
-        description: name of udf version
-      version:
-        type: string
-        description: Type-specific version
-      image_name:
-        type: string
-        description: Docker image name to use for udf
-        x-omitempty: true
-      exec:
-        type: string
-        description: Type-specific executable text
-      exec_raw:
-        type: string
-        x-omitempty: true
-        description: optional raw text to store of serialized function, used for showing in UI
-      default:
-        description: If current image version is default version
-        type: boolean
-        example: true
-
-  UDFListingData:
-    description: Object including udfs and metadata
-    type: object
-    properties:
-      udf_info_list:
-        description: List of UDFInfo
-        type: array
-        x-omitempty: true
-        items:
-          $ref: "#/definitions/UDFInfo"
-      pagination_metadata:
-        $ref: "#/definitions/PaginationMetadata"
 
   SQLParameters:
     description: Parameters for running sql query
@@ -4176,67 +4131,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /udfs:
-    parameters:
-    - name: namespace
-      in: query
-      description: namespace to filter
-      type: string
-      required: false
-    - name: created_by
-      in: query
-      description: username to filter
-      type: string
-      required: false
-    - name: page
-      in: query
-      description: pagination offset
-      type: integer
-      required: false
-    - name: per_page
-      in: query
-      description: pagination limit
-      type: integer
-      required: false
-    - name: type
-      in: query
-      description: udf type, "generic", "single_array"
-      required: false
-      type: string
-    - name: search
-      in: query
-      description: search string that will look at name, namespace or description fields
-      required: false
-      type: string
-    - name: orderby
-      in: query
-      description: sort by which field valid values include created_at, last_used, name
-      required: false
-      type: string
-    - name: tag
-      in: query
-      description: tag to search for, more than one can be included
-      required: false
-      type: array
-      items:
-        type: string
-    get:
-      description: get a all UDFs accessible to the user
-      tags:
-        - udf
-      operationId: getUDFInfoList
-      responses:
-        200:
-          description: UDFInfo list
-          schema:
-            $ref: "#/definitions/UDFListingData"
-        404:
-          description: udf not found
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
   /udf/{namespace}/{name}:
     parameters:
       - name: namespace
@@ -4311,59 +4205,6 @@ paths:
       responses:
         202:
           description: UDF delete successfully
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
-  /udf/{namespace}/{name}/share:
-    parameters:
-      - name: namespace
-        in: path
-        description: namespace array is in (an organization name or user's username)
-        type: string
-        required: true
-      - name: name
-        in: path
-        description: name of UDFInfo
-        type: string
-        required: true
-    get:
-      description: Get all sharing details of the udf
-      tags:
-        - udf
-      operationId: getUDFInfoSharingPolicies
-      responses:
-        200:
-          description: List of all specific sharing policies
-          schema:
-            type: array
-            x-omitempty: true
-            items:
-              $ref: "#/definitions/UDFSharing"
-        404:
-          description: UDF does not exist or user does not have permissions to view array sharing policies
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    patch:
-      description: Share a UDF with a user
-      tags:
-        - udf
-      operationId: shareUDFInfo
-      parameters:
-        - name: udf_sharing
-          in: body
-          description: Namespace and list of permissions to share with. An empty list of permissions will remove the namespace, if permissions already exist they will be deleted then new ones added. In the event of a failure, the new polcies will be rolled back to prevent partial policies, and its likely the udf will not be shared with the namespace at all
-          schema:
-            $ref: "#/definitions/UDFSharing"
-          required: true
-      responses:
-        204:
-          description: UDF shared successfully
-        404:
-          description: UDF does not exist or user does not have permissions to share udf
         default:
           description: error response
           schema:
