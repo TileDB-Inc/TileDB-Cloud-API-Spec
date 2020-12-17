@@ -1192,6 +1192,8 @@ definitions:
         format: int64
       message:
         type: string
+      request_id:
+        type: string
 
   User:
     description: User
