@@ -1056,6 +1056,10 @@ definitions:
         description: logs from array task
         type: string
         x-omitempty: false
+      duration:
+        description: duration in nanoseconds of an array task
+        type: int64
+        example: 341000000000
 
   PaginationMetadata:
     properties:
