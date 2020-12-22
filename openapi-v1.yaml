@@ -3970,6 +3970,27 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /task/{id}/retry:
+    parameters:
+      - name: id
+        in: path
+        description: task id to retry
+        type: string
+        required: true
+    post:
+      tags:
+        - tasks
+      description: Retry an array task 
+      responses:
+        200:
+          description: Array task
+          schema:
+            $ref: "#/definitions/ArrayTask"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /token:
     post:
       tags:
