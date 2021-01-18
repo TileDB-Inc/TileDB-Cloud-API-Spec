@@ -3979,6 +3979,10 @@ paths:
         description: task id to retry
         type: string
         required: true
+      - name: Accept-Encoding
+        in: header
+        description: Encoding to use
+        type: string
     post:
       tags:
         - tasks
