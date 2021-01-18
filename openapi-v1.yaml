@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 2.1.1
+  version: 2.1.26
 
 produces:
 - application/json
@@ -2518,6 +2518,11 @@ paths:
           schema:
             $ref: "#/definitions/ArraySchema"
           required: true
+        - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+          in: header
+          description: Optional registered access credentials to use for creation
+          type: string
+          required: false
       responses:
         204:
           description: schema created successfully
