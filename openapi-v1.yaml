@@ -4032,6 +4032,12 @@ paths:
             Content-Type:
               type: string
               description: format results are delivered in 
+        202:
+          description: task is still executing 
+        404:
+          description: results were not saved, or results have expored 
+          schema:
+            $ref: "#/definitions/Error"
         default:
           description: error response
           schema:
