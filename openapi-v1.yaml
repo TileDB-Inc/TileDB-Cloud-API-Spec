@@ -127,6 +127,8 @@ definitions:
     enum: &UDFLANGUAGE
       # python
       - python
+      # r
+      - r      
 
   UDFType:
     description: UDF Type
