@@ -3881,9 +3881,16 @@ paths:
         required: false
       - name: type
         in: query
-        description: task type, "QUERY", "SQL", "UDF"
+        description: task type, "QUERY", "SQL", "UDF", "GENERIC_UDF"
         required: false
         type: string
+      - name: exclude_type
+        in: query
+        description: task_type to exclude matching array in results, more than one can be included
+        required: false
+        type: array
+        items:
+          type: string
       - name: status
         in: query
         description: Filter to only return these statuses
