@@ -1965,6 +1965,9 @@ definitions:
       task_name:
         description: name of task, optional
         type: string
+      store_results:
+        description: store results for later retrieval 
+        type: boolean
 
   UDF:
     description: User-defined function
@@ -2014,6 +2017,9 @@ definitions:
         type: string
         description: Argument(s) to pass to udf function, tuple or list of args/kwargs which can be in native or json format
         x-omitempty: true
+      store_results:
+        description: store results for later retrieval 
+        type: boolean
 
   UDFImage:
     description: Defines a set of images related to a specific name
@@ -2159,6 +2165,9 @@ definitions:
         type: string
         description: Output array uri
         example: "s3://my_bucket/my_output_array"
+      store_results:
+        description: store results for later retrieval 
+        type: boolean
 
   NotebookStatus:
     description: Status details of a notebook server
@@ -3995,6 +4004,42 @@ paths:
           description: Array task
           schema:
             $ref: "#/definitions/ArrayTask"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /task/{id}/result:
+    parameters:
+      - name: id
+        in: path
+        description: task id to retrieve stored results
+        type: string
+        required: true
+      - name: Accept-Encoding
+        in: header
+        description: Encoding to use
+        type: string
+    get:
+      tags:
+        - tasks
+      description: Retrieve results of an array task 
+      responses:
+        200:
+          description: output and format of originating request 
+          schema:
+            type: string
+            format: binary/json
+          headers:
+            Content-Type:
+              type: string
+              description: format results are delivered in 
+        202:
+          description: task is still executing 
+        404:
+          description: results were not saved, or results have expored 
+          schema:
+            $ref: "#/definitions/Error"
         default:
           description: error response
           schema:
