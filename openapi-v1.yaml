@@ -1060,7 +1060,7 @@ definitions:
         x-omitempty: false
       duration:
         description: duration in nanoseconds of an array task
-        type: int64
+        type: number
         example: 341000000000
 
   PaginationMetadata:
@@ -1784,7 +1784,7 @@ definitions:
       default:
         type: boolean
         description: true if this is the default credential to be used within this namespace
-        x-omitempty: false
+        x-omitempty: true
       buckets:
         description: a whitelist of one or more buckets this key should access
         type: array
