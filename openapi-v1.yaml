@@ -1213,8 +1213,8 @@ definitions:
         example: "00000000-0000-0000-0000-000000000000"
       username:
         type: string
-        minLength: 4
-        maxLength: 20
+        minLength: 1
+        maxLength: 63
         pattern: "^[\\w.\\-]+$"   # only allows alphanumeric characters
         description: username must be unique
         example: "username"
@@ -1337,8 +1337,8 @@ definitions:
         $ref: "#/definitions/OrganizationRoles"
       name:
         type: string
-        minLength: 4
-        maxLength: 20
+        minLength: 1
+        maxLength: 63
         pattern: "^[\\w.\\-]+$"   # only allows alphanumeric characters
         description: organization name must be unique
       created_at:
