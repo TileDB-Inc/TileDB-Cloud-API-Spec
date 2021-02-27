@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 2.1.26
+  version: 2.2.9
 
 produces:
 - application/json
@@ -147,6 +147,8 @@ definitions:
       - native
       # JSON
       - json
+      # Arrow IPC format
+      - arrow
 
   Layout:
     description: Layout of array
@@ -1960,7 +1962,7 @@ definitions:
         x-omitempty: true
       result_format:
         $ref: "#/definitions/UDFResultType"
-        description: type of results (native, i.e cloud pickle or json)
+        description: type of results (native, i.e cloud pickle or json or arrow)
         x-omitempty: true
       task_name:
         description: name of task, optional
@@ -2008,7 +2010,7 @@ definitions:
           type: string
       result_format:
         $ref: "#/definitions/UDFResultType"
-        description: type of results (native, i.e cloud pickle or json)
+        description: type of results (native, i.e cloud pickle or json or arrow)
         x-omitempty: true
       task_name:
         description: name of task, optional
