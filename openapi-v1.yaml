@@ -1964,6 +1964,10 @@ definitions:
         $ref: "#/definitions/UDFResultType"
         description: type of results (native, i.e cloud pickle or json or arrow)
         x-omitempty: true
+      result_format_version:
+        type: string
+        description: string representing the serialization format to use, i.e. cloudpickle version or arrow IPC verison
+        x-omitempty: true
       task_name:
         description: name of task, optional
         type: string
@@ -2011,6 +2015,10 @@ definitions:
       result_format:
         $ref: "#/definitions/UDFResultType"
         description: type of results (native, i.e cloud pickle or json or arrow)
+        x-omitempty: true
+      result_format_version:
+        type: string
+        description: string representing the serialization format to use, i.e. cloudpickle version or arrow IPC verison
         x-omitempty: true
       task_name:
         description: name of task, optional
