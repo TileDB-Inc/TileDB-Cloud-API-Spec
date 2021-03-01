@@ -128,7 +128,7 @@ definitions:
       # python
       - python
       # r
-      - r      
+      - r
 
   UDFType:
     description: UDF Type
@@ -1290,7 +1290,7 @@ definitions:
         type: string
       default_s3_path_credentials_name:
         description: Default s3 path credentials name is the credentials name to use along with default_s3_path
-        type: string        
+        type: string
       default_namespace_charged:
         description: Override the default namespace charged for actions when no namespace is specified
         type: string
@@ -1972,7 +1972,7 @@ definitions:
         description: name of task, optional
         type: string
       store_results:
-        description: store results for later retrieval 
+        description: store results for later retrieval
         type: boolean
 
   UDF:
@@ -2028,7 +2028,7 @@ definitions:
         description: Argument(s) to pass to udf function, tuple or list of args/kwargs which can be in native or json format
         x-omitempty: true
       store_results:
-        description: store results for later retrieval 
+        description: store results for later retrieval
         type: boolean
 
   UDFImage:
@@ -2176,7 +2176,7 @@ definitions:
         description: Output array uri
         example: "s3://my_bucket/my_output_array"
       store_results:
-        description: store results for later retrieval 
+        description: store results for later retrieval
         type: boolean
 
   NotebookStatus:
@@ -2587,7 +2587,7 @@ paths:
       - name: has_task_id
         in: query
         type: boolean
-        description: Excludes activity log results that does not contain an array task uuid 
+        description: Excludes activity log results that does not contain an array task uuid
     get:
       description: get array activity logs
       tags:
@@ -4019,7 +4019,7 @@ paths:
     post:
       tags:
         - tasks
-      description: Retry an array task 
+      description: Retry an array task
       responses:
         200:
           description: Array task
@@ -4044,21 +4044,21 @@ paths:
     get:
       tags:
         - tasks
-      description: Retrieve results of an array task 
+      description: Retrieve results of an array task
       responses:
         200:
-          description: output and format of originating request 
+          description: output and format of originating request
           schema:
             type: string
             format: binary/json
           headers:
             Content-Type:
               type: string
-              description: format results are delivered in 
+              description: format results are delivered in
         202:
-          description: task is still executing 
+          description: task is still executing
         404:
-          description: results were not saved, or results have expored 
+          description: results were not saved, or results have expored
           schema:
             $ref: "#/definitions/Error"
         default:
@@ -4372,6 +4372,10 @@ paths:
               $ref: "#/definitions/NotebookStatus"
         202:
           description: Notebook server is pending
+        402:
+          description: Payment required
+          schema:
+            $ref: "#/definitions/Error"
         404:
           description: Notebook is not running
         default:
