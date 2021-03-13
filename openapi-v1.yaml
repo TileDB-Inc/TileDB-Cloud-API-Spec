@@ -1031,7 +1031,17 @@ definitions:
         type: string
         format: date-time
       cost:
-        description: Cost accumulated for task in USD, example is $0.12
+        description: Total accumulated for task in USD, example is $0.12
+        type: number
+        format: double
+        example: 0.12
+      egress_cost:
+        description: Total accumulated for egress task in USD, example is $0.12
+        type: number
+        format: double
+        example: 0.12
+      access_cost:
+        description: Cost accumulated for access task in USD, example is $0.12
         type: number
         format: double
         example: 0.12
