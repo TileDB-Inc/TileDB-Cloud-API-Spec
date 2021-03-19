@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 2.2.9
+  version: 2.2.19
 
 produces:
 - application/json
@@ -1074,6 +1074,12 @@ definitions:
         description: duration in nanoseconds of an array task
         type: number
         example: 341000000000
+      sql_init_commands:
+        description: SQL queries or commands to run before main sql query
+        type: array
+        items:
+          type: string
+          description: sql query or command to run before main sql query
 
   PaginationMetadata:
     properties:
@@ -2188,6 +2194,12 @@ definitions:
       store_results:
         description: store results for later retrieval
         type: boolean
+      init_commands:
+        description: Queries or commands to run before main query
+        type: array
+        items:
+          type: string
+          description: sql query or command to run before main sql query
 
   NotebookStatus:
     description: Status details of a notebook server
