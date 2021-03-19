@@ -1080,6 +1080,12 @@ definitions:
         items:
           type: string
           description: sql query or command to run before main sql query
+      sql_parameters:
+        description: SQL query parameters
+        type: array
+        items:
+          type: {}
+          description: parameter for sql query, any datatype supported
 
   PaginationMetadata:
     properties:
@@ -2200,6 +2206,12 @@ definitions:
         items:
           type: string
           description: sql query or command to run before main sql query
+      sql_parameters:
+        description: SQL query parameters
+        type: array
+        items:
+          type: {}
+          description: parameter for sql query, any datatype supported
 
   NotebookStatus:
     description: Status details of a notebook server
