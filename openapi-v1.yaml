@@ -1083,9 +1083,7 @@ definitions:
       sql_parameters:
         description: SQL query parameters
         type: array
-        items:
-          type: {}
-          description: parameter for sql query, any datatype supported
+        items: {}
 
   PaginationMetadata:
     properties:
@@ -2206,12 +2204,10 @@ definitions:
         items:
           type: string
           description: sql query or command to run before main sql query
-      sql_parameters:
+      parameters:
         description: SQL query parameters
         type: array
-        items:
-          type: {}
-          description: parameter for sql query, any datatype supported
+        items: {}
 
   NotebookStatus:
     description: Status details of a notebook server
