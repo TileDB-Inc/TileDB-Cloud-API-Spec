@@ -139,10 +139,10 @@ definitions:
       # generic
       - generic
 
-  UDFResultType:
+  ResultFormat:
     description: Results type
     type: string
-    enum: &UDFRESULTTYPE
+    enum: &ResultFormat
       # native (i.e. cloud pickle)
       - native
       # JSON
@@ -1983,7 +1983,7 @@ definitions:
         description: Argument(s) to pass to udf function, tuple or list of args/kwargs which can be in native or json format
         x-omitempty: true
       result_format:
-        $ref: "#/definitions/UDFResultType"
+        $ref: "#/definitions/ResultFormat"
         description: type of results (native, i.e cloud pickle or json or arrow)
         x-omitempty: true
       result_format_version:
@@ -2035,7 +2035,7 @@ definitions:
         items:
           type: string
       result_format:
-        $ref: "#/definitions/UDFResultType"
+        $ref: "#/definitions/ResultFormat"
         description: type of results (native, i.e cloud pickle or json or arrow)
         x-omitempty: true
       result_format_version:
@@ -2200,6 +2200,13 @@ definitions:
       store_results:
         description: store results for later retrieval
         type: boolean
+      result_format:
+        $ref: "#/definitions/ResultFormat"
+        description: type of results (native, i.e cloud pickle or json or arrow)
+        x-omitempty: tru
+      result_format_version:
+        type: string
+        description: string representing the serialization format to use, i.e. cloudpickle version or arrow IPC verisonn
       init_commands:
         description: Queries or commands to run before main query
         type: array
