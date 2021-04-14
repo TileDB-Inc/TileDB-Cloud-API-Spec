@@ -1084,6 +1084,14 @@ definitions:
         description: SQL query parameters
         type: array
         items: {}
+      result_format:
+        $ref: "#/definitions/ResultFormat"
+        description: type of results (native, i.e cloud pickle or json or arrow)
+        x-omitempty: true
+      result_format_version:
+        type: string
+        description: string representing the serialization format to use, i.e. cloudpickle version or arrow IPC verison
+        x-omitempty: true
 
   PaginationMetadata:
     properties:
