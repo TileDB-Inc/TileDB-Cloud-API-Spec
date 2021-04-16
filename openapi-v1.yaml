@@ -4177,7 +4177,25 @@ paths:
       description: Fetch a list of user tokens
       responses:
         200:
-          description: Array of all user created tokens
+          description: Array of user created non-session tokens
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/Token"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /tokens/session:
+    get:
+      tags:
+        - user
+      description: Fetch a list of user session tokens
+      responses:
+        200:
+          description: Array of user created session tokens
           schema:
             type: array
             x-omitempty: true
