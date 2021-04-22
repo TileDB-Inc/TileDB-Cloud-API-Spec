@@ -1709,6 +1709,10 @@ definitions:
         type: string
         x-omitempty: true
         description: License text
+      read_only:
+        description: Suggests if the array is in read_only mode
+        type: boolean
+        example: false
 
   ArrayInfoUpdate:
     description: metadata of an array
