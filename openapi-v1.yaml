@@ -4026,6 +4026,20 @@ paths:
         type: array
         items:
           type: string
+      - name: file_type
+        in: query
+        description: match file_type of task array, more than one can be included
+        required: false
+        type: array
+        items:
+          type: string
+      - name: exclude_file_type
+        in: query
+        description: exclude file_type of task arrays, more than one can be included
+        required: false
+        type: array
+        items:
+          type: string
       - name: status
         in: query
         description: Filter to only return these statuses
