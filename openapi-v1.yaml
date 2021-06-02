@@ -4883,6 +4883,7 @@ paths:
         description: tag to search for, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
       - name: exclude_tag
@@ -4890,6 +4891,7 @@ paths:
         description: tags to exclude matching array in results, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
       - name: file_type
@@ -4897,6 +4899,7 @@ paths:
         description: file_type to search for, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
       - name: exclude_file_type
@@ -4904,6 +4907,7 @@ paths:
         description: file_type to exclude matching array in results, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
     get:
@@ -4972,6 +4976,7 @@ paths:
         description: tag to search for, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
       - name: exclude_tag
@@ -4979,6 +4984,7 @@ paths:
         description: tags to exclude matching array in results, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
       - name: file_type
@@ -4986,6 +4992,7 @@ paths:
         description: file_type to search for, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
       - name: exclude_file_type
@@ -4993,6 +5000,7 @@ paths:
         description: file_type to exclude matching array in results, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
     get:
@@ -5061,6 +5069,7 @@ paths:
         description: tag to search for, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
       - name: exclude_tag
@@ -5068,6 +5077,7 @@ paths:
         description: tags to exclude matching array in results, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
       - name: file_type
@@ -5075,6 +5085,7 @@ paths:
         description: file_type to search for, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
       - name: exclude_file_type
@@ -5082,6 +5093,7 @@ paths:
         description: file_type to exclude matching array in results, more than one can be included
         required: false
         type: array
+        collectionFormat: multi
         items:
           type: string
     get:
