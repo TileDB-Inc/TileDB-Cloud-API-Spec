@@ -2730,7 +2730,7 @@ paths:
       consumes:
         - application/json
         - application/capnp
-      operationId: getArrayMetadataCap
+      operationId: getArrayMetadataCapnp
       responses:
         200:
           description: array metadata for an array
@@ -2750,7 +2750,7 @@ paths:
       consumes:
         - application/json
         - application/capnp
-      operationId: updateArrayMetadataCap
+      operationId: updateArrayMetadataCapnp
       parameters:
         - name: arrayMetadataEntries
           in: body
