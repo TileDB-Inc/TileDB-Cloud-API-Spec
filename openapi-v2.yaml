@@ -635,7 +635,10 @@ paths:
         required: false
       - name: event_types
         in: query
-        type: string
+        collectionFormat: multi
+        type: array
+        items:
+          type: string
         description: Event values can be one or more of the following read, write, create, delete, register, deregister, comma separated
       - name: task_id
         in: query
