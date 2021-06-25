@@ -2479,6 +2479,20 @@ definitions:
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
 
+  TokenScope:
+    description: An api token scope available for creation
+    type: string
+    enum: &TokenScope
+      - password_reset
+      - confirm_email
+      - "*"
+      - user:read
+      - user:write
+      - user:admin
+      - array:read
+      - array:write
+      - array:admin
+
 
 paths:
   /.stats:
@@ -4305,6 +4319,24 @@ paths:
       responses:
         204:
           description: revokation successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /tokens/scopes:
+    get:
+      tags:
+        - user
+      description: retrieves available token scopes for a user 
+      operationId: getTokenScopes
+      responses:
+        200:
+          description: available token scopes  
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/TokenScope"
         default:
           description: error response
           schema:
