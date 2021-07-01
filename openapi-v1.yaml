@@ -1480,8 +1480,10 @@ definitions:
     enum: &FILETYPE
       # Notebook
       - notebook
-     # UDF
+      # UDF
       - user_defined_function
+      # ML Model
+      - ml_model
 
   FilePropertyName:
     description: File property assigned to a specific file (array)
