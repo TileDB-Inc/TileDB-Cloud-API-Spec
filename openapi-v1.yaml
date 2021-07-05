@@ -1646,6 +1646,7 @@ definitions:
       description:
         description: description of array
         type: string
+        x-nullable: true
       name:
         description: name of array
         type: string
@@ -1723,6 +1724,7 @@ definitions:
       description:
         description: description of array
         type: string
+        x-nullable: true
       name:
         description: description of array
         type: string
