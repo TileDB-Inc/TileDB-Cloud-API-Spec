@@ -667,10 +667,7 @@ paths:
         200:
           description: log of array activity
           schema:
-            type: array
-            x-omitempty: true
-            items:
-              $ref: "#/definitions/ArrayActivityLog"
+              $ref: "#/definitions/ArrayActivityLogData"
         default:
           description: error response
           schema:
