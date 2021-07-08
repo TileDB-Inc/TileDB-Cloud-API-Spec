@@ -2487,10 +2487,10 @@ definitions:
       - confirm_email
       - "*"
       - user:read
-      - user:write
+      - user:read-write
       - user:admin
       - array:read
-      - array:write
+      - array:read-write
       - array:admin
 
 
