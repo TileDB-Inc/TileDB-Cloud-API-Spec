@@ -1780,9 +1780,9 @@ definitions:
         example: myToken
       scope:
         description: "Optional scope to limit token, defaults to all permissions, current supported values are password_reset or *"
-        type: string
-        example: "*"
-        default: "*"
+        type: array
+        items:
+          $ref: "#/definitions/TokenScope"
 
   Token:
     description: A api token and its metadata
@@ -1804,9 +1804,9 @@ definitions:
         format: date-time
       scope:
         description: Optional scope to limit token, defaults to all permissions, current supported values are password_reset or *
-        type: string
-        example: "*"
-        default: "*"
+        type: array
+        items:
+          $ref: "#/definitions/TokenScope"
 
   AWSAccessCredentials:
     description: Model representing aws keys or service role, service roles are currently ignored, but will be preferred option in the future
