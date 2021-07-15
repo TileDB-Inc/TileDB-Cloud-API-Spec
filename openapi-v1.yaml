@@ -1715,6 +1715,7 @@ definitions:
       read_only:
         description: Suggests if the array is in read_only mode
         type: boolean
+        x-nullable: true
         example: false
 
   ArrayInfoUpdate:
