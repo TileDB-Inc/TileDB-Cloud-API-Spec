@@ -1764,6 +1764,11 @@ definitions:
         type: string
         x-omitempty: true
         description: License text
+      read_only:
+        description: Suggests if the array is in read_only mode
+        type: boolean
+        x-omitempty: true
+        example: true
 
   TokenRequest:
     description: A request from a user for an api token
