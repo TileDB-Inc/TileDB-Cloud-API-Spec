@@ -10,10 +10,9 @@ consumes:
 - application/json
 
 schemes:
-- http
 - https
 
-basePath: /v2
+basePath: api.tiledb.com/v2
 
 securityDefinitions:
   BasicAuth:
@@ -224,6 +223,22 @@ definitions:
         description: Number of bytes in the var-length attribute data buffer
         type: integer
         format: uint64
+      validityLenBufferSizeInBytes:
+        description: Number of bytes for validity in case attribute is nullable
+        type: integer
+        format: uint64
+      originalFixedLenBufferSizeInBytes:
+        description: Original user set number of bytes in the fixed-length attribute data buffer
+        type: integer
+        format: uint64
+      originalVarLenBufferSizeInBytes:
+        description: Original user set number of bytes in the var-length attribute data buffer
+        type: integer
+        format: uint64
+      originalValidityLenBufferSizeInBytes:
+        description: Original user set number of bytes in the validity data buffer
+        type: integer
+        format: uint64
 
   Writer:
     type: object
@@ -252,6 +267,19 @@ definitions:
         items:
           type: integer
           format: uint8
+      bufferSizes:
+        description: The list of sizes per range
+        type: array
+        items:
+          type: integer
+          format: uint64
+      bufferStartSizes:
+        description: The list of start sizes per range
+        type: array
+        items:
+          type: integer
+          format: uint64
+
 
   Subarray:
     description: A Subarray
@@ -397,6 +425,10 @@ definitions:
         format: uint64
       totalVarLenBufferBytes:
         description: Total number of bytes in variable size attribute buffers.
+        type: integer
+        format: uint64
+      totalValidityBufferBytes:
+        description: Total number of bytes in fixed size attribute buffers.
         type: integer
         format: uint64
     x-go-type:
