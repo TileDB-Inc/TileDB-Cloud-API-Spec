@@ -77,6 +77,32 @@ definitions:
       - STRING_UCS2
       # UCS4 string
       - STRING_UCS4
+      # Years
+      - DATETIME_YEAR
+      # Months
+      - DATETIME_MONTH
+      # Weeks
+      - DATETIME_WEEK
+      # Days
+      - DATETIME_DAY
+      # Hours
+      - DATETIME_HR
+      # Minutes
+      - DATETIME_MIN
+      # Seconds
+      - DATETIME_SEC
+      # Milliseconds
+      - DATETIME_MS
+      # Microseconds
+      - DATETIME_US
+      # Nanoseconds
+      - DATETIME_NS
+      # Picoseconds
+      - DATETIME_PS
+      # Femtoseconds
+      - DATETIME_FS
+      # Attoseconds
+      - DATETIME_AS
       # This can be any datatype. Must store (type tag, value) pairs.
       - ANY
 
