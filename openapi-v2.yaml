@@ -582,6 +582,7 @@ definitions:
       secret_access_key:
         description: "The access key's secret. Never returned in responses."
         type: string
+        x-go-custom-tag: 'tdbrest:"secret"'
       # service role ARN is not yet supported.
 
   AzureCredential:
@@ -595,13 +596,14 @@ definitions:
       account_key:
         description: "The secret key. Never returned in responses."
         type: string
+        x-go-custom-tag: 'tdbrest:"secret"'
 
   CloudProvider:
     description: "A service where data is stored or computations take place."
     type: "string"
     enum:
-      - "aws"  # Amazon Web Services
-      - "azure"  # Microsoft Azure
+      - "AWS"  # Amazon Web Services
+      - "AZURE"  # Microsoft Azure
 
 paths:
   /arrays/{namespace}/{array}/query/submit:
