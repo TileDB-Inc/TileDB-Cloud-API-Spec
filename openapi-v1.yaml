@@ -43,7 +43,7 @@ definitions:
   ArrayType:
     description: TileDB array type
     type: string
-    enum: &ARRAYTYPE
+    enum:
       # Dense array
       - dense
       # Sparse array
@@ -52,7 +52,7 @@ definitions:
   Datatype:
     description: TileDB data type
     type: string
-    enum: &DATATYPE
+    enum:
       # 32-bit signed integer
       - INT32
       # 64-bit signed integer
@@ -93,7 +93,7 @@ definitions:
   ActivityEventType:
     description: Type of activity logged
     type: string
-    enum: &ACTIVITYEVENTTYPE
+    enum:
       # read_schema operation
       - read_schema
       # max_buffer_sizes operation
@@ -124,7 +124,7 @@ definitions:
   UDFLanguage:
     description: UDF Type
     type: string
-    enum: &UDFLANGUAGE
+    enum:
       # python
       - python
       # r
@@ -133,7 +133,7 @@ definitions:
   UDFType:
     description: UDF Type
     type: string
-    enum: &UDFTYPE
+    enum:
       # single_array
       - single_array
       # generic
@@ -142,7 +142,7 @@ definitions:
   ResultFormat:
     description: Results type
     type: string
-    enum: &ResultFormat
+    enum:
       # native (i.e. cloud pickle)
       - native
       # JSON
@@ -153,7 +153,7 @@ definitions:
   Layout:
     description: Layout of array
     type: string
-    enum: &LAYOUT
+    enum:
       # Row-major layout
       - row-major
       # Column-major layout
@@ -166,7 +166,7 @@ definitions:
   Querytype:
     description: Type of query
     type: string
-    enum: &QUERYTYPE
+    enum:
       # READ
       - READ
       # Write
@@ -175,7 +175,7 @@ definitions:
   Querystatus:
     description: Status of query
     type: string
-    enum: &QUERYSTATUS
+    enum:
       # FAILED
       - FAILED
       # COMPLETED
@@ -190,7 +190,7 @@ definitions:
   FilterType:
     description: TileDB filter types
     type: string
-    enum: &FILTERTYPE
+    enum:
        # No-op filter
       - FILTER_NONE
       # Gzip compressor
@@ -217,7 +217,7 @@ definitions:
   FilterOption:
     description: TileDB filter option
     type: string
-    enum: &FILTEROPTION
+    enum:
       # Compression level. Type: `int32_t`
       - COMPRESSION_LEVEL
       # Max window length for bit width reduction. Type: `uint32_t`
@@ -228,7 +228,7 @@ definitions:
   OrganizationRoles:
     description: role user has in organization
     type: string
-    enum: &ORGANIZATIONROLES
+    enum:
       # Owner/creator of group
       - owner
       # Admin almost all rights but can't delete organization
@@ -241,7 +241,7 @@ definitions:
   ArrayActions:
     description: actions a user can take on an array
     type: string
-    enum: &ARRAYACTIONS
+    enum:
       # Read
       - read
       # Write
@@ -258,7 +258,7 @@ definitions:
   UDFActions:
     description: actions a user can take on an udf
     type: string
-    enum: &UDFACTIONS
+    enum:
       # Fetch udf and run jobs
       - fetch_udf
       # Share udf with others
@@ -267,7 +267,7 @@ definitions:
   NamespaceActions:
     description: actions a user can take on an organization
     type: string
-    enum: &NAMESPACEACTIONS
+    enum:
        # Fetch details about namespace and read arrays in namespace
       - read
       # Write to arrays inside namespace
@@ -943,7 +943,7 @@ definitions:
   ArrayTaskType:
     description: Synchronous Task Type
     type: string
-    enum: &ARRAYTASKTYPE
+    enum:
       - SQL
       - UDF
       - QUERY
@@ -952,7 +952,7 @@ definitions:
   ArrayTaskStatus:
     description: Status of array task
     type: string
-    enum: &ARRAYTASKSTATUS
+    enum:
       # FAILED
       - FAILED
       # COMPLETED
@@ -1477,7 +1477,7 @@ definitions:
   FileType:
     description: File types represented as TileDB arrays
     type: string
-    enum: &FILETYPE
+    enum:
       # Notebook
       - notebook
       # UDF
@@ -1488,7 +1488,7 @@ definitions:
   FilePropertyName:
     description: File property assigned to a specific file (array)
     type: string
-    enum: &FILEPROPERTYNAME
+    enum:
       # Image name
       - image
       # Size
@@ -1499,7 +1499,7 @@ definitions:
   PricingType:
     description: Pricing types
     type: string
-    enum: &PRICINGTYPE
+    enum:
       # Egress pricing
       - egress
       # Access pricing
@@ -1508,14 +1508,14 @@ definitions:
   PricingCurrency:
     description: Currency of pricing
     type: string
-    enum: &PRICINGCURRENCY
+    enum:
       # US Dollars
       - USD
 
   PricingUnitLabel:
     description: Unit label
     type: string
-    enum: &PRICINGUNITLABEL
+    enum:
       # Byte
       - byte
       # Second
@@ -1524,14 +1524,14 @@ definitions:
   PricingAggregateUsage:
     description: Specifies a usage aggregation strategy for pricings of usage_type=metered
     type: string
-    enum: &PRICINGAGGREGATEUSAGE
+    enum:
       # For summing up all usage during a period
       - sum
 
   PricingInterval:
     description: Interval for pricing
     type: string
-    enum: &PRICINGINTERVAL
+    enum:
       # Month
       - month
 
@@ -1856,7 +1856,7 @@ definitions:
   SSOProvider:
     description: Single sign on provider
     type: string
-    enum: &SSOPROVIDER
+    enum:
       # Github
       - github
       # Google
@@ -1867,7 +1867,7 @@ definitions:
   PublicShareFilter:
     description: Query parameter to get array metadatas
     type: string
-    enum: &PUBLICSHAREFILTER
+    enum:
       # Exclude
       - exclude
       # Only
@@ -2333,14 +2333,14 @@ definitions:
   FavoriteType:
     description: List of values that FavoriteType can take
     type: string
-    enum: &FAVORITETYPE
+    enum:
       # Array
       - ARRAY
 
   InvitationType:
     description: List of values that InvitationType can take
     type: string
-    enum: &INVITATIONTYPE
+    enum:
       # Array share
       - ARRAY_SHARE
       # Join Organization
@@ -2349,7 +2349,7 @@ definitions:
   InvitationStatus:
     description: List of values that InvitationStatus can take
     type: string
-    enum: &INVITATIONSTATUS
+    enum:
       # Pending
       - PENDING
       # Accepted
@@ -2492,7 +2492,7 @@ definitions:
   TokenScope:
     description: An api token scope available for creation
     type: string
-    enum: &TokenScope
+    enum:
       - password_reset
       - confirm_email
       - "*"
@@ -4338,11 +4338,11 @@ paths:
     get:
       tags:
         - user
-      description: retrieves available token scopes for a user 
+      description: retrieves available token scopes for a user
       operationId: getTokenScopes
       responses:
         200:
-          description: available token scopes  
+          description: available token scopes
           schema:
             type: array
             items:
