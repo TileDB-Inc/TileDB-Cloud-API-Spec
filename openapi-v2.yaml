@@ -275,6 +275,8 @@ definitions:
         type: boolean
       dedupCoords:
         type: boolean
+      subarrayRanges:
+        $ref: "#/definitions/Subarray"
       subarray:
         $ref: "#/definitions/DomainArray"
 
