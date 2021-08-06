@@ -43,7 +43,7 @@ definitions:
   Datatype:
     description: TileDB data type
     type: string
-    enum: &DATATYPE
+    enum:
       # 32-bit signed integer
       - INT32
       # 64-bit signed integer
@@ -84,7 +84,7 @@ definitions:
   Layout:
     description: Layout of array
     type: string
-    enum: &LAYOUT
+    enum:
       # Row-major layout
       - row-major
       # Column-major layout
@@ -97,7 +97,7 @@ definitions:
   Querytype:
     description: Type of query
     type: string
-    enum: &QUERYTYPE
+    enum:
       # READ
       - READ
       # Write
@@ -106,7 +106,7 @@ definitions:
   Querystatus:
     description: Status of query
     type: string
-    enum: &QUERYSTATUS
+    enum:
       # FAILED
       - FAILED
       # COMPLETED
@@ -463,7 +463,7 @@ definitions:
   ActivityEventType:
     description: Type of activity logged
     type: string
-    enum: &ACTIVITYEVENTTYPE
+    enum:
       # read_schema operation
       - read_schema
       # max_buffer_sizes operation
@@ -599,7 +599,7 @@ definitions:
   CloudProvider:
     description: "A service where data is stored or computations take place."
     type: "string"
-    enum: &CLOUDPROVIDER
+    enum:
       - "aws"  # Amazon Web Services
       - "azure"  # Microsoft Azure
 
@@ -749,9 +749,8 @@ paths:
         type: string
       - name: provider
         in: query
-        description: "Show only the credentials from this provider"
+        description: "Show only the credentials from this provider. This should be one of the CloudProvider enum values."
         type: string
-        enum: *CLOUDPROVIDER
     get:
       tags:
         - user
