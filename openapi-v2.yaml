@@ -459,7 +459,7 @@ definitions:
         x-omitempty: true
         type: string
         example: "{\"rows\":[{\"start\": 1, \"end\": 1},{\"start\": 3, \"end\": 4}],\"cols\":[{\"start\": 1, \"end\": 4}]}"
-  
+
   ActivityEventType:
     description: Type of activity logged
     type: string
@@ -490,7 +490,7 @@ definitions:
       - array_metadata_update
       # estimated_result_sizes
       - estimated_result_sizes
-  
+
   ArrayActivityLogData:
     description: Object including array tasks and metadata
     type: object
@@ -535,6 +535,73 @@ definitions:
         format: int64
       message:
         type: string
+
+  AccessCredential:
+    description: "A union type which may contain a credential to access any one cloud provider."
+    type: "object"
+    properties:
+      name:
+        description: "A user-specified name for the key"
+        type: string
+      provider:
+        description: "The service provider that this credential provides access to. This is derived from the one field which is set when creating or updating the credential data."
+        $ref: "#/definitions/CloudProvider"
+        readOnly: true
+      provider_default:
+        description: "True if this is the namespace's default credential to be used when connecting to the given cloud provider. There can be at most one default for each unique provider."
+        type: boolean
+        x-omitempty: true
+      created_at:
+        description: "Time when the credential was created (rfc3339)"
+        type: string
+        format: date-time
+        readOnly: true
+      updated_at:
+        description: "Time when the credential was last updated (rfc3339)"
+        type: string
+        format: date-time
+        readOnly: true
+      credential:
+        description: "The credential information itself. Exactly one sub-field may be set. The names match those in the CloudProvider enum."
+        type: object
+        x-omitempty: true
+        properties:
+          aws:
+            $ref: "#/definitions/AWSCredential"
+          azure:
+            $ref: "#/definitions/AzureCredential"
+
+  AWSCredential:
+    description: "Credential information to access Amazon Web Services"
+    type: object
+    x-omitempty: true
+    properties:
+      access_key_id:
+        description: "The ID of the access key"
+        type: string
+      secret_access_key:
+        description: "The access key's secret. Never returned in responses."
+        type: string
+      # service role ARN is not yet supported.
+
+  AzureCredential:
+    description: "Credential information to access Microsoft Azure. Each supported property is the snake_case version of its name in an Azure Storage connection string."
+    type: object
+    x-omitempty: True
+    properties:
+      account_name:
+        description: "The name of the Azure account to access"
+        type: string
+      account_key:
+        description: "The secret key. Never returned in responses."
+        type: string
+
+  CloudProvider:
+    description: "A service where data is stored or computations take place."
+    type: "string"
+    enum: &CLOUDPROVIDER
+      - "aws"  # Amazon Web Services
+      - "azure"  # Microsoft Azure
 
 paths:
   /arrays/{namespace}/{array}/query/submit:
@@ -670,5 +737,116 @@ paths:
               $ref: "#/definitions/ArrayActivityLogData"
         default:
           description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /credentials/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace
+        required: true
+        type: string
+      - name: provider
+        in: query
+        description: "Show only the credentials from this provider"
+        type: string
+        enum: *CLOUDPROVIDER
+    get:
+      tags:
+        - user
+        - organization
+      description: "List the credentials available in the namespace"
+      operationId: listCredentials
+      responses:
+        200:
+          description: "Available credentials are returned"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/AccessCredential"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - user
+        - organization
+      description: "Create a new credential for the namespace"
+      operationId: addCredential
+      parameters:
+        - name: accessCredential
+          in: body
+          description: "The new credentials to be created."
+          schema:
+            $ref: "#/definitions/AccessCredential"
+          required: true
+      responses:
+        204:
+          description: "The new credential was successfully added."
+        default:
+          description: "error response"
+          schema:
+            $ref: "#/definitions/Error"
+
+  /credentials/{namespace}/{name}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace
+        required: true
+        type: string
+      - name: name
+        in: path
+        description: "A URL-safe version of the credential's user-provided name"
+        required: true
+        type: string
+    get:
+      tags:
+        - user
+        - organization
+      description: "Retrieve an access credential by name"
+      operationId: getCredential
+      responses:
+        200:
+          description: "Credential exists and can be returned"
+          schema:
+            $ref: "#/definitions/AccessCredential"
+        default:
+          description: "error response"
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - user
+        - organization
+      description: "Update the named access credential. This will also update the information used to access arrays set to use this credential."
+      operationId: updateCredential
+      parameters:
+        - name: accessCredential
+          in: body
+          description: "Changes to make to this credential"
+          schema:
+            $ref: "#/definitions/AccessCredential"
+          required: true
+      responses:
+        204:
+          description: "The credential was updated successfully"
+        default:
+          description: "Error response"
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - user
+        - organization
+      description: "Delete the named access credential. Any arrays still set to use this credential will use the namespace's default and may become unreachable."
+      operationId: deleteCredential
+      responses:
+        204:
+          description: "The credential was deleted successfully"
+        default:
+          description: "Error response"
           schema:
             $ref: "#/definitions/Error"
