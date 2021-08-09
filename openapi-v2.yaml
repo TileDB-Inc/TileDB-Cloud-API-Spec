@@ -570,6 +570,19 @@ definitions:
             $ref: "#/definitions/AWSCredential"
           azure:
             $ref: "#/definitions/AzureCredential"
+  
+  AccessCredentialsData:
+    description: Object including credentials and pagination metadata
+    type: object
+    properties:
+      credentials:
+        description: List of credentials
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/AccessCredential"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
 
   AWSCredential:
     description: "Credential information to access Amazon Web Services"
@@ -761,9 +774,7 @@ paths:
         200:
           description: "Available credentials are returned"
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/AccessCredential"
+            $ref: "#/definitions/AccessCredentialsData"
         default:
           description: error response
           schema:
