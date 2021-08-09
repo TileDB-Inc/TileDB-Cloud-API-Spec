@@ -507,12 +507,12 @@ definitions:
   PaginationMetadata:
     properties:
       page:
-        description: pagination offset
+        description: pagination offset. Use it to skip the first ((page - 1) * per_page) items
         type: number
         format: uint64
         example: 1
       per_page:
-        description: pagination limit
+        description: pagination limit (page size)
         type: number
         format: uint64
         example: 10
