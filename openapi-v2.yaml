@@ -764,6 +764,14 @@ paths:
         in: query
         description: "Show only the credentials from this provider. This should be one of the CloudProvider enum values."
         type: string
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
     get:
       tags:
         - user
