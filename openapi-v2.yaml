@@ -550,7 +550,7 @@ definitions:
       provider_default:
         description: "True if this is the namespace's default credential to be used when connecting to the given cloud provider. There can be at most one default for each unique provider."
         type: boolean
-        x-omitempty: true
+        x-nullable: true
       created_at:
         description: "Time when the credential was created (rfc3339)"
         type: string
@@ -570,7 +570,7 @@ definitions:
             $ref: "#/definitions/AWSCredential"
           azure:
             $ref: "#/definitions/AzureCredential"
-  
+
   AccessCredentialsData:
     description: Object including credentials and pagination metadata
     type: object
@@ -587,6 +587,7 @@ definitions:
   AWSCredential:
     description: "Credential information to access Amazon Web Services"
     type: object
+    x-nullable: true
     x-omitempty: true
     properties:
       access_key_id:
@@ -601,7 +602,8 @@ definitions:
   AzureCredential:
     description: "Credential information to access Microsoft Azure. Each supported property is the snake_case version of its name in an Azure Storage connection string."
     type: object
-    x-omitempty: True
+    x-nullable: true
+    x-omitempty: true
     properties:
       account_name:
         description: "The name of the Azure account to access"
