@@ -2012,6 +2012,14 @@ definitions:
         type: string
         description: Argument(s) to pass to udf function, tuple or list of args/kwargs which can be in native or json format
         x-omitempty: true
+      stored_param_uuids:
+        type: array
+        items:
+          type: string
+          example: 229f38c4-ba89-43d6-ab88-bae3bcca7969
+        description: 'The UUIDs of stored input parameters (passed in a
+          language-specific format within "argument") to be retrieved from the
+          server-side cache. Serialized in standard hex format with no {}.'
       result_format:
         $ref: "#/definitions/ResultFormat"
         description: type of results (native, i.e cloud pickle or json or arrow)
@@ -2076,6 +2084,13 @@ definitions:
         type: string
         description: Argument(s) to pass to udf function, tuple or list of args/kwargs which can be in native or json format
         x-omitempty: true
+      stored_param_uuids:
+        type: array
+        items:
+          type: string
+        description: 'The UUIDs of stored input parameters (passed in a
+          language-specific format within "argument") to be retrieved from the
+          server-side cache. Serialized in standard hex format with no {}.'
       store_results:
         description: store results for later retrieval
         type: boolean
