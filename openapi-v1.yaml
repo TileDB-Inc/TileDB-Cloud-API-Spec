@@ -5334,7 +5334,7 @@ paths:
           schema:
             $ref: '#/definitions/FavoriteCreate'
       responses:
-        202:
+        204:
           description: Item added to favorites successfully
 
   /favorites/{id}:
@@ -5360,5 +5360,5 @@ paths:
       description: Delete specific favorite
       operationId: deleteFavorite
       responses:
-        202:
+        204:
           description: Favorite item deleted successfully
