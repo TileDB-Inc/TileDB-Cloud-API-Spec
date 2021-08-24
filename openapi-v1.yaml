@@ -2318,6 +2318,10 @@ definitions:
       name:
         type: string
         description: Name of the object. It wont be persisted in DB
+      created_at:
+        description: Datetime the favorite was created in UTC
+        type: string
+        format: date-time
 
   FavoriteCreate:
     description: Request body to add a favorite
