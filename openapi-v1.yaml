@@ -2304,16 +2304,12 @@ definitions:
         example: 4000
 
   Favorite:
-    title: Favorite
+    description: A user-favorite item
     type: object
-    x-examples: {}
-    x-tags:
-      - favorites
     properties:
       id:
         type: string
-        description: |
-          unique uuid of the favorite
+        description: unique uuid of the favorite
       object_type:
         $ref: '#/definitions/FavoriteType'
       namespace:
@@ -2323,9 +2319,13 @@ definitions:
         type: string
         description: Name of the object. It wont be persisted in DB
 
-  FavoriteUpdate:
-    title: FavoriteUpdate
+  FavoriteCreate:
+    description: Request body to add a favorite
     type: object
+    required:
+      - name
+      - namespace
+      - object_type
     properties:
       name:
         type: string
@@ -2340,6 +2340,19 @@ definitions:
     enum:
       # Array
       - ARRAY
+
+  FavoritesData:
+    description: Object including favorites and pagination metadata
+    type: object
+    properties:
+      favorites:
+        description: List of favorites
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/Favorite"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
 
   InvitationType:
     description: List of values that InvitationType can take
@@ -5295,32 +5308,31 @@ paths:
       tags:
         - favorites
       description: Fetch all favorites of connected user
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Favorite'
-      operationId: getFavorites
+      operationId: listFavorites
       parameters:
         - type: string
           in: query
           name: type
           description: The type of the desired favorites e.g. arrays
+      responses:
+        200:
+          description: Available favorites are returned
+          schema:
+            $ref: "#/definitions/FavoritesData"
     post:
       tags:
         - favorites
       description: Add a new favorite
-      operationId: postFavorite
-      responses:
-        '200':
-          description: OK
+      operationId: addFavorite
       parameters:
         - in: body
           name: body
           schema:
-            $ref: '#/definitions/FavoriteUpdate'
+            $ref: '#/definitions/FavoriteCreate'
+      responses:
+        202:
+          description: Item added to favorites successfully
+
   /favorites/{id}:
     parameters:
       - type: string
@@ -5332,17 +5344,17 @@ paths:
       tags:
         - favorites
       description: Fetch specific favorite of a user
+      operationId: getFavorite
       responses:
-        '200':
+        200:
           description: OK
           schema:
             $ref: '#/definitions/Favorite'
-      operationId: getFavorite
     delete:
       tags:
         - favorites
       description: Delete specific favorite
-      operationId: deleteFavoriteId
+      operationId: deleteFavorite
       responses:
-        '200':
-          description: OK
+        202:
+          description: Favorite item deleted successfully
