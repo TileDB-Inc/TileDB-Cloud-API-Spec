@@ -609,6 +609,21 @@ definitions:
         alias: "tiledb"
       type: "ArraySchema"
 
+  ArraySchemaEvolution:
+    type: object
+    description: Array schema evolution
+    properties:
+      attributesToDrop:
+        type: array
+        description: List of attribute names to drop
+        items:
+          type: string
+      attributesToAdd:
+        type: array
+        description: List of attributes to add
+        items:
+          $ref: "#/definitions/Attribute"
+
   AttributeBufferHeader:
     description: Represents an attribute buffer header information
     type: object
@@ -3583,6 +3598,38 @@ paths:
             application/json:
               message: "Error try again"
               code: 1
+
+  /arrays/{namespace}/{array}/evolve:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+    post:
+      description: evolve array schema by applying list of actions in body
+      tags:
+        - array
+      operationId: evolveSchema
+      parameters:
+        - name: arraySchemaEvolution
+          in: body
+          description: actions to take for schema evolution
+          schema:
+            $ref: "#/definitions/ArraySchemaEvolution"
+          required: true
+      responses:
+        204:
+          description: schema evolved successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /arrays/last_accessed:
     get:
