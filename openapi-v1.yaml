@@ -1088,10 +1088,6 @@ definitions:
         $ref: "#/definitions/ResultFormat"
         description: type of results (native, i.e cloud pickle or json or arrow)
         x-omitempty: true
-      result_format_version:
-        type: string
-        description: string representing the serialization format to use, i.e. cloudpickle version or arrow IPC verison
-        x-omitempty: true
 
   PaginationMetadata:
     properties:
@@ -2020,10 +2016,6 @@ definitions:
         $ref: "#/definitions/ResultFormat"
         description: type of results (native, i.e cloud pickle or json or arrow)
         x-omitempty: true
-      result_format_version:
-        type: string
-        description: string representing the serialization format to use, i.e. cloudpickle version or arrow IPC verison
-        x-omitempty: true
       task_name:
         description: name of task, optional
         type: string
@@ -2076,10 +2068,6 @@ definitions:
       result_format:
         $ref: "#/definitions/ResultFormat"
         description: type of results (native, i.e cloud pickle or json or arrow)
-        x-omitempty: true
-      result_format_version:
-        type: string
-        description: string representing the serialization format to use, i.e. cloudpickle version or arrow IPC verison
         x-omitempty: true
       task_name:
         description: name of task, optional
@@ -2261,9 +2249,6 @@ definitions:
         $ref: "#/definitions/ResultFormat"
         description: type of results (native, i.e cloud pickle or json or arrow)
         x-omitempty: tru
-      result_format_version:
-        type: string
-        description: string representing the serialization format to use, i.e. cloudpickle version or arrow IPC verisonn
       init_commands:
         description: Queries or commands to run before main query
         type: array
