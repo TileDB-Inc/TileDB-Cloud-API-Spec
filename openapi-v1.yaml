@@ -1721,6 +1721,11 @@ definitions:
         type: boolean
         x-nullable: true
         example: false
+      is_favorite:
+        description: Indicates whether the array is in user favorites
+        type: boolean
+        x-omitempty: true
+        example: true
 
   ArrayInfoUpdate:
     description: metadata of an array
