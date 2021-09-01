@@ -520,6 +520,11 @@ definitions:
         x-omitempty: true
         type: string
         example: "{\"rows\":[{\"start\": 1, \"end\": 1},{\"start\": 3, \"end\": 4}],\"cols\":[{\"start\": 1, \"end\": 4}]}"
+      query_stats:
+        description: stats for query
+        x-omitempty: true
+        type: string
+        example: "{\"i\": [\"don't\", \"know\", \"yet\"]}"
 
   ActivityEventType:
     description: Type of activity logged
