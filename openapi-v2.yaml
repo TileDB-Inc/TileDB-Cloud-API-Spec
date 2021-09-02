@@ -457,7 +457,7 @@ definitions:
         type: integer
         format: uint64
       totalValidityBufferBytes:
-        description: Total number of bytes in fixed size attribute buffers.
+        description: Total number of bytes in validity buffers
         type: integer
         format: uint64
     x-go-type:
