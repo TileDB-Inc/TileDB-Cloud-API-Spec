@@ -2317,25 +2317,117 @@ definitions:
         format: uint64
         example: 4000
 
-  Favorite:
-    description: A user-favorite item
+  ArrayFavorite:
+    description: A user-favorite array item
     type: object
     properties:
       id:
         type: string
         description: unique uuid of the favorite
-      object_type:
-        $ref: '#/definitions/FavoriteType'
-      namespace:
-        type: string
-        description: The namespace the favorite is in. It won't be persisted in DB
-      name:
-        type: string
-        description: Name of the object. It wont be persisted in DB
       created_at:
         description: Datetime the favorite was created in UTC
         type: string
         format: date-time
+      array_uuid:
+        description: unique uuid of the array
+        type: string
+
+  ArrayFavoritesData:
+    description: Object including array favorites and pagination metadata
+    type: object
+    properties:
+      arrays:
+        description: List of array infos
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/ArrayInfo"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
+  NotebookFavorite:
+    description: A user-favorite notebook item
+    type: object
+    properties:
+      id:
+        type: string
+        description: unique uuid of the favorite
+      created_at:
+        description: Datetime the favorite was created in UTC
+        type: string
+        format: date-time
+      notebook_uuid:
+        description: unique uuid of the notebook
+        type: string
+
+  NotebookFavoritesData:
+    description: Object including notebook favorites and pagination metadata
+    type: object
+    properties:
+      notebooks:
+        description: List of notebook infos
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/ArrayInfo"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
+  UDFFavorite:
+    description: A user-favorite UDF item
+    type: object
+    properties:
+      id:
+        type: string
+        description: unique uuid of the favorite
+      created_at:
+        description: Datetime the favorite was created in UTC
+        type: string
+        format: date-time
+      udf_uuid:
+        description: unique uuid of the UDF
+        type: string
+
+  UDFFavoritesData:
+    description: Object including UDF favorites and pagination metadata
+    type: object
+    properties:
+      udfs:
+        description: List of UDF infos
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/ArrayInfo"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
+  MLModelFavorite:
+    description: A user-favorite MLModel item
+    type: object
+    properties:
+      id:
+        type: string
+        description: unique uuid of the favorite
+      created_at:
+        description: Datetime the favorite was created in UTC
+        type: string
+        format: date-time
+      mlmodel_uuid:
+        description: unique uuid of the MLModel
+        type: string
+
+  MLModelFavoritesData:
+    description: Object including MLModel favorites and pagination metadata
+    type: object
+    properties:
+      mlmodels:
+        description: List of MLModel infos
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/ArrayInfo"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
 
   FavoriteCreate:
     description: Request body to add a favorite
@@ -2343,34 +2435,11 @@ definitions:
     required:
       - name
       - namespace
-      - object_type
     properties:
       name:
         type: string
       namespace:
         type: string
-      object_type:
-        $ref: '#/definitions/FavoriteType'
-
-  FavoriteType:
-    description: List of values that FavoriteType can take
-    type: string
-    enum:
-      # Array
-      - ARRAY
-
-  FavoritesData:
-    description: Object including favorites and pagination metadata
-    type: object
-    properties:
-      favorites:
-        description: List of favorites
-        type: array
-        x-omitempty: false
-        items:
-          $ref: "#/definitions/Favorite"
-      pagination_metadata:
-        $ref: "#/definitions/PaginationMetadata"
 
   InvitationType:
     description: List of values that InvitationType can take
@@ -5353,27 +5422,22 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /favorites:
+  /arrays/favorites:
     get:
       tags:
         - favorites
-      description: Fetch all favorites of connected user
-      operationId: listFavorites
-      parameters:
-        - type: string
-          in: query
-          name: type
-          description: The type of the desired favorites e.g. arrays
+      description: Fetch all array favorites of connected user
+      operationId: listArrayFavorites
       responses:
         200:
-          description: Available favorites are returned
+          description: Available array favorites are returned
           schema:
-            $ref: "#/definitions/FavoritesData"
+            $ref: "#/definitions/ArrayFavoritesData"
     post:
       tags:
         - favorites
-      description: Add a new favorite
-      operationId: addFavorite
+      description: Add a new array favorite
+      operationId: addArrayFavorite
       parameters:
         - in: body
           name: body
@@ -5383,28 +5447,242 @@ paths:
         204:
           description: Item added to favorites successfully
 
-  /favorites/{id}:
+  /arrays/favorites/uuids:
+    get:
+      tags:
+        - favorites
+      description: Fetch all favorite array uuids of connected user
+      operationId: listArrayFavoritesUUIDs
+      responses:
+        200:
+          description: Available favorites array uuids are returned
+          schema:
+            type: array
+            x-omitempty: false
+            items:
+              $ref: "#/definitions/ArrayFavorite"
+
+  /arrays/favorites/{id}:
     parameters:
       - type: string
         name: id
         in: path
         required: true
-        description: The uuid of the favorite
+        description: The uuid of the array favorite
     get:
       tags:
         - favorites
-      description: Fetch specific favorite of a user
-      operationId: getFavorite
+      description: Fetch specific array favorite of a user
+      operationId: getArrayFavorite
       responses:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/Favorite'
+            $ref: '#/definitions/ArrayFavorite'
     delete:
       tags:
         - favorites
-      description: Delete specific favorite
-      operationId: deleteFavorite
+      description: Delete specific array favorite
+      operationId: deleteArrayFavorite
       responses:
         204:
-          description: Favorite item deleted successfully
+          description: Array favorite item deleted successfully
+
+  /notebooks/favorites:
+    get:
+      tags:
+        - favorites
+      description: Fetch all notebook favorites of connected user
+      operationId: listNotebookFavorites
+      responses:
+        200:
+          description: Available notebook favorites are returned
+          schema:
+            $ref: "#/definitions/NotebookFavoritesData"
+    post:
+      tags:
+        - favorites
+      description: Add a new notebook favorite
+      operationId: addNotebookFavorite
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/FavoriteCreate'
+      responses:
+        204:
+          description: Item added to favorites successfully
+
+  /notebooks/favorites/uuids:
+    get:
+      tags:
+        - favorites
+      description: Fetch all favorite notebook uuids of connected user
+      operationId: listNotebookFavoritesUUIDs
+      responses:
+        200:
+          description: Available favorites notebook uuids are returned
+          schema:
+            type: array
+            x-omitempty: false
+            items:
+              $ref: "#/definitions/NotebookFavorite"
+
+
+  /notebooks/favorites/{id}:
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: The uuid of the notebook favorite
+    get:
+      tags:
+        - favorites
+      description: Fetch specific notebook favorite of a user
+      operationId: getNotebookFavorite
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/NotebookFavorite'
+    delete:
+      tags:
+        - favorites
+      description: Delete specific notebook favorite
+      operationId: deleteNotebookFavorite
+      responses:
+        204:
+          description: Notebook favorite item deleted successfully
+
+  /mlmodels/favorites:
+    get:
+      tags:
+        - favorites
+      description: Fetch all ML models favorites of connected user
+      operationId: listMLModelFavorites
+      responses:
+        200:
+          description: Available ML models favorites are returned
+          schema:
+            $ref: "#/definitions/MLModelFavoritesData"
+    post:
+      tags:
+        - favorites
+      description: Add a new ML model favorite
+      operationId: addMLModelFavorite
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/FavoriteCreate'
+      responses:
+        204:
+          description: Item added to favorites successfully
+
+  /mlmodels/favorites/uuids:
+    get:
+      tags:
+        - favorites
+      description: Fetch all favorite ML models uuids of connected user
+      operationId: listMLModelFavoritesUUIDs
+      responses:
+        200:
+          description: Available favorites ML model uuids are returned
+          schema:
+            type: array
+            x-omitempty: false
+            items:
+              $ref: "#/definitions/MLModelFavorite"
+
+  /mlmodels/favorites/{id}:
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: The uuid of the ML model favorite
+    get:
+      tags:
+        - favorites
+      description: Fetch specific ML model favorite of a user
+      operationId: getMLModelFavorite
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/MLModelFavorite'
+    delete:
+      tags:
+        - favorites
+      description: Delete specific ML model favorite
+      operationId: deleteMLModelFavorite
+      responses:
+        204:
+          description: ML model favorite item deleted successfully
+
+  /udfs/favorites:
+    get:
+      tags:
+        - favorites
+      description: Fetch all UDF favorites of connected user
+      operationId: listUDFFavorites
+      responses:
+        200:
+          description: Available UDF favorites are returned
+          schema:
+            $ref: "#/definitions/UDFFavoritesData"
+    post:
+      tags:
+        - favorites
+      description: Add a new UDF favorite
+      operationId: addUDFFavorite
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/FavoriteCreate'
+      responses:
+        204:
+          description: Item added to favorites successfully
+
+  /udfs/favorites/uuids:
+    get:
+      tags:
+        - favorites
+      description: Fetch all favorite UDF uuids of connected user
+      operationId: listUDFFavoritesUUIDs
+      responses:
+        200:
+          description: Available favorites UDF uuids are returned
+          schema:
+            type: array
+            x-omitempty: false
+            items:
+              $ref: "#/definitions/UDFFavorite"
+
+  /udfs/favorites/{id}:
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: The uuid of the UDF favorite
+    get:
+      tags:
+        - favorites
+      description: Fetch specific UDF favorite of a user
+      operationId: getUDFFavorite
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/UDFFavorite'
+    delete:
+      tags:
+        - favorites
+      description: Delete specific UDF favorite
+      operationId: deleteUDFFavorite
+      responses:
+        204:
+          description: UDF favorite item deleted successfully
