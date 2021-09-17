@@ -524,7 +524,7 @@ definitions:
         description: stats for query
         x-omitempty: true
         type: string
-        example: "{\"i\": [\"don't\", \"know\", \"yet\"]}"
+        example: "{\"timers\": {\"Context.StorageManager.read_load_array_schema_from_uri.sum\": 0.0255293, \"...\": \"...\"}, \"counters\": {\"Context.StorageManager.read_unfiltered_byte_num\": 191, \"...\": \"...\"}}"
 
   ActivityEventType:
     description: Type of activity logged
