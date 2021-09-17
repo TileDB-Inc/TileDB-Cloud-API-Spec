@@ -78,6 +78,32 @@ definitions:
       - STRING_UCS2
       # UCS4 string
       - STRING_UCS4
+      # Years
+      - DATETIME_YEAR
+      # Months
+      - DATETIME_MONTH
+      # Weeks
+      - DATETIME_WEEK
+      # Days
+      - DATETIME_DAY
+      # Hours
+      - DATETIME_HR
+      # Minutes
+      - DATETIME_MIN
+      # Seconds
+      - DATETIME_SEC
+      # Milliseconds
+      - DATETIME_MS
+      # Microseconds
+      - DATETIME_US
+      # Nanoseconds
+      - DATETIME_NS
+      # Picoseconds
+      - DATETIME_PS
+      # Femtoseconds
+      - DATETIME_FS
+      # Attoseconds
+      - DATETIME_AS
       # This can be any datatype. Must store (type tag, value) pairs.
       - ANY
 
@@ -224,6 +250,22 @@ definitions:
         description: Number of bytes in the var-length attribute data buffer
         type: integer
         format: uint64
+      validityLenBufferSizeInBytes:
+        description: Number of bytes for validity in case attribute is nullable
+        type: integer
+        format: uint64
+      originalFixedLenBufferSizeInBytes:
+        description: Original user set number of bytes in the fixed-length attribute data buffer
+        type: integer
+        format: uint64
+      originalVarLenBufferSizeInBytes:
+        description: Original user set number of bytes in the var-length attribute data buffer
+        type: integer
+        format: uint64
+      originalValidityLenBufferSizeInBytes:
+        description: Original user set number of bytes in the validity data buffer
+        type: integer
+        format: uint64
 
   Writer:
     type: object
@@ -234,6 +276,8 @@ definitions:
         type: boolean
       dedupCoords:
         type: boolean
+      subarrayRanges:
+        $ref: "#/definitions/Subarray"
       subarray:
         $ref: "#/definitions/DomainArray"
 
@@ -252,6 +296,19 @@ definitions:
         items:
           type: integer
           format: uint8
+      bufferSizes:
+        description: The list of sizes per range
+        type: array
+        items:
+          type: integer
+          format: uint64
+      bufferStartSizes:
+        description: The list of start sizes per range
+        type: array
+        items:
+          type: integer
+          format: uint64
+
 
   Subarray:
     description: A Subarray
@@ -397,6 +454,10 @@ definitions:
         format: uint64
       totalVarLenBufferBytes:
         description: Total number of bytes in variable size attribute buffers.
+        type: integer
+        format: uint64
+      totalValidityBufferBytes:
+        description: Total number of bytes in validity buffers
         type: integer
         format: uint64
     x-go-type:
