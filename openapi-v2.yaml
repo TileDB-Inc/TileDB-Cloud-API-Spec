@@ -556,6 +556,12 @@ definitions:
       - array_metadata_update
       # estimated_result_sizes
       - estimated_result_sizes
+      # captures enum value "update" (registered UDFs)
+      - update
+      # captures enum value "info" (registered UDFs)
+      - info
+      # captures enum value "run" (registered UDFs)
+      - run
 
   ArrayActivityLogData:
     description: Object including array tasks and metadata
