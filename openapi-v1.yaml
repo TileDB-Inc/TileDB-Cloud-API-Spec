@@ -934,6 +934,10 @@ definitions:
         description: uuid of associated array task
         type: string
         example:  "00000000-0000-0000-0000-000000000000"
+      id:
+        description: id of the activity
+        type: string
+        example:  "00000000-0000-0000-0000-000000000000"
       query_ranges:
         description: ranges for query
         x-omitempty: true
@@ -2732,6 +2736,38 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /arrays/{namespace}/{array}/activity/{id}:
+      parameters:
+        - name: namespace
+          in: path
+          description: namespace array is in (an organization name or user's username)
+          type: string
+          required: true
+        - name: array
+          in: path
+          description: name/uri of array that is url-encoded
+          type: string
+          required: true
+        - name: id
+          in: path
+          description: id of the activity
+          type: string
+          required: true
+      get:
+        description: get activity log by id
+        tags:
+          - array
+        operationId: getActivityLogById
+        responses:
+          200:
+            description: array activity
+            schema:
+                $ref: "#/definitions/ArrayActivityLog"
+          default:
+            description: error response
+            schema:
+              $ref: "#/definitions/Error"
 
   /arrays/{namespace}/{array}/deregister:
     parameters:
