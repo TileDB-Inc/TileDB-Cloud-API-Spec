@@ -515,6 +515,10 @@ definitions:
         description: uuid of associated array task
         type: string
         example:  "00000000-0000-0000-0000-000000000000"
+      id:
+        description: id of the activity
+        type: string
+        example:  "00000000-0000-0000-0000-000000000000"
       query_ranges:
         description: ranges for query
         x-omitempty: true
