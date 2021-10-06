@@ -1210,6 +1210,20 @@ definitions:
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
 
+  ArrayVersionData:
+    description: Object including array versions (list of Unix epoch timestamps in milliseconds) and pagination metadata
+    type: object
+    properties:
+      versions:
+        description: List of timestamps expressed in milliseconds since Unix epoch
+        type: array
+        x-omitempty: true
+        items:
+          type: integer
+          format: uint64
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
   ArrayBrowserSidebar:
     description: Object for ui array tasks browser page
     type: object
@@ -3574,6 +3588,12 @@ paths:
         description: (optional) limit character length of returned values
         type: integer
         required: false
+      - name: version
+        in: query
+        description: "Milliseconds since Unix epoch, metadata will use open_at functionality to open array at the specific timestamp"
+        type: integer
+        format: uint64
+        required: false
     get:
       description: get metadata from the array in json format
       tags:
@@ -3646,6 +3666,44 @@ paths:
             application/json:
               message: "Error try again"
               code: 1
+
+  /arrays/{namespace}/{array}/versions:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+    get:
+      description: retrieve a list of timestamps from the array fragment info listing in milliseconds, paginated
+      tags:
+        - array
+      produces:
+        - application/json
+      responses:
+        200:
+          description: list of timestamps in milliseconds, paginated
+          schema:
+            $ref: "#/definitions/ArrayVersionData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /arrays/last_accessed:
     get:
@@ -4704,20 +4762,27 @@ paths:
         description: name/uri of array that is url-encoded
         type: string
         required: true
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
     get:
-      description: retrieve a list of timestamps from the array fragment info listing in milliseconds
+      description: retrieve a list of timestamps from the array fragment info listing in milliseconds, paginated
       tags:
         - udf
       produces:
         - application/json
       responses:
         200:
-          description: list of timestamps in milliseconds
+          description: list of timestamps in milliseconds, paginated
           schema:
-            type: array
-            items:
-              type: integer
-              format: uint64
+            $ref: "#/definitions/ArrayVersionData"
         default:
           description: error response
           schema:
@@ -4819,20 +4884,27 @@ paths:
         description: name/uri of array that is url-encoded
         type: string
         required: true
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
     get:
-      description: retrieve a list of timestamps from the array fragment info listing in milliseconds
+      description: retrieve a list of timestamps from the array fragment info listing in milliseconds, paginated
       tags:
         - notebooks
       produces:
         - application/json
       responses:
         200:
-          description: list of timestamps in milliseconds
+          description: list of timestamps in milliseconds, paginated
           schema:
-            type: array
-            items:
-              type: integer
-              format: uint64
+            $ref: "#/definitions/ArrayVersionData"
         default:
           description: error response
           schema:
