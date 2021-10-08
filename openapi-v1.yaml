@@ -5501,6 +5501,17 @@ paths:
 
   /arrays/favorites:
     get:
+      parameters:
+        - name: page
+          in: query
+          description: pagination offset
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit
+          type: integer
+          required: false
       tags:
         - favorites
       description: Fetch all array favorites of connected user
@@ -5510,6 +5521,10 @@ paths:
           description: Available array favorites are returned
           schema:
             $ref: "#/definitions/ArrayFavoritesData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     post:
       tags:
         - favorites
@@ -5523,6 +5538,10 @@ paths:
       responses:
         204:
           description: Item added to favorites successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /arrays/favorites/uuids:
     get:
@@ -5538,6 +5557,10 @@ paths:
             x-omitempty: false
             items:
               $ref: "#/definitions/ArrayFavorite"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /arrays/favorites/{id}:
     parameters:
@@ -5556,6 +5579,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ArrayFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     delete:
       tags:
         - favorites
@@ -5564,9 +5591,24 @@ paths:
       responses:
         204:
           description: Array favorite item deleted successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /notebooks/favorites:
     get:
+      parameters:
+        - name: page
+          in: query
+          description: pagination offset
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit
+          type: integer
+          required: false
       tags:
         - favorites
       description: Fetch all notebook favorites of connected user
@@ -5576,6 +5618,10 @@ paths:
           description: Available notebook favorites are returned
           schema:
             $ref: "#/definitions/NotebookFavoritesData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     post:
       tags:
         - favorites
@@ -5589,6 +5635,10 @@ paths:
       responses:
         204:
           description: Item added to favorites successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /notebooks/favorites/uuids:
     get:
@@ -5604,6 +5654,10 @@ paths:
             x-omitempty: false
             items:
               $ref: "#/definitions/NotebookFavorite"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
 
   /notebooks/favorites/{id}:
@@ -5623,6 +5677,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/NotebookFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     delete:
       tags:
         - favorites
@@ -5631,9 +5689,24 @@ paths:
       responses:
         204:
           description: Notebook favorite item deleted successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /mlmodels/favorites:
     get:
+      parameters:
+        - name: page
+          in: query
+          description: pagination offset
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit
+          type: integer
+          required: false
       tags:
         - favorites
       description: Fetch all ML models favorites of connected user
@@ -5643,6 +5716,10 @@ paths:
           description: Available ML models favorites are returned
           schema:
             $ref: "#/definitions/MLModelFavoritesData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     post:
       tags:
         - favorites
@@ -5656,6 +5733,10 @@ paths:
       responses:
         204:
           description: Item added to favorites successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /mlmodels/favorites/uuids:
     get:
@@ -5671,6 +5752,10 @@ paths:
             x-omitempty: false
             items:
               $ref: "#/definitions/MLModelFavorite"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /mlmodels/favorites/{id}:
     parameters:
@@ -5689,6 +5774,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/MLModelFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     delete:
       tags:
         - favorites
@@ -5697,9 +5786,24 @@ paths:
       responses:
         204:
           description: ML model favorite item deleted successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /udfs/favorites:
     get:
+      parameters:
+        - name: page
+          in: query
+          description: pagination offset
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit
+          type: integer
+          required: false
       tags:
         - favorites
       description: Fetch all UDF favorites of connected user
@@ -5709,6 +5813,10 @@ paths:
           description: Available UDF favorites are returned
           schema:
             $ref: "#/definitions/UDFFavoritesData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     post:
       tags:
         - favorites
@@ -5722,6 +5830,10 @@ paths:
       responses:
         204:
           description: Item added to favorites successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /udfs/favorites/uuids:
     get:
@@ -5737,6 +5849,10 @@ paths:
             x-omitempty: false
             items:
               $ref: "#/definitions/UDFFavorite"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   /udfs/favorites/{id}:
     parameters:
@@ -5755,6 +5871,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/UDFFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     delete:
       tags:
         - favorites
@@ -5763,3 +5883,7 @@ paths:
       responses:
         204:
           description: UDF favorite item deleted successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
