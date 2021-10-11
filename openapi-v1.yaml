@@ -2991,6 +2991,41 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /arrays/{namespace}/{array}/fragment_timestamp:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: timestamp
+        in: query
+        description: "Milliseconds since Unix epoch"
+        type: integer
+        format: uint64
+        required: false
+    get:
+      description: Get fragment timestamp (start) on an array, will search for the closest (start) timestamp to the timestamp asked
+      tags:
+        - array
+      operationId: getFragmentTimestamp
+      responses:
+        200:
+          description: fragment timestamp (start) on an array
+          schema:
+            description: "Milliseconds since Unix epoch, start timestamp of selected fragment or latest timestamp if input timestamp is omitted"
+            type: integer
+            format: uint64
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /arrays/{namespace}/{array}/register:
     parameters:
       - name: namespace
