@@ -3013,7 +3013,7 @@ paths:
       description: Get fragment timestamp (start) on an array, will search for the closest (start) timestamp to the timestamp asked
       tags:
         - array
-      operationId: getFragmentVersion
+      operationId: getFragmentTimestamp
       responses:
         200:
           description: fragment timestamp (start) on an array
