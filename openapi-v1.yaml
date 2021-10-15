@@ -5783,7 +5783,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /mlmodels/favorites:
+  /ml_models/favorites:
     get:
       parameters:
         - name: page
@@ -5827,7 +5827,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /mlmodels/favorites/uuids:
+  /ml_models/favorites/uuids:
     get:
       tags:
         - favorites
@@ -5846,7 +5846,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /mlmodels/favorites/{id}:
+  /ml_models/favorites/{id}:
     parameters:
       - type: string
         name: id
@@ -5880,7 +5880,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /mlmodels/favorites/{namespace}/{name}:
+  /ml_models/favorites/{namespace}/{name}:
     parameters:
       - type: string
         name: namespace
