@@ -1210,11 +1210,11 @@ definitions:
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
 
-  ArrayVersionData:
-    description: Object including array versions (list of Unix epoch timestamps in milliseconds) and pagination metadata
+  ArrayEndTimestampData:
+    description: Object including array end_timestamps (list of Unix epoch timestamps in milliseconds) and pagination metadata
     type: object
     properties:
-      versions:
+      end_timestamps:
         description: List of timestamps expressed in milliseconds since Unix epoch
         type: array
         x-omitempty: true
@@ -2991,7 +2991,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /arrays/{namespace}/{array}/fragment_timestamp:
+  /arrays/{namespace}/{array}/fragment_end_timestamp:
     parameters:
       - name: namespace
         in: path
@@ -3003,22 +3003,22 @@ paths:
         description: name/uri of array that is url-encoded
         type: string
         required: true
-      - name: timestamp
+      - name: end_timestamp
         in: query
         description: "Milliseconds since Unix epoch"
         type: integer
         format: uint64
         required: false
     get:
-      description: Get fragment timestamp (start) on an array, will search for the closest (start) timestamp to the timestamp asked
+      description: Get fragment end_timestamp on an array, will search for the closest end_timestamp to the timestamp asked
       tags:
         - array
-      operationId: getFragmentTimestamp
+      operationId: getFragmentEndTimestamp
       responses:
         200:
-          description: fragment timestamp (start) on an array
+          description: fragment end_timestamp on an array
           schema:
-            description: "Milliseconds since Unix epoch, start timestamp of selected fragment or latest timestamp if input timestamp is omitted"
+            description: "Milliseconds since Unix epoch, end_timestamp of selected fragment or latest timestamp if input timestamp is omitted"
             type: integer
             format: uint64
         default:
@@ -3697,7 +3697,7 @@ paths:
         description: (optional) limit character length of returned values
         type: integer
         required: false
-      - name: version
+      - name: end_timestamp
         in: query
         description: "Milliseconds since Unix epoch, metadata will use open_at functionality to open array at the specific timestamp"
         type: integer
@@ -3776,7 +3776,7 @@ paths:
               message: "Error try again"
               code: 1
 
-  /arrays/{namespace}/{array}/versions:
+  /arrays/{namespace}/{array}/end_timestamps:
     parameters:
       - name: namespace
         in: path
@@ -3808,7 +3808,7 @@ paths:
         200:
           description: list of timestamps in milliseconds, paginated
           schema:
-            $ref: "#/definitions/ArrayVersionData"
+            $ref: "#/definitions/ArrayEndTimestampData"
         default:
           description: error response
           schema:
@@ -4859,7 +4859,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /udf/{namespace}/{array}/versions:
+  /udf/{namespace}/{array}/end_timestamps:
     parameters:
       - name: namespace
         in: path
@@ -4891,7 +4891,7 @@ paths:
         200:
           description: list of timestamps in milliseconds, paginated
           schema:
-            $ref: "#/definitions/ArrayVersionData"
+            $ref: "#/definitions/ArrayEndTimestampData"
         default:
           description: error response
           schema:
@@ -4981,7 +4981,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /notebooks/{namespace}/{array}/versions:
+  /notebooks/{namespace}/{array}/end_timestamps:
     parameters:
       - name: namespace
         in: path
@@ -5013,7 +5013,7 @@ paths:
         200:
           description: list of timestamps in milliseconds, paginated
           schema:
-            $ref: "#/definitions/ArrayVersionData"
+            $ref: "#/definitions/ArrayEndTimestampData"
         default:
           description: error response
           schema:
