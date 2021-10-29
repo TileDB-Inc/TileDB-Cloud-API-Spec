@@ -1896,6 +1896,8 @@ definitions:
       - google
       # Stripe
       - stripe
+      # Okta
+      - okta
 
   PublicShareFilter:
     description: Query parameter to get array metadatas
