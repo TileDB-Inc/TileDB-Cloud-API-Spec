@@ -2129,7 +2129,7 @@ definitions:
         $ref: "#/definitions/QueryRanges"
       subarray:
         $ref: "#/definitions/UDFSubarray"
-        description: Subarray ranges to query, this is deprecate and `ranges` in UDFArrayDetails should be used instead.
+        description: Subarray ranges to query. This is deprecated. For single-array UDF, please use `ranges` in MultiArrayUDF; for multi-array UDF, please use `ranges` in UDFArrayDetails.
       buffers:
         description: List of buffers to fetch (attributes + dimensions). Deprecated please set arrays with UDFArrayDetails
         type: array
