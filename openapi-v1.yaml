@@ -2628,6 +2628,71 @@ definitions:
       - array:read-write
       - array:admin
 
+  GroupAsset:
+    description: an asset of a group. Can be array notebook ml_model or udf
+    type: object
+    properties:
+      name:
+        description: the name of the asset
+        type: string
+      namespace:
+        description: the namespace of the asset
+        type: string
+
+  GroupInfo:
+    description: A group of assets
+    type: object
+    properties:
+      path:
+        description: the slash separated path of the group
+        type: string
+      name:
+        description: the name of the group, the last element of path
+        type: string
+      description:
+        description: human readable description of the contents
+        type: string
+      type:
+        description: the asset type
+        type: string
+      groups:
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/GroupInfo"
+      assets:
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/GroupAsset"
+
+  CreateGroup:
+    description: parameters for the creation of group
+    type: object
+    properties:
+      name:
+        description: the name of the group. The path will be parentPath/name
+        type: string
+      description:
+        description: human readable description of the contents
+        type: string
+
+  ChangeGroupAssets:
+    description: which assets to add/remove from the group
+    type: object
+    properties:
+      add:
+        description: the assets to add
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/GroupAsset"
+      del:
+        description: the assets to remove
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/GroupAsset"
 
 paths:
   /.stats:
@@ -3840,6 +3905,81 @@ paths:
               message: "Error try again"
               code: 1
 
+  /arrays/groups/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace of group (an organization name or user's username)
+        type: string
+        required: true
+      - name: path
+        in: query
+        description: the slash separated path name like /tile/a/b/c
+        type: string
+        required: false
+
+    post:
+      tags:
+        - groups
+      operationId: createArraysGroup
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/CreateGroup'
+      responses:
+        204:
+          description: group created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    patch:
+      tags:
+        - groups
+      operationId: changeArraysGroupAssets
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/ChangeGroupAssets'
+      responses:
+        204:
+          description: group assets changed successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    get:
+      tags:
+        - groups
+      operationId: listArraysGroup
+      responses:
+        200:
+          description: list the subgroups and arrays of the group
+          schema:
+            $ref: "#/definitions/GroupInfo"
+          examples:
+            application/json:
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    delete:
+      tags:
+        - groups
+      operationId: deleteArraysGroup
+      responses:
+        204:
+          description: delete the groups and its subgroups recursively. Arrays are not deleted
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /user:
     get:
       tags:
@@ -4729,6 +4869,82 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /udfs/groups/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace of group (an organization name or user's username)
+        type: string
+        required: true
+      - name: path
+        in: query
+        description: the slash separated path name like /tile/a/b/c
+        type: string
+        required: false
+
+    post:
+      tags:
+        - groups
+      operationId: createUDFsGroup
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/CreateGroup'
+      responses:
+        204:
+          description: group created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    patch:
+      tags:
+        - groups
+      operationId: changeUDFsGroupAssets
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/ChangeGroupAssets'
+      responses:
+        204:
+          description: group assets changed successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    get:
+      tags:
+        - groups
+      operationId: listUDFsGroup
+      responses:
+        200:
+          description: list the subgroups and UDFs of the group
+          schema:
+            $ref: "#/definitions/GroupInfo"
+          examples:
+            application/json:
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    delete:
+      tags:
+        - groups
+      operationId: deleteUDFsGroup
+      responses:
+        204:
+          description: delete the groups and its subgroups recursively. UDFs are not deleted
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+
   /udf/{namespace}/{name}:
     parameters:
       - name: namespace
@@ -5020,6 +5236,82 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /notebooks/groups/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace of group (an organization name or user's username)
+        type: string
+        required: true
+      - name: path
+        in: query
+        description: the slash separated path name like /tile/a/b/c
+        type: string
+        required: false
+
+    post:
+      tags:
+        - groups
+      operationId: createNotebooksGroup
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/CreateGroup'
+      responses:
+        204:
+          description: group created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    patch:
+      tags:
+        - groups
+      operationId: changeNotebooksGroupAssets
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/ChangeGroupAssets'
+      responses:
+        204:
+          description: group assets changed successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    get:
+      tags:
+        - groups
+      operationId: listNotebooksGroup
+      responses:
+        200:
+          description: list the subgroups and notebooks of the group
+          schema:
+            $ref: "#/definitions/GroupInfo"
+          examples:
+            application/json:
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    delete:
+      tags:
+        - groups
+      operationId: deleteNotebooksGroup
+      responses:
+        204:
+          description: delete the groups and its subgroups recursively. Notebooks are not deleted
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
 
   /invitations:
     parameters:
@@ -6028,6 +6320,82 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/UDFFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+
+  /ml_models/groups/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace of group (an organization name or user's username)
+        type: string
+        required: true
+      - name: path
+        in: query
+        description: the slash separated path name like /tile/a/b/c
+        type: string
+        required: false
+
+    post:
+      tags:
+        - groups
+      operationId: createMLModelsGroup
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/CreateGroup'
+      responses:
+        204:
+          description: group created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    patch:
+      tags:
+        - groups
+      operationId: changeMLModelsGroupAssets
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/ChangeGroupAssets'
+      responses:
+        204:
+          description: group assets changed successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    get:
+      tags:
+        - groups
+      operationId: listMLModelsGroup
+      responses:
+        200:
+          description: list the subgroups and MLModels of the group
+          schema:
+            $ref: "#/definitions/GroupInfo"
+          examples:
+            application/json:
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+    delete:
+      tags:
+        - groups
+      operationId: deleteMLModelsGroup
+      responses:
+        204:
+          description: delete the groups and its subgroups recursively. MLModels are not deleted
         default:
           description: error response
           schema:
