@@ -5667,6 +5667,11 @@ paths:
   /notebooks/favorites:
     get:
       parameters:
+        - name: is_dashboard
+          in: query
+          description: return only dashboards
+          type: boolean
+          required: false
         - name: page
           in: query
           description: pagination offset
