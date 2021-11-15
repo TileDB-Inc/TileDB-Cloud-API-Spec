@@ -2632,6 +2632,43 @@ definitions:
       - array:read-write
       - array:admin
 
+  FileCreate:
+    description: Input/Output information required to create a new file 
+    type: object
+    properties:
+      input_uri:
+        type: string
+        description: storage URI of the input file 
+      input_mime_type:
+        type: string
+        description: manually specified mime type of the file 
+      output_uri:
+        type: string
+        description: output location of the TileDB File
+
+  FileCreated:
+    description: Created file uri and information 
+    type: object
+    properties:
+      output_uri:
+        type: string
+        description: output location of the TileDB File
+
+  FileExport:
+    description: Output information required to export a file 
+    type: object
+    properties:
+      output_uri:
+        type: string
+        description: output location of the TileDB File
+
+  FileExported:
+    description: Output uri of the exported file 
+    type: object
+    properties:
+      output_uri:
+        type: string
+        description: output location of the exported file 
 
 paths:
   /.stats:
@@ -6037,6 +6074,63 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/UDFFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /files/{namespace}:
+    parameters:
+      - type: string
+        name: namespace
+        in: path
+        required: true
+        description: The namespace of the file
+      - name: FileCreate
+        in: body
+        description: Input/Output information to create a new TileDB file
+        schema:
+          $ref: "#/definitions/FileCreate"
+        required: true
+    post:
+      description: Create a tiledb file at the specified location
+      operationId: HandleCreateFile
+      responses:
+        201:
+          description: File created          
+          schema:
+            $ref: "#/definitions/FileCreated"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /files/{namespace}/{file}/export:
+    parameters:
+      - type: string
+        name: namespace
+        in: path
+        required: true
+        description: The namespace of the file
+      - type: string
+        name: file
+        in: path
+        required: true
+        description: The file identifier
+      - name: FileExport
+        in: body
+        description: Export configuration information
+        schema:
+          $ref: "#/definitions/FileExport"
+        required: true
+    post:
+      description: Export a TileDB File back to its original file format 
+      operationId: HandleExportFile
+      responses:
+        201:
+          description: File exported          
+          schema:
+            $ref: "#/definitions/FileExported"    
         default:
           description: error response
           schema:
