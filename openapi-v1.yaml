@@ -976,6 +976,8 @@ definitions:
       - RUNNING
       # DENIED
       - DENIED
+      # UNKNOWN
+      - UNKNOWN
 
   ArrayTaskLog:
     description: Array task stderr/stdout logs
