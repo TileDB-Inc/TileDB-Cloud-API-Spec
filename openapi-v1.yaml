@@ -2639,9 +2639,6 @@ definitions:
       input_uri:
         type: string
         description: storage URI of the input file 
-      input_mime_type:
-        type: string
-        description: manually specified mime type of the file 
       output_uri:
         type: string
         description: output location of the TileDB File
