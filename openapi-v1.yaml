@@ -2639,9 +2639,6 @@ definitions:
       input_uri:
         type: string
         description: storage URI of the input file 
-      input_mime_type:
-        type: string
-        description: manually specified mime type of the file 
       output_uri:
         type: string
         description: output location of the TileDB File
@@ -2653,6 +2650,9 @@ definitions:
       output_uri:
         type: string
         description: output location of the TileDB File
+      file_uuid:
+        type: string
+        description: uuid of the file created 
 
   FileExport:
     description: Output information required to export a file 
