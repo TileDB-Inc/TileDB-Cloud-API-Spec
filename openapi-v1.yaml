@@ -1507,6 +1507,8 @@ definitions:
       - user_defined_function
       # ML Model
       - ml_model
+      # Files
+      - file
 
   FilePropertyName:
     description: File property assigned to a specific file (array)
