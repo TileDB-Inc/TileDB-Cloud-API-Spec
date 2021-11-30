@@ -2644,9 +2644,12 @@ definitions:
       output_uri:
         type: string
         description: output location of the TileDB File
+      name:
+        type: string
+        description: name to set for registered file
 
   FileCreated:
-    description: Created file uri and information 
+    description: Created file uri and information
     type: object
     properties:
       output_uri:
@@ -2654,7 +2657,7 @@ definitions:
         description: output location of the TileDB File
       file_uuid:
         type: string
-        description: uuid of the file created 
+        description: uuid of the file created
 
   FileExport:
     description: Output information required to export a file 
