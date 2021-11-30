@@ -966,12 +966,16 @@ definitions:
     description: Status of array task
     type: string
     enum:
+      # QUEUED
+      - QUEUED
       # FAILED
       - FAILED
       # COMPLETED
       - COMPLETED
       # RUNNING
       - RUNNING
+      # DENIED
+      - DENIED
 
   ArrayTaskLog:
     description: Array task stderr/stdout logs
