@@ -6101,6 +6101,11 @@ paths:
         schema:
           $ref: "#/definitions/FileCreate"
         required: true
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
     post:
       description: Create a tiledb file at the specified location
       tags:
