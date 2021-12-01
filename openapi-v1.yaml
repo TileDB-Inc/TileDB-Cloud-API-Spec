@@ -2639,12 +2639,12 @@ definitions:
       - array:admin
 
   FileCreate:
-    description: Input/Output information required to create a new file 
+    description: Input/Output information required to create a new file
     type: object
     properties:
       input_uri:
         type: string
-        description: storage URI of the input file 
+        description: storage URI of the input file
       output_uri:
         type: string
         description: output location of the TileDB File
@@ -2653,18 +2653,18 @@ definitions:
         description: name to set for registered file
 
   FileCreated:
-    description: Created file uri and information
+    description: Created file name and information
     type: object
     properties:
       output_uri:
         type: string
         description: output location of the TileDB File
-      file_uuid:
+      file_name:
         type: string
-        description: uuid of the file created
+        description: name of the file created
 
   FileExport:
-    description: Output information required to export a file 
+    description: Output information required to export a file
     type: object
     properties:
       output_uri:
@@ -2672,12 +2672,12 @@ definitions:
         description: output location of the TileDB File
 
   FileExported:
-    description: Output uri of the exported file 
+    description: Output uri of the exported file
     type: object
     properties:
       output_uri:
         type: string
-        description: output location of the exported file 
+        description: output location of the exported file
 
 paths:
   /.stats:
@@ -6108,7 +6108,7 @@ paths:
       operationId: HandleCreateFile
       responses:
         201:
-          description: File created          
+          description: File created
           schema:
             $ref: "#/definitions/FileCreated"
         default:
@@ -6135,15 +6135,15 @@ paths:
           $ref: "#/definitions/FileExport"
         required: true
     post:
-      description: Export a TileDB File back to its original file format 
+      description: Export a TileDB File back to its original file format
       tags:
         - files
       operationId: HandleExportFile
       responses:
         201:
-          description: File exported          
+          description: File exported
           schema:
-            $ref: "#/definitions/FileExported"    
+            $ref: "#/definitions/FileExported"
         default:
           description: error response
           schema:
