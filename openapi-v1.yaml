@@ -1049,6 +1049,7 @@ definitions:
         description: Finish time RFC3339 for job
         type: string
         format: date-time
+        x-nullable: true
       cost:
         description: Total accumulated for task in USD, example is $0.12
         type: number
