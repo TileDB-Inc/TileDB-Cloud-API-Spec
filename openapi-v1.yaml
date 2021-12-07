@@ -2436,15 +2436,14 @@ definitions:
     description: A user-favorite notebook item
     type: object
     properties:
-      id:
-        type: string
-        description: unique UUID of the favorite
-      created_at:
-        description: Datetime the favorite was created in UTC
-        type: string
-        format: date-time
       notebook_uuid:
         description: unique UUID of the notebook
+        type: string
+      namespace:
+        description: the namespace of the notebook
+        type: string
+      name:
+        description: the name of the notebook
         type: string
 
   NotebookFavoritesData:
@@ -5989,30 +5988,13 @@ paths:
           required: false
       tags:
         - favorites
-      description: Fetch all notebook favorites of connected user
+      description: Fetch a page of notebook favorites of connected user
       operationId: listNotebookFavorites
       responses:
         200:
           description: Available notebook favorites are returned
           schema:
             $ref: "#/definitions/NotebookFavoritesData"
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      tags:
-        - favorites
-      description: Add a new notebook favorite
-      operationId: addNotebookFavorite
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/FavoriteCreate'
-      responses:
-        204:
-          description: Item added to favorites successfully
         default:
           description: error response
           schema:
@@ -6037,41 +6019,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-
-  /notebooks/favorites/{id}:
-    parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
-        description: The UUID of the notebook favorite
-    get:
-      tags:
-        - favorites
-      description: Fetch specific notebook favorite of a user
-      operationId: getNotebookFavorite
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/NotebookFavorite'
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    delete:
-      tags:
-        - favorites
-      description: Delete specific notebook favorite
-      operationId: deleteNotebookFavorite
-      responses:
-        204:
-          description: Notebook favorite item deleted successfully
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
   /notebooks/favorites/{namespace}/{name}:
     parameters:
       - type: string
@@ -6088,12 +6035,36 @@ paths:
       tags:
         - favorites
       description: Fetch notebook favorite of a specific notebook
-      operationId: getNotebookFavoriteForNotebook
+      operationId: getNotebookFavorite
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/NotebookFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - favorites
+      description: Add a new notebook favorite
+      operationId: addNotebookFavorite
+      responses:
+        204:
+          description: Item added to favorites successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - favorites
+      description: Delete specific notebook favorite
+      operationId: deleteNotebookFavorite
+      responses:
+        204:
+          description: notebook favorite item deleted successfully
         default:
           description: error response
           schema:
