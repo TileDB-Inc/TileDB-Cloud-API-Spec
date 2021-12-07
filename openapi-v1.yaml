@@ -2463,15 +2463,14 @@ definitions:
     description: A user-favorite UDF item
     type: object
     properties:
-      id:
-        type: string
-        description: unique UUID of the favorite
-      created_at:
-        description: Datetime the favorite was created in UTC
-        type: string
-        format: date-time
       udf_uuid:
         description: unique UUID of the UDF
+        type: string
+      namespace:
+        description: the namespace of the UDF
+        type: string
+      name:
+        description: the name of the UDF
         type: string
 
   UDFFavoritesData:
@@ -6182,30 +6181,13 @@ paths:
           required: false
       tags:
         - favorites
-      description: Fetch all UDF favorites of connected user
+      description: Fetch a page of UDF favorites of connected user
       operationId: listUDFFavorites
       responses:
         200:
           description: Available UDF favorites are returned
           schema:
             $ref: "#/definitions/UDFFavoritesData"
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      tags:
-        - favorites
-      description: Add a new UDF favorite
-      operationId: addUDFFavorite
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/FavoriteCreate'
-      responses:
-        204:
-          description: Item added to favorites successfully
         default:
           description: error response
           schema:
@@ -6230,40 +6212,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /udfs/favorites/{id}:
-    parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
-        description: The UUID of the UDF favorite
-    get:
-      tags:
-        - favorites
-      description: Fetch specific UDF favorite of a user
-      operationId: getUDFFavorite
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/UDFFavorite'
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    delete:
-      tags:
-        - favorites
-      description: Delete specific UDF favorite
-      operationId: deleteUDFFavorite
-      responses:
-        204:
-          description: UDF favorite item deleted successfully
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
   /udfs/favorites/{namespace}/{name}:
     parameters:
       - type: string
@@ -6280,12 +6228,36 @@ paths:
       tags:
         - favorites
       description: Fetch UDF favorite of a specific UDF
-      operationId: getUDFFavoriteForUDF
+      operationId: getUDFFavorite
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/UDFFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - favorites
+      description: Add a new UDF favorite
+      operationId: addUDFFavorite
+      responses:
+        204:
+          description: Item added to favorites successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - favorites
+      description: Delete specific UDF favorite
+      operationId: deleteUDFFavorite
+      responses:
+        204:
+          description: UDF favorite item deleted successfully
         default:
           description: error response
           schema:
