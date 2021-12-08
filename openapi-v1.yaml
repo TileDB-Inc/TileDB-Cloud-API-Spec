@@ -6545,6 +6545,8 @@ paths:
     post:
       description: Create a task graph log.
       operationId: createTaskGraphLog
+      tags:
+        - taskGraphLogs
       responses:
         201:
           description: >
@@ -6594,6 +6596,8 @@ paths:
     get:
       description: Fetch the task graph logs a user has access to.
       operationId: listTaskGraphLogs
+      tags:
+        - taskGraphLogs
       responses:
         200:
           description: The task graph logs that matched the user's query.
@@ -6615,6 +6619,8 @@ paths:
       description: >
         Fetch information about a single task graph execution.
       operationId: getTaskGraphLog
+      tags:
+        - taskGraphLogs
       responses:
         200:
           description: Information about the execution of a single task graph.
@@ -6628,6 +6634,8 @@ paths:
       description: >
         Update information about a single task graph execution.
       operationId: updateTaskGraphLog
+      tags:
+        - taskGraphLogs
       parameters:
         - name: log
           in: body
