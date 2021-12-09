@@ -2824,6 +2824,7 @@ definitions:
         type: string
         format: date-time
         readOnly: true
+        x-nullable: true
         x-omitempty: true
         description: >
           The start time of the task graph, recorded when the server
@@ -2832,6 +2833,7 @@ definitions:
         type: string
         format: date-time
         readOnly: true
+        x-nullable: true
         x-omitempty: true
         description: >
           The end time of the task graph, recorded when the client reports
