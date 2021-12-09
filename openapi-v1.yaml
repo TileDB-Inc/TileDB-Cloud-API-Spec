@@ -2815,6 +2815,11 @@ definitions:
         type: string
         readOnly: true
         description: The name of the user who created this task graph log.
+      name:
+        type: string
+        description: >
+          A name for this task graph log, displayed in the UI.
+          Does not need to be unique.
       start_time:
         type: string
         format: date-time
