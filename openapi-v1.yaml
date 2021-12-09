@@ -2778,7 +2778,7 @@ definitions:
     description: The status of a given task graph execution.
     type: string
     enum:
-      - unstarted
+      - submitted
         # The task graph has been submitted, but no tasks have been run.
         # This should not be reported by the client.
       - running
@@ -2788,14 +2788,14 @@ definitions:
         # The graph is not yet completed, but nothing is actively running.
         # This should not be reported by the client.
       - abandoned
-        # The graph has been idle for an extended period of time,
-        # likely due to crashing or aborting without notifying the server.
+        # The graph has been idle for an extended period of time, likely due to
+        # the client crashing or aborting without notifying the server.
         # Semantically this is equivalent to `idle`.
       - succeeded
         # The client has declared that the task graph has completed
         # successfully. This ordinarily entails all nodes succeeding.
       - failed
-        # The client has decided that the task graph was not successful.
+        # The client has declared that the task graph was not successful.
       - cancelled
         # The client has cancelled further execution of the task graph.
 
@@ -2836,12 +2836,12 @@ definitions:
       nodes:
         type: array
         items:
-          $ref: '#/definitions/TaskGraphNodeMeta'
+          $ref: '#/definitions/TaskGraphNodeMetadata'
         description: >
           The structure of the graph. This is provided by the client
           when first setting up the task graph. Thereafter, it is read-only.
 
-  TaskGraphNodeMeta:
+  TaskGraphNodeMetadata:
     description: Metadata about an individual node in a task graph.
     type: object
     properties:
@@ -6534,19 +6534,22 @@ paths:
             $ref: "#/definitions/Error"
 =======
   /taskgraphs/log:
-    parameters:
-      - name: namespace
-        type: string
-        in: query
-        required: true
-        description: >
-          The namespace that owns the task graph.
-          This is required for POST requests to create a new graph.
     post:
       description: Create a task graph log.
       operationId: createTaskGraphLog
       tags:
         - taskGraphLogs
+      parameters:
+        - name: namespace
+          type: string
+          in: query
+          required: true
+          description: >
+            The namespace that owns the task graph that is being run.
+        - name: log
+          in: body
+          schema:
+            $ref: '#/definitions/TaskGraphLog'
       responses:
         201:
           description: >
@@ -6594,7 +6597,10 @@ paths:
         type: integer
         required: false
     get:
-      description: Fetch the task graph logs a user has access to.
+      description: >
+        Fetch the task graph logs a user has access to. Entries in the response
+        are ordered from newest to oldest. Pagination parameters work as in
+        other API methods; see PaginationMetadata for details.
       operationId: listTaskGraphLogs
       tags:
         - taskGraphLogs
