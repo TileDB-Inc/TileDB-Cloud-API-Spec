@@ -2840,6 +2840,8 @@ definitions:
         description: >
           The structure of the graph. This is provided by the client
           when first setting up the task graph. Thereafter, it is read-only.
+          This must be topographically sorted; that is, each node must appear
+          after all nodes that it depends upon.
 
   TaskGraphNodeMetadata:
     description: Metadata about an individual node in a task graph.
