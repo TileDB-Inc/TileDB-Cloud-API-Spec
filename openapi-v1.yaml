@@ -6607,9 +6607,13 @@ paths:
         required: false
     get:
       description: >
-        Fetch the task graph logs a user has access to. Entries in the response
-        are ordered from newest to oldest. Pagination parameters work as in
-        other API methods; see PaginationMetadata for details.
+        Fetch the task graph logs a user has access to. The returned entries
+        will include only summary data, and will not include information about
+        the individual tasks that were executed. (This information is available
+        when requesting an individual task graph log.)
+
+        Entries in the response are ordered from newest to oldest. Pagination
+        parameters work as in other API methods; see PaginationMetadata.
       operationId: listTaskGraphLogs
       tags:
         - taskGraphLogs
