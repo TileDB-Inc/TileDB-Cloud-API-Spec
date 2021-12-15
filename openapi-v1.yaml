@@ -256,12 +256,12 @@ definitions:
       - read_array_schema
 
   UDFActions:
-    description: actions a user can take on an udf
+    description: actions a user can take on a UDF
     type: string
     enum:
-      # Fetch udf and run jobs
+      # Fetch UDF and run jobs
       - fetch_udf
-      # Share udf with others
+      # Share UDF with others
       - share_udf
 
   NamespaceActions:
@@ -935,11 +935,11 @@ definitions:
         format: uint64
         example: 1073741824
       array_task_id:
-        description: uuid of associated array task
+        description: UUID of associated array task
         type: string
         example:  "00000000-0000-0000-0000-000000000000"
       id:
-        description: id of the activity
+        description: ID of the activity
         type: string
         example:  "00000000-0000-0000-0000-000000000000"
       query_ranges:
@@ -995,7 +995,7 @@ definitions:
     type: object
     properties:
       id:
-        description: task id
+        description: task ID
         type: string
       name:
         description: Optional task name
@@ -1066,7 +1066,7 @@ definitions:
         format: double
         example: 0.12
       query_type:
-        description: If task type is query, whether its a read or write query
+        description: If task type is query, whether it's a read or write query
         $ref: "#/definitions/Querytype"
       udf_code:
         description: Optional actual code that is going to be executed
@@ -1171,7 +1171,7 @@ definitions:
     properties:
       array_id:
         type: string
-        description: unique id of array
+        description: unique ID of array
         example: "00000000-0000-0000-0000-000000000000"
       array_name:
         type: string
@@ -1274,7 +1274,7 @@ definitions:
     properties:
       id:
         type: string
-        description: unique id of user
+        description: unique ID of user
         example: "00000000-0000-0000-0000-000000000000"
       username:
         type: string
@@ -1349,10 +1349,10 @@ definitions:
         readOnly: true
         x-omitempty: false
       default_s3_path:
-        description: default s3 path to store newly created notebooks
+        description: default S3 path to store newly created notebooks
         type: string
       default_s3_path_credentials_name:
-        description: Default s3 path credentials name is the credentials name to use along with default_s3_path
+        description: Default S3 path credentials name is the credentials name to use along with default_s3_path
         type: string
       default_namespace_charged:
         description: Override the default namespace charged for actions when no namespace is specified
@@ -1364,11 +1364,11 @@ definitions:
     properties:
       user_id:
         type: string
-        description: unique id of user
+        description: unique ID of user
         example: "00000000-0000-0000-0000-000000000000"
       organization_id:
         type: string
-        description: unique id of organization
+        description: unique ID of organization
         example: "00000000-0000-0000-0000-000000000000"
       username:
         description: username for user
@@ -1395,7 +1395,7 @@ definitions:
     properties:
       id:
         type: string
-        description: unique id of organization
+        description: unique ID of organization
         example: "00000000-0000-0000-0000-000000000000"
       role:
         description: role of requested user within this organization
@@ -1449,10 +1449,10 @@ definitions:
         readOnly: true
         x-omitempty: false
       default_s3_path:
-        description: default s3 path to store newly created notebooks
+        description: default S3 path to store newly created notebooks
         type: string
       default_s3_path_credentials_name:
-        description: Default s3 path credentials name is the credentials name to use along with default_s3_path
+        description: Default S3 path credentials name is the credentials name to use along with default_s3_path
         type: string
       stripe_connect:
         description: Denotes that the organization is able to apply pricing to arrays by means of Stripe Connect
@@ -1483,7 +1483,7 @@ definitions:
         example: "organization"
 
   UDFSharing:
-    description: details for sharing a given udf
+    description: details for sharing a given UDF
     type: object
     properties:
       actions:
@@ -1576,11 +1576,11 @@ definitions:
     type: object
     properties:
       id:
-        description: Unique id of plan as defined by Stripe
+        description: Unique ID of plan as defined by Stripe
         type: string
         example: "planID"
       array_uuid:
-        description: Unique id of registered array
+        description: Unique ID of registered array
         type: string
         example: "00000000-0000-0000-0000-000000000000"
       pricing_name:
@@ -1626,15 +1626,15 @@ definitions:
     type: object
     properties:
       id:
-        description: Unique id of subscription as defined by Stripe
+        description: Unique ID of subscription as defined by Stripe
         type: string
         example: "subscriptionID"
       owner_namespace_uuid:
-        description: Unique id of the array (product) owner
+        description: Unique ID of the array (product) owner
         type: string
         example: "00000000-0000-0000-0000-000000000000"
       customer_namespace_uuid:
-        description: Unique id of the array (product) user (customer)
+        description: Unique ID of the array (product) user (customer)
         type: string
         example: "00000000-0000-0000-0000-000000000000"
       pricing:
@@ -1649,7 +1649,7 @@ definitions:
     type: object
     properties:
       id:
-        description: unique id of registered array
+        description: unique ID of registered array
         type: string
         example: "00000000-0000-0000-0000-000000000000"
       file_type:
@@ -1847,7 +1847,7 @@ definitions:
         description: Name of token to revoke
         type: string
       issued_at:
-        description: datetime the token was created at
+        description: datetime the token was created
         type: string
         format: date-time
       expires_at:
@@ -1889,12 +1889,12 @@ definitions:
           description: A bucket or path of a bucket that is granted access by these credentials
           example: "s3://company-bucket-1/tiledb/"
       created_at:
-        description: Time when udf dependencies was created (rfc3339)
+        description: Time when UDF dependencies were created (rfc3339)
         type: string
         format: date-time
         readOnly: true
       updated_at:
-        description: Time when udf dependencies was last updated (rfc3339)
+        description: Time when UDF dependencies was last updated (rfc3339)
         type: string
         format: date-time
         readOnly: true
@@ -2012,7 +2012,7 @@ definitions:
             type: number
 
   QueryJson:
-    description: Query returning results as json
+    description: Query returning results as JSON
     type: object
     properties:
       query_ranges:
@@ -2042,7 +2042,7 @@ definitions:
         description: Type-specific version
       image_name:
         type: string
-        description: Docker image name to use for udf
+        description: Docker image name to use for UDF
         x-omitempty: true
       exec:
         type: string
@@ -2053,7 +2053,7 @@ definitions:
         description: optional raw text to store of serialized function, used for showing in UI
       argument:
         type: string
-        description: Argument(s) to pass to udf function, tuple or list of args/kwargs which can be in native or json format
+        description: Argument(s) to pass to UDF function, tuple or list of args/kwargs which can be in native or JSON format
         x-omitempty: true
       stored_param_uuids:
         type: array
@@ -2107,7 +2107,7 @@ definitions:
         description: Type-specific version
       image_name:
         type: string
-        description: Docker image name to use for udf
+        description: Docker image name to use for UDF
         x-omitempty: true
       exec:
         type: string
@@ -2125,7 +2125,7 @@ definitions:
         type: string
       argument:
         type: string
-        description: Argument(s) to pass to udf function, tuple or list of args/kwargs which can be in native or json format
+        description: Argument(s) to pass to UDF function, tuple or list of args/kwargs which can be in native or JSON format
         x-omitempty: true
       stored_param_uuids:
         type: array
@@ -2142,9 +2142,9 @@ definitions:
         $ref: "#/definitions/QueryRanges"
       subarray:
         $ref: "#/definitions/UDFSubarray"
-        description: Subarray ranges to query. This is deprecated. For single-array UDF, please use `ranges` in MultiArrayUDF; for multi-array UDF, please use `ranges` in UDFArrayDetails.
+        description: Subarray ranges to query. This is deprecated. For single-array UDF, please use `ranges` in `MultiArrayUDF`; for multi-array UDF, please use `ranges` in `UDFArrayDetails`.
       buffers:
-        description: List of buffers to fetch (attributes + dimensions). Deprecated please set arrays with UDFArrayDetails
+        description: List of buffers to fetch (attributes + dimensions). Deprecated; please set arrays with `UDFArrayDetails`.
         type: array
         x-omitempty: true
         items:
@@ -2161,12 +2161,12 @@ definitions:
     type: object
     properties:
       id:
-        description: Unique id of set of images
+        description: Unique ID of set of images
         type: string
         example: "00000000-0000-0000-0000-000000000000"
       name:
         type: string
-        description: name of udf
+        description: name of UDF
       language:
         $ref: "#/definitions/UDFLanguage"
         description: UDF language
@@ -2176,14 +2176,14 @@ definitions:
     type: object
     properties:
       id:
-        description: Unique id of a versioned image
+        description: Unique ID of a versioned image
         type: string
         example: "00000000-0000-0000-0000-000000000000"
       name:
         type: string
         description: name of UDFImageVersion
       udf_image_uuid:
-        description: Unique id of the udf image set
+        description: Unique ID of the UDF image set
         type: string
         x-omitempty: false
         example: "00000000-0000-0000-0000-000000000000"
@@ -2210,7 +2210,7 @@ definitions:
     properties:
       name:
         type: string
-        description: name of udf
+        description: name of UDF
       language:
         $ref: "#/definitions/UDFLanguage"
         description: UDF language
@@ -2219,7 +2219,7 @@ definitions:
         description: Type-specific version
       image_name:
         type: string
-        description: Docker image name to use for udf
+        description: Docker image name to use for UDF
         x-omitempty: true
       type:
         $ref: "#/definitions/UDFType"
@@ -2233,7 +2233,7 @@ definitions:
         description: optional raw text to store of serialized function, used for showing in UI
       readme:
         type: string
-        description: Markdown readme of udfs
+        description: Markdown readme of UDFs
       license_id:
         type: string
         x-omitempty: true
@@ -2243,7 +2243,7 @@ definitions:
         x-omitempty: true
         description: License text
       tags:
-        description: optional tags for udf
+        description: optional tags for UDF
         x-omitempty: false
         type: array
         items:
@@ -2255,12 +2255,12 @@ definitions:
     type: object
     properties:
       id:
-        description: Unique id of udf
+        description: Unique ID of UDF
         type: string
         example: "00000000-0000-0000-0000-000000000000"
       name:
         type: string
-        description: name of udf
+        description: name of UDF
       language:
         $ref: "#/definitions/UDFLanguage"
         description: UDF language
@@ -2269,7 +2269,7 @@ definitions:
         description: UDF type
       readme:
         type: string
-        description: Markdown readme of udfs
+        description: Markdown readme of UDFs
       license_id:
         type: string
         x-omitempty: true
@@ -2279,7 +2279,7 @@ definitions:
         x-omitempty: true
         description: License text
       tags:
-        description: optional tags for udf
+        description: optional tags for UDF
         x-omitempty: false
         type: array
         items:
@@ -2357,13 +2357,13 @@ definitions:
     properties:
       id:
         type: string
-        description: unique uuid of the favorite
+        description: unique UUID of the favorite
       created_at:
         description: Datetime the favorite was created in UTC
         type: string
         format: date-time
       array_uuid:
-        description: unique uuid of the array
+        description: unique UUID of the array
         type: string
 
   ArrayFavoritesData:
@@ -2385,13 +2385,13 @@ definitions:
     properties:
       id:
         type: string
-        description: unique uuid of the favorite
+        description: unique UUID of the favorite
       created_at:
         description: Datetime the favorite was created in UTC
         type: string
         format: date-time
       notebook_uuid:
-        description: unique uuid of the notebook
+        description: unique UUID of the notebook
         type: string
 
   NotebookFavoritesData:
@@ -2413,13 +2413,13 @@ definitions:
     properties:
       id:
         type: string
-        description: unique uuid of the favorite
+        description: unique UUID of the favorite
       created_at:
         description: Datetime the favorite was created in UTC
         type: string
         format: date-time
       udf_uuid:
-        description: unique uuid of the UDF
+        description: unique UUID of the UDF
         type: string
 
   UDFFavoritesData:
@@ -2441,13 +2441,13 @@ definitions:
     properties:
       id:
         type: string
-        description: unique uuid of the favorite
+        description: unique UUID of the favorite
       created_at:
         description: Datetime the favorite was created in UTC
         type: string
         format: date-time
       mlmodel_uuid:
-        description: unique uuid of the MLModel
+        description: unique UUID of the MLModel
         type: string
 
   MLModelFavoritesData:
@@ -2546,7 +2546,7 @@ definitions:
     type: object
     properties:
       id:
-        description: Unique id of invitation added to magic link
+        description: Unique ID of invitation added to magic link
         type: string
         example: "00000000-0000-0000-0000-000000000000"
       invitation_type:
@@ -2559,12 +2559,12 @@ definitions:
         type: string
         example: "00000000-0000-0000-0000-000000000000"
       user_namespace_uuid:
-        description: Unique id of the user accepted the invitation
+        description: Unique ID of the user accepted the invitation
         type: string
         x-omitempty: false
         example: "00000000-0000-0000-0000-000000000000"
       organization_user_uuid:
-        description: Unique id of the organization user accepted the invitation
+        description: Unique ID of the organization user accepted the invitation
         type: string
         x-omitempty: false
         example: "00000000-0000-0000-0000-000000000000"
@@ -2577,7 +2577,7 @@ definitions:
         $ref: "#/definitions/OrganizationRoles"
         x-omitempty: false
       array_uuid:
-        description: Unique id of the array
+        description: Unique ID of the array
         type: string
         x-omitempty: false
         example: "00000000-0000-0000-0000-000000000000"
@@ -2862,11 +2862,11 @@ paths:
       - name: task_id
         in: query
         type: string
-        description: Array task id To filter activity to
+        description: Array task ID To filter activity to
       - name: has_task_id
         in: query
         type: boolean
-        description: Excludes activity log results that does not contain an array task uuid
+        description: Excludes activity log results that do not contain an array task UUID
     get:
       description: get array activity logs
       tags:
@@ -2899,11 +2899,11 @@ paths:
           required: true
         - name: id
           in: path
-          description: id of the activity
+          description: ID of the activity
           type: string
           required: true
       get:
-        description: get activity log by id
+        description: get activity log by ID
         tags:
           - array
         operationId: getActivityLogById
@@ -3203,7 +3203,7 @@ paths:
             items:
               $ref: "#/definitions/ArraySharing"
         404:
-          description: Array does not exist or user does not have permissions to view array sharing policies
+          description: Array does not exist or user does not have permissions to view array-sharing policies
         default:
           description: error response
           schema:
@@ -3216,7 +3216,7 @@ paths:
       parameters:
         - name: array_sharing
           in: body
-          description: Namespace and list of permissions to share with. An empty list of permissions will remove the namespace, if permissions already exist they will be deleted then new ones added. In the event of a failure, the new polcies will be rolled back to prevent partial policies, and its likely the array will not be shared with the namespace at all
+          description: Namespace and list of permissions to share with. An empty list of permissions will remove the namespace; if permissions already exist they will be deleted then new ones added. In the event of a failure, the new policies will be rolled back to prevent partial policies, and it's likely the array will not be shared with the namespace at all.
           schema:
             $ref: "#/definitions/ArraySharing"
           required: true
@@ -3331,7 +3331,7 @@ paths:
         type: string
       - name: v2
         in: query
-        description: flag to indicate if v2 array udfs should be used, currently in beta testing. Setting any value will enable v2 array udfs
+        description: flag to indicate if v2 array UDFs should be used, currently in beta testing. Setting any value will enable v2 array UDFs.
         type: string
         required: false
 
@@ -3347,13 +3347,13 @@ paths:
       parameters:
         - name: udf
           in: body
-          description: udf to run
+          description: UDF to run
           schema:
             $ref: "#/definitions/MultiArrayUDF"
           required: true
       responses:
         200:
-          description: udf completed and the udf-type specific result is returned
+          description: UDF completed and the UDF-type specific result is returned
           headers:
             X-TILEDB-CLOUD-TASK-ID:
               type: string
@@ -3459,7 +3459,7 @@ paths:
         description: Name of organization or user who should be charged for this request
         type: string
     post:
-      description: send a query to run against a specified array/URI registered to a group/project, returns json results
+      description: send a query to run against a specified array/URI registered to a group/project, returns JSON results
       tags:
         - query
       produces:
@@ -3476,7 +3476,7 @@ paths:
           required: true
       responses:
         200:
-          description: query completed and results are returned in json format
+          description: query completed and results are returned in JSON format
           headers:
             X-TILEDB-CLOUD-TASK-ID:
               type: string
@@ -3759,7 +3759,7 @@ paths:
         format: uint64
         required: false
     get:
-      description: get metadata from the array in json format
+      description: get metadata from the array in JSON format
       tags:
         - array
       operationId: getArrayMetaDataJson
@@ -3977,7 +3977,7 @@ paths:
     parameters:
       - name: username
         in: path
-        description: username or id
+        description: username or ID
         required: true
         type: string
     get:
@@ -4182,7 +4182,7 @@ paths:
     parameters:
       - name: organization
         in: path
-        description: organization name or id
+        description: organization name or ID
         required: true
         type: string
     get:
@@ -4491,7 +4491,7 @@ paths:
     parameters:
       - name: id
         in: path
-        description: task id to fetch
+        description: task ID to fetch
         type: string
         required: true
     get:
@@ -4512,7 +4512,7 @@ paths:
     parameters:
       - name: id
         in: path
-        description: task id to retrieve stored results
+        description: task ID to retrieve stored results
         type: string
         required: true
       - name: Accept-Encoding
@@ -4712,13 +4712,13 @@ paths:
       parameters:
         - name: udf
           in: body
-          description: udf to run
+          description: UDF to run
           schema:
             $ref: "#/definitions/GenericUDF"
           required: true
       responses:
         200:
-          description: udf completed and the udf-type specific result is returned
+          description: UDF completed and the UDF-type specific result is returned
           headers:
             X-TILEDB-CLOUD-TASK-ID:
               type: string
@@ -4759,13 +4759,13 @@ paths:
       parameters:
         - name: udf
           in: body
-          description: udf to run
+          description: UDF to run
           schema:
             $ref: "#/definitions/MultiArrayUDF"
           required: true
       responses:
         200:
-          description: udf completed and the udf-type specific result is returned
+          description: UDF completed and the UDF-type specific result is returned
           headers:
             X-TILEDB-CLOUD-TASK-ID:
               type: string
@@ -4791,7 +4791,7 @@ paths:
         required: true
       - name: name
         in: path
-        description: name to register udf under
+        description: name to register UDF under
         type: string
         required: true
     get:
@@ -4805,7 +4805,7 @@ paths:
           schema:
             $ref: "#/definitions/UDFInfo"
         404:
-          description: udf not found
+          description: UDF not found
         default:
           description: error response
           schema:
@@ -4818,38 +4818,38 @@ paths:
       parameters:
         - name: udf
           in: body
-          description: udf to register
+          description: UDF to register
           schema:
             $ref: "#/definitions/UDFInfoUpdate"
           required: true
       responses:
         204:
-          description: udf registered successfully
+          description: UDF registered successfully
         default:
           description: error response
           schema:
             $ref: "#/definitions/Error"
     patch:
-      description: updated an existing registerd UDF in the given namespace
+      description: update an existing registered UDF in the given namespace
       tags:
         - udf
       operationId: updateUDFInfo
       parameters:
         - name: udf
           in: body
-          description: udf to update
+          description: UDF to update
           schema:
             $ref: "#/definitions/UDFInfoUpdate"
           required: true
       responses:
         204:
-          description: udf updated successfully
+          description: UDF updated successfully
         default:
           description: error response
           schema:
             $ref: "#/definitions/Error"
     delete:
-      description: delete a registerd UDF, this will remove all sharing and can not be undone
+      description: delete a registered UDF -- this will remove all sharing and can not be undone
       tags:
         - udf
       operationId: deleteUDFInfo
@@ -4874,7 +4874,7 @@ paths:
         type: string
         required: true
     get:
-      description: Get all sharing details of the udf
+      description: Get all sharing details of the UDF
       tags:
         - udf
       operationId: getUDFInfoSharingPolicies
@@ -4887,7 +4887,7 @@ paths:
             items:
               $ref: "#/definitions/UDFSharing"
         404:
-          description: UDF does not exist or user does not have permissions to view array sharing policies
+          description: UDF does not exist or user does not have permissions to view array-sharing policies
         default:
           description: error response
           schema:
@@ -4900,7 +4900,7 @@ paths:
       parameters:
         - name: udf_sharing
           in: body
-          description: Namespace and list of permissions to share with. An empty list of permissions will remove the namespace, if permissions already exist they will be deleted then new ones added. In the event of a failure, the new polcies will be rolled back to prevent partial policies, and its likely the udf will not be shared with the namespace at all
+          description: Namespace and list of permissions to share with. An empty list of permissions will remove the namespace; if permissions already exist they will be deleted then new ones added. In the event of a failure, the new policies will be rolled back to prevent partial policies, and it's likely the UDF will not be shared with the namespace at all.
           schema:
             $ref: "#/definitions/UDFSharing"
           required: true
@@ -4908,7 +4908,7 @@ paths:
         204:
           description: UDF shared successfully
         404:
-          description: UDF does not exist or user does not have permissions to share udf
+          description: UDF does not exist or user does not have permissions to share UDF
         default:
           description: error response
           schema:
@@ -5017,7 +5017,7 @@ paths:
         type: string
         required: true
     patch:
-      description: update name on a notebok, moving related s3 object to new location
+      description: update name on a notebok, moving related S3 object to new location
       tags:
         - notebook
       operationId: updateNotebookName
@@ -5078,7 +5078,7 @@ paths:
     parameters:
       - name: organization
         in: query
-        description: name or id of organization to filter
+        description: name or ID of organization to filter
         type: string
         required: false
       - name: array
@@ -5142,7 +5142,7 @@ paths:
     parameters:
       - name: invitation
         in: path
-        description: the id of invitation about to be accepted
+        description: the ID of invitation about to be accepted
         type: string
         required: true
     post:
@@ -5169,7 +5169,7 @@ paths:
         required: true
       - name: invitation
         in: path
-        description: the id of invitation about to be cancelled
+        description: the ID of invitation about to be cancelled
         type: string
         required: true
       - name: array
@@ -5196,12 +5196,12 @@ paths:
     parameters:
       - name: invitation
         in: path
-        description: the id of invitation about to be cancelled
+        description: the ID of invitation about to be cancelled
         type: string
         required: true
       - name: organization
         in: path
-        description: name or uuid of organization
+        description: name or UUID of organization
         type: string
         required: true
     delete:
@@ -5259,7 +5259,7 @@ paths:
     parameters:
       - name: organization
         in: path
-        description: name or uuid of organization
+        description: name or UUID of organization
         type: string
         required: true
     post:
@@ -5658,7 +5658,7 @@ paths:
         name: id
         in: path
         required: true
-        description: The uuid of the array favorite
+        description: The UUID of the array favorite
     get:
       tags:
         - favorites
@@ -5788,7 +5788,7 @@ paths:
         name: id
         in: path
         required: true
-        description: The uuid of the notebook favorite
+        description: The UUID of the notebook favorite
     get:
       tags:
         - favorites
@@ -5912,7 +5912,7 @@ paths:
         name: id
         in: path
         required: true
-        description: The uuid of the ML model favorite
+        description: The UUID of the ML model favorite
     get:
       tags:
         - favorites
@@ -6036,7 +6036,7 @@ paths:
         name: id
         in: path
         required: true
-        description: The uuid of the UDF favorite
+        description: The UUID of the UDF favorite
     get:
       tags:
         - favorites
