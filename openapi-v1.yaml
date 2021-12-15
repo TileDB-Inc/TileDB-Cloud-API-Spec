@@ -1847,7 +1847,7 @@ definitions:
         description: Name of token to revoke
         type: string
       issued_at:
-        description: datetime the token was created at
+        description: datetime the token was created
         type: string
         format: date-time
       expires_at:
@@ -1889,7 +1889,7 @@ definitions:
           description: A bucket or path of a bucket that is granted access by these credentials
           example: "s3://company-bucket-1/tiledb/"
       created_at:
-        description: Time when UDF dependencies was created (rfc3339)
+        description: Time when UDF dependencies were created (rfc3339)
         type: string
         format: date-time
         readOnly: true
