@@ -2809,8 +2809,10 @@ definitions:
         description: The server-generated UUID of the task graph.
       namespace:
         type: string
-        readOnly: true
-        description: The namespace that owns this task graph log.
+        description: >
+          The namespace that owns this task graph log.
+          When creating a task graph log, this is used as the namespace to
+          create the log in; thereafter it is read-only.
       created_by:
         type: string
         readOnly: true
@@ -6549,12 +6551,6 @@ paths:
       tags:
         - taskGraphLogs
       parameters:
-        - name: namespace
-          type: string
-          in: query
-          required: true
-          description: >
-            The namespace that owns the task graph that is being run.
         - name: log
           in: body
           schema:
