@@ -2408,15 +2408,14 @@ definitions:
     description: A user-favorite array item
     type: object
     properties:
-      id:
-        type: string
-        description: unique UUID of the favorite
-      created_at:
-        description: Datetime the favorite was created in UTC
-        type: string
-        format: date-time
       array_uuid:
         description: unique UUID of the array
+        type: string
+      namespace:
+        description: the namespace of the array
+        type: string
+      name:
+        description: the name of the array
         type: string
 
   ArrayFavoritesData:
@@ -2512,18 +2511,6 @@ definitions:
           $ref: "#/definitions/ArrayInfo"
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
-
-  FavoriteCreate:
-    description: Request body to add a favorite
-    type: object
-    required:
-      - name
-      - namespace
-    properties:
-      name:
-        type: string
-      namespace:
-        type: string
 
   InvitationType:
     description: List of values that InvitationType can take
@@ -5858,30 +5845,13 @@ paths:
           required: false
       tags:
         - favorites
-      description: Fetch all array favorites of connected user
+      description: Fetch a page of array favorites of connected user
       operationId: listArrayFavorites
       responses:
         200:
           description: Available array favorites are returned
           schema:
             $ref: "#/definitions/ArrayFavoritesData"
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      tags:
-        - favorites
-      description: Add a new array favorite
-      operationId: addArrayFavorite
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/FavoriteCreate'
-      responses:
-        204:
-          description: Item added to favorites successfully
         default:
           description: error response
           schema:
@@ -5906,40 +5876,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /arrays/favorites/{id}:
-    parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
-        description: The UUID of the array favorite
-    get:
-      tags:
-        - favorites
-      description: Fetch specific array favorite of a user
-      operationId: getArrayFavorite
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/ArrayFavorite'
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    delete:
-      tags:
-        - favorites
-      description: Delete specific array favorite
-      operationId: deleteArrayFavorite
-      responses:
-        204:
-          description: Array favorite item deleted successfully
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
   /arrays/favorites/{namespace}/{name}:
     parameters:
       - type: string
@@ -5956,12 +5892,36 @@ paths:
       tags:
         - favorites
       description: Fetch array favorite of a specific array
-      operationId: getArrayFavoriteForArray
+      operationId: getArrayFavorite
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/ArrayFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - favorites
+      description: Add a new array favorite
+      operationId: addArrayFavorite
+      responses:
+        204:
+          description: Item added to favorites successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - favorites
+      description: Delete specific array favorite
+      operationId: deleteArrayFavorite
+      responses:
+        204:
+          description: array favorite item deleted successfully
         default:
           description: error response
           schema:
