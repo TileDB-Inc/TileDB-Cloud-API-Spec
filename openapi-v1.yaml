@@ -3336,6 +3336,11 @@ paths:
         description: flag to indicate if v2 array UDFs should be used, currently in beta testing. Setting any value will enable v2 array UDFs.
         type: string
         required: false
+      - name: timeout
+        in: query
+        description: UDF-type timeout in seconds
+        type: integer
+        required: false
 
     post:
       description: send a UDF to run against a specified array/URI registered to a group/project
@@ -4697,6 +4702,11 @@ paths:
         description: namespace array is in (an organization name or user's username)
         type: string
         required: true
+      - name: timeout
+        in: query
+        description: UDF-type timeout in seconds
+        type: integer
+        required: false
       - name: Accept-Encoding
         in: header
         description: Encoding to use
