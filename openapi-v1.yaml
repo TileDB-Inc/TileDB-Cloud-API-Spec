@@ -2075,6 +2075,9 @@ definitions:
       store_results:
         description: store results for later retrieval
         type: boolean
+      timeout:
+        description: "UDF-type timeout in seconds (default: 900)"
+        type: integer
 
   UDFArrayDetails:
     description: Contains array details for multi-array query including uri, ranges buffers
@@ -2157,6 +2160,9 @@ definitions:
         x-omitempty: false
         items:
           $ref: "#/definitions/UDFArrayDetails"
+      timeout:
+        description: "UDF-type timeout in seconds (default: 900)"
+        type: integer
 
   UDFImage:
     description: Defines a set of images related to a specific name
@@ -3335,11 +3341,6 @@ paths:
         in: query
         description: flag to indicate if v2 array UDFs should be used, currently in beta testing. Setting any value will enable v2 array UDFs.
         type: string
-        required: false
-      - name: timeout
-        in: query
-        description: UDF-type timeout in seconds
-        type: integer
         required: false
 
     post:
@@ -4702,11 +4703,6 @@ paths:
         description: namespace array is in (an organization name or user's username)
         type: string
         required: true
-      - name: timeout
-        in: query
-        description: UDF-type timeout in seconds
-        type: integer
-        required: false
       - name: Accept-Encoding
         in: header
         description: Encoding to use
