@@ -2075,6 +2075,9 @@ definitions:
       store_results:
         description: store results for later retrieval
         type: boolean
+      timeout:
+        description: "UDF-type timeout in seconds (default: 900)"
+        type: integer
 
   UDFArrayDetails:
     description: Contains array details for multi-array query including uri, ranges buffers
@@ -2157,6 +2160,9 @@ definitions:
         x-omitempty: false
         items:
           $ref: "#/definitions/UDFArrayDetails"
+      timeout:
+        description: "UDF-type timeout in seconds (default: 900)"
+        type: integer
 
   UDFImage:
     description: Defines a set of images related to a specific name
