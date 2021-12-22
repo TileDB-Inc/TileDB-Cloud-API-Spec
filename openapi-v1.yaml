@@ -1110,6 +1110,9 @@ definitions:
         $ref: "#/definitions/ResultFormat"
         description: type of results (native, i.e cloud pickle or json or arrow)
         x-omitempty: true
+      timeout:
+        description: "task timeout in seconds"
+        type: integer
 
   PaginationMetadata:
     properties:
