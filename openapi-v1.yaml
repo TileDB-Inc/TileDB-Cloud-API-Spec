@@ -1770,11 +1770,6 @@ definitions:
         type: boolean
         x-omitempty: true
         example: true
-      favorite_uuid:
-        description: The favorite UUID if the array if is_favorite is true
-        type: string
-        x-omitempty: true
-        example: "00000000-0000-0000-0000-000000000000"
 
   ArrayInfoUpdate:
     description: metadata of an array
