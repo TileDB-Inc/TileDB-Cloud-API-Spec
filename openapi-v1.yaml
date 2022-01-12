@@ -6550,14 +6550,19 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-=======
-  /taskgraphs/log:
+
+  /taskgraphs/{namespace}/log:
     post:
       description: Create a task graph log.
       operationId: createTaskGraphLog
       tags:
         - task_graph_logs
       parameters:
+        - name: namespace
+          in: path
+          description: The namespace that will own this task graph log.
+          type: string
+          required: true
         - name: log
           in: body
           required: true
@@ -6579,7 +6584,7 @@ paths:
     parameters:
       - name: namespace
         in: query
-        description: Include logs from only this namespace.
+        description: Include logs for this namespace.
         type: string
         required: false
       - name: created_by
@@ -6611,13 +6616,14 @@ paths:
         required: false
     get:
       description: >
-        Fetch the task graph logs a user has access to. The returned entries
-        will include only summary data, and will not include information about
-        the individual tasks that were executed. (This information is available
-        when requesting an individual task graph log.)
+        Fetch the task graph logs of a namespace the user has access to. The
+        returned entries will include only summary data, and will not include
+        information about the individual tasks that were executed. (This
+        information is available when requesting an individual task graph log.)
 
         Entries in the response are ordered from newest to oldest. Pagination
         parameters work as in other API methods; see PaginationMetadata.
+
       operationId: listTaskGraphLogs
       tags:
         - task_graph_logs
@@ -6631,8 +6637,13 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /taskgraphs/logs/{id}:
+  /taskgraphs/{namespace}/logs/{id}:
     parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph log.
+        type: string
+        required: true
       - name: id
         in: path
         description: The UUID of the task graph log entry.
