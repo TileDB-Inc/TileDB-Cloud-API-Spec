@@ -6556,10 +6556,11 @@ paths:
       description: Create a task graph log.
       operationId: createTaskGraphLog
       tags:
-        - taskGraphLogs
+        - task_graph_logs
       parameters:
         - name: log
           in: body
+          required: true
           schema:
             $ref: '#/definitions/TaskGraphLog'
       responses:
@@ -6619,7 +6620,7 @@ paths:
         parameters work as in other API methods; see PaginationMetadata.
       operationId: listTaskGraphLogs
       tags:
-        - taskGraphLogs
+        - task_graph_logs
       responses:
         200:
           description: The task graph logs that matched the user's query.
@@ -6642,7 +6643,7 @@ paths:
         Fetch information about a single task graph execution.
       operationId: getTaskGraphLog
       tags:
-        - taskGraphLogs
+        - task_graph_logs
       responses:
         200:
           description: Information about the execution of a single task graph.
@@ -6657,7 +6658,7 @@ paths:
         Update information about a single task graph execution.
       operationId: updateTaskGraphLog
       tags:
-        - taskGraphLogs
+        - task_graph_logs
       parameters:
         - name: log
           in: body
