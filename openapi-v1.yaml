@@ -2690,6 +2690,80 @@ definitions:
         type: string
         description: output location of the exported file
 
+  Group:
+    description: Attributes that describe the group itself, not any of the subgroups or assets
+    type: object
+    properties:
+      id:
+        description: the globally unique id of the group
+        type: string
+        x-omitempty: true
+      namespace:
+        description: The namespace of the group
+        type: string
+      name:
+        description: The name of the group. It is unique within the namespace. No 2 groups can have the same name
+        type: string
+      description:
+        description: A human readable description of the content of the group
+        type: string
+        x-omitempty: true
+    example:
+      id: 0000-0001-0002-0003
+      namespace: my-organization
+      name: intro-to-genomics
+      path: /genomics-course/intro-to-genomics
+      description: contains arrays and notebooks for an 101 course on genomics with TileDB
+
+  GroupCreate:
+    description: Initial attributes for the creation of a new group
+    type: object
+    properties:
+      parent:
+        description: The name of the parent of the group. If empty, then the new group will be a top level group.
+        type: string
+      description:
+        description: A human readable description of the content of the group
+        type: string
+    example:
+      parent: genomics-course
+      description: contains arrays and notebooks for an 101 course on genomics with TileDB
+
+  GroupUpdate:
+    description: Updates for a group. New values for the attributes.
+    type: object
+    properties:
+      name:
+        description: The new name of the group
+        type: string
+      description:
+        description: A new human readable description of the content of the group
+        type: string
+    example:
+      name: intro-to-genomics
+      description: contains arrays and notebooks for an 101 course on genomics with TileDB
+
+  GroupListing:
+    description: The contents of a group i.e attributes, subgroups and assets
+    allOf:
+      - $ref: '#/definitions/Group'
+      - type: object
+        properties:
+          groups:
+            description: Contains one page of subgroups of the group.
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/Group"
+          assets:
+            description: Contains one page of assets of the group as ArrayInfos
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/ArrayInfo"
+          pagination_metadata:
+            $ref: "#/definitions/PaginationMetadata"
+
 paths:
   /.stats:
     get:
@@ -6160,6 +6234,178 @@ paths:
           description: File exported
           schema:
             $ref: "#/definitions/FileExported"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{namespace}:
+    parameters:
+      - name: namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace to operate on
+    get:
+      description: Returns one page of top level groups in namespace.
+      operationId: listTopLevelGroups
+      tags:
+        - groups
+      parameters:
+        - name: page
+          in: query
+          description: pagination offset
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit
+          type: integer
+          required: false
+      responses:
+        200:
+          description: the group contents
+          schema:
+            $ref: '#/definitions/GroupListing'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{namespace}/{name}:
+    parameters:
+      - name: namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: name
+        type: string
+        in: path
+        required: true
+        description: The name of the group
+    post:
+      description: Creates a new, empty group in the namespace.
+      operationId: createGroup
+      tags:
+        - groups
+      parameters:
+        - in: body
+          name: GroupCreate
+          schema:
+            $ref: '#/definitions/GroupCreate'
+      responses:
+        204:
+          description: group created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    get:
+      description: Returns the contents, assets and subgroups, of the group
+      operationId: listGroup
+      tags:
+        - groups
+      parameters:
+        - name: output
+          in: query
+          required: false
+          type: string
+          enum:
+            - attributes # return only the group
+            - groups     # return one page of subgroups
+            - assets     # return one page of assets
+        - name: page
+          in: query
+          description: pagination offset for assets
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit for assets
+          type: integer
+          required: false
+      responses:
+        200:
+          description: the group contents
+          schema:
+            $ref: '#/definitions/GroupListing'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      description: Changes attributes of the group
+      operationId: updateGroup
+      tags:
+        - groups
+      parameters:
+        - in: body
+          name: GroupUpdate
+          schema:
+            $ref: '#/definitions/GroupUpdate'
+      responses:
+        204:
+          description: attributes changed successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      description: Deletes the group and all the subgroups recursively. The assets are not deleted nor are not relocated to any other group
+      operationId: deleteGroup
+      tags:
+        - groups
+      responses:
+        204:
+          description: group deleted successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{namespace}/{name}/{asset_namespace}/{asset_name}:
+    parameters:
+      - name: namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: name
+        type: string
+        in: path
+        required: true
+        description: The name of the group
+      - name: asset_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the asset
+      - name: asset_name
+        type: string
+        in: path
+        required: true
+        description: The name of the asset
+    post:
+      description: Adds an asset(array, notebook, udf etc) to a group
+      operationId: addAsset
+      tags:
+        - groups
+      responses:
+        204:
+          description: asset added successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      description: Removes an asset from a group
+      operationId: removeAsset
+      tags:
+        - groups
+      responses:
+        204:
+          description: asset removed successfully
         default:
           description: error response
           schema:
