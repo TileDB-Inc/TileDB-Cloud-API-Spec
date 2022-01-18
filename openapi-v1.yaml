@@ -2772,24 +2772,31 @@ definitions:
       name: intro-to-genomics
       description: contains arrays and notebooks for an 101 course on genomics with TileDB
 
+  GroupEntry:
+    description: An entry of a group, that is a subgroup or an asset
+    type: object
+    properties:
+      asset:
+        description: If not empty, this entry is an asset
+        $ref: "#/definitions/ArrayInfo"
+        x-omitempty: true
+      group:
+        description: If not empty, this entry is a group
+        $ref: "#/definitions/Group"
+        x-omitempty: true
+
   GroupListing:
     description: The contents of a group i.e attributes, subgroups and assets
     allOf:
       - $ref: '#/definitions/Group'
       - type: object
         properties:
-          groups:
-            description: Contains one page of subgroups of the group.
+          entries:
+            description: Contains one page of group entries
             type: array
             x-omitempty: true
             items:
-              $ref: "#/definitions/Group"
-          assets:
-            description: Contains one page of assets of the group as ArrayInfos
-            type: array
-            x-omitempty: true
-            items:
-              $ref: "#/definitions/ArrayInfo"
+              $ref: "#/definitions/GroupEntry"
           pagination_metadata:
             $ref: "#/definitions/PaginationMetadata"
 
@@ -6365,6 +6372,7 @@ paths:
             - attributes # return only the group
             - groups     # return one page of subgroups
             - assets     # return one page of assets
+            - mixed      # return one page of assets and direct subgroups
         - name: page
           in: query
           description: pagination offset for assets
