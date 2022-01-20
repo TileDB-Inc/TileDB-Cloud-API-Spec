@@ -2809,7 +2809,7 @@ definitions:
         $ref: "#/definitions/Group"
         x-omitempty: true
 
-  GroupListing:
+  GroupContents:
     description: The contents of a group i.e attributes, subgroups and assets
     allOf:
       - $ref: '#/definitions/Group'
@@ -6547,7 +6547,7 @@ paths:
         200:
           description: the group contents
           schema:
-            $ref: '#/definitions/GroupListing'
+            $ref: '#/definitions/GroupContents'
         default:
           description: error response
           schema:
