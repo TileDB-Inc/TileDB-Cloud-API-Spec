@@ -2088,6 +2088,12 @@ definitions:
       timeout:
         description: "UDF-type timeout in seconds (default: 900)"
         type: integer
+      dont_download_results:
+        description: 'Set to true to avoid downloading the results of this UDF.
+          Useful for intermediate nodes in a task graph where you will not be
+          using the results of your function.
+          Defaults to false ("yes download results").'
+        type: boolean
 
   UDFArrayDetails:
     description: Contains array details for multi-array query including uri, ranges buffers
@@ -2151,6 +2157,12 @@ definitions:
           server-side cache. Serialized in standard hex format with no {}.'
       store_results:
         description: store results for later retrieval
+        type: boolean
+      dont_download_results:
+        description: 'Set to true to avoid downloading the results of this UDF.
+          Useful for intermediate nodes in a task graph where you will not be
+          using the results of your function.
+          Defaults to false ("yes download results").'
         type: boolean
       ranges:
         description: ranges to run against, generic format. Deprecated please set arrays with UDFArrayDetails
@@ -2320,6 +2332,12 @@ definitions:
         example: "s3://my_bucket/my_output_array"
       store_results:
         description: store results for later retrieval
+        type: boolean
+      dont_download_results:
+        description: 'Set to true to avoid downloading the results of this UDF.
+          Useful for intermediate nodes in a task graph where you will not be
+          using the results of your function.
+          Defaults to false ("yes download results").'
         type: boolean
       result_format:
         $ref: "#/definitions/ResultFormat"
