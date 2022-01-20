@@ -2824,6 +2824,19 @@ definitions:
           pagination_metadata:
             $ref: "#/definitions/PaginationMetadata"
 
+  GroupBrowserData:
+    description: Object including group info and pagination metadata
+    type: object
+    properties:
+      groups:
+        description: Group Info
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/Group"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
   TaskGraphLogStatus:
     description: The status of a given task graph execution.
     type: string
@@ -6366,7 +6379,7 @@ paths:
         200:
           description: the group contents
           schema:
-            $ref: '#/definitions/GroupListing'
+            $ref: '#/definitions/GroupBrowserData'
         default:
           description: error response
           schema:
@@ -6418,7 +6431,7 @@ paths:
         200:
           description: the group contents
           schema:
-            $ref: '#/definitions/GroupListing'
+            $ref: '#/definitions/GroupBrowserData'
         default:
           description: error response
           schema:
@@ -6470,7 +6483,7 @@ paths:
         200:
           description: the group contents
           schema:
-            $ref: '#/definitions/GroupListing'
+            $ref: '#/definitions/GroupBrowserData'
         default:
           description: error response
           schema:
