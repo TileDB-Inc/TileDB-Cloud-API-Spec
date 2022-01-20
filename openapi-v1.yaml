@@ -1110,6 +1110,16 @@ definitions:
         $ref: "#/definitions/ResultFormat"
         description: type of results (native, i.e cloud pickle or json or arrow)
         x-omitempty: true
+      task_graph_uuid:
+        type: string
+        x-omitempty: true
+        description: >
+          If set, the ID of the log for the task graph that this was part of.
+      client_node_uuid:
+        type: string
+        x-omitempty: true
+        description: >
+          If set, the client-defined ID of the node within this task's graph.
 
   PaginationMetadata:
     properties:
@@ -2763,6 +2773,136 @@ definitions:
               $ref: "#/definitions/ArrayInfo"
           pagination_metadata:
             $ref: "#/definitions/PaginationMetadata"
+
+  TaskGraphLogStatus:
+    description: The status of a given task graph execution.
+    type: string
+    enum:
+      - submitted
+        # The task graph has been submitted, but no tasks have been run.
+        # This should not be reported by the client.
+      - running
+        # Some task in the graph is currently running.
+        # This should not be reported by the client.
+      - idle
+        # The graph is not yet completed, but nothing is actively running.
+        # This should not be reported by the client.
+      - abandoned
+        # The graph has been idle for an extended period of time, likely due to
+        # the client crashing or aborting without notifying the server.
+        # Semantically this is equivalent to `idle`.
+      - succeeded
+        # The client has declared that the task graph has completed
+        # successfully. This ordinarily entails all nodes succeeding.
+      - failed
+        # The client has declared that the task graph was not successful.
+      - cancelled
+        # The client has cancelled further execution of the task graph.
+
+  TaskGraphLog:
+    description: Logging information about the execution of a task graph.
+    type: object
+    properties:
+      uuid:
+        type: string
+        readOnly: true
+        description: The server-generated UUID of the task graph.
+      namespace:
+        type: string
+        description: >
+          The namespace that owns this task graph log.
+          When creating a task graph log, this is used as the namespace to
+          create the log in; thereafter it is read-only.
+      created_by:
+        type: string
+        readOnly: true
+        description: The name of the user who created this task graph log.
+      name:
+        type: string
+        description: >
+          A name for this task graph log, displayed in the UI.
+          Does not need to be unique.
+      created_at:
+        type: string
+        format: date-time
+        readOnly: true
+        description: >
+          The date/time when this task graph log was originally created.
+          This is distinct from the execution start_time.
+      start_time:
+        type: string
+        format: date-time
+        readOnly: true
+        x-nullable: true
+        x-omitempty: true
+        description: >
+          The start time of the task graph, recorded when the server
+          starts executing the first node.
+      end_time:
+        type: string
+        format: date-time
+        readOnly: true
+        x-nullable: true
+        x-omitempty: true
+        description: >
+          The end time of the task graph, recorded when the client reports
+          completion.
+      status:
+        $ref: '#/definitions/TaskGraphLogStatus'
+      nodes:
+        type: array
+        items:
+          $ref: '#/definitions/TaskGraphNodeMetadata'
+        description: >
+          The structure of the graph. This is provided by the client
+          when first setting up the task graph. Thereafter, it is read-only.
+          This must be topographically sorted; that is, each node must appear
+          after all nodes that it depends upon.
+
+  TaskGraphNodeMetadata:
+    description: Metadata about an individual node in a task graph.
+    type: object
+    properties:
+      client_node_uuid:
+        type: string
+        description: The client-generated UUID of the given graph node.
+      name:
+        type: string
+        description: >
+          The client-generated name of the node.
+          This is not guaranteed to be unique.
+      depends_on:
+        type: array
+        items:
+          type: string
+        description: >
+          The client_node_uuid of each node that this node depends upon.
+          Used to define the structure of the graph.
+      executions:
+        type: array
+        items:
+          $ref: '#/definitions/ArrayTask'
+        readOnly: true
+        description: >
+          ArrayTasks representing each execution attempt for this node.
+          For nodes that have never been submitted, this will be empty.
+          For nodes that have been retried, this may have multiple entries.
+          The last one in the list represents the most recent execution.
+
+          This is read-only and generated by the server based on
+          the tasks it has actually executed.
+
+  TaskGraphLogsData:
+    description: Response data for a task graph list, including pagination metadata.
+    type: object
+    properties:
+      task_graph_logs:
+        description: The requested task graph logs.
+        type: array
+        items:
+          $ref: '#/definitions/TaskGraphLog'
+      pagination_metadata:
+        $ref: '#/definitions/PaginationMetadata'
 
 paths:
   /.stats:
@@ -6410,3 +6550,145 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /taskgraphs/{namespace}/log:
+    post:
+      description: Create a task graph log.
+      operationId: createTaskGraphLog
+      tags:
+        - task_graph_logs
+      parameters:
+        - name: namespace
+          in: path
+          description: The namespace that will own this task graph log.
+          type: string
+          required: true
+        - name: log
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TaskGraphLog'
+      responses:
+        201:
+          description: >
+            The task graph was created. The returned TaskGraphLog will include
+            the data the client sent, with the server-defined fields added in.
+          schema:
+            $ref: '#/definitions/TaskGraphLog'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
+  /taskgraphs/logs:
+    parameters:
+      - name: namespace
+        in: query
+        description: Include logs for this namespace.
+        type: string
+        required: false
+      - name: created_by
+        in: query
+        description: Include logs from only this user.
+        type: string
+        required: false
+      - name: search
+        in: query
+        description: search string that will look at name.
+        required: false
+        type: string
+      - name: start_time
+        in: query
+        description: Include logs created after this time.
+        type: string
+        format: date-time
+        required: false
+      - name: end_time
+        in: query
+        description: Include logs created before this time.
+        type: string
+        format: date-time
+        required: false
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+    get:
+      description: >
+        Fetch the task graph logs of a namespace the user has access to. The
+        returned entries will include only summary data, and will not include
+        information about the individual tasks that were executed. (This
+        information is available when requesting an individual task graph log.)
+
+        Entries in the response are ordered from newest to oldest. Pagination
+        parameters work as in other API methods; see PaginationMetadata.
+
+      operationId: listTaskGraphLogs
+      tags:
+        - task_graph_logs
+      responses:
+        200:
+          description: The task graph logs that matched the user's query.
+          schema:
+            $ref: '#/definitions/TaskGraphLogsData'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
+  /taskgraphs/{namespace}/logs/{id}:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph log.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph log entry.
+        type: string
+        required: true
+    get:
+      description: >
+        Fetch information about a single task graph execution.
+      operationId: getTaskGraphLog
+      tags:
+        - task_graph_logs
+      responses:
+        200:
+          description: Information about the execution of a single task graph.
+          schema:
+            $ref: '#/definitions/TaskGraphLog'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      description: >
+        Update information about a single task graph execution.
+      operationId: updateTaskGraphLog
+      tags:
+        - task_graph_logs
+      parameters:
+        - name: log
+          in: body
+          description: >
+            Updates to make to the task graph log. The only manual update
+            that a client should need to make to a task graph log is to update
+            its completion status to `succeeded`, `failed`, or `cancelled`.
+          schema:
+            $ref: '#/definitions/TaskGraphLog'
+          required: true
+      responses:
+        204:
+          description: Log entry updated successfully.
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
