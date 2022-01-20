@@ -6296,19 +6296,142 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /groups/{namespace}:
-    parameters:
-      - name: namespace
-        type: string
-        in: path
-        required: true
-        description: The namespace to operate on
+  /groups/browser/owned:
     get:
-      description: Returns one page of top level groups in namespace.
-      operationId: listTopLevelGroups
+      description: Returns one page of owned groups.
+      operationId: listOwnedGroups
       tags:
         - groups
       parameters:
+        - name: namespace
+          in: query
+          description: namespace
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: search string that will look at name of groups
+          type: string
+          required: false
+        - name: flat
+          in: query
+          description: if true, ignores the nesting of groups and searches all of them
+          type: boolean
+          required: false
+        - name: parent
+          in: query
+          description: search only the children of the groups with this uuid
+          type: string
+          required: false
+        - name: orderby
+          in: query
+          description: sort by which field valid values include name
+          type: string
+          required: false
+        - name: page
+          in: query
+          description: pagination offset
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit
+          type: integer
+          required: false
+      responses:
+        200:
+          description: the group contents
+          schema:
+            $ref: '#/definitions/GroupListing'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/browser/shared:
+    get:
+      description: Returns one page of shared groups.
+      operationId: listSharedGroups
+      tags:
+        - groups
+      parameters:
+        - name: namespace
+          in: query
+          description: namespace
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: search string that will look at name of groups
+          type: string
+          required: false
+        - name: flat
+          in: query
+          description: if true, ignores the nesting of groups and searches all of them
+          type: boolean
+          required: false
+        - name: parent
+          in: query
+          description: search only the children of the groups with this uuid
+          type: string
+          required: false
+        - name: orderby
+          in: query
+          description: sort by which field valid values include name
+          type: string
+          required: false
+        - name: page
+          in: query
+          description: pagination offset
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit
+          type: integer
+          required: false
+      responses:
+        200:
+          description: the group contents
+          schema:
+            $ref: '#/definitions/GroupListing'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/browser/public:
+    get:
+      description: Returns one page of public groups.
+      operationId: listPublicGroups
+      tags:
+        - groups
+      parameters:
+        - name: namespace
+          in: query
+          description: namespace
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: search string that will look at name of groups
+          type: string
+          required: false
+        - name: flat
+          in: query
+          description: if true, ignores the nesting of groups and searches all of them
+          type: boolean
+          required: false
+        - name: parent
+          in: query
+          description: search only the children of the groups with this uuid
+          type: string
+          required: false
+        - name: orderby
+          in: query
+          description: sort by which field valid values include name
+          type: string
+          required: false
         - name: page
           in: query
           description: pagination offset
