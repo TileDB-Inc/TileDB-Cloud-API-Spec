@@ -6592,6 +6592,11 @@ paths:
         description: Include logs from only this user.
         type: string
         required: false
+      - name: search
+        in: query
+        description: search string that will look at name.
+        required: false
+        type: string
       - name: start_time
         in: query
         description: Include logs created after this time.
