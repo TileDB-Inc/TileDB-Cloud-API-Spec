@@ -2094,6 +2094,17 @@ definitions:
           using the results of your function.
           Defaults to false ("yes download results").'
         type: boolean
+      task_graph_uuid:
+        type: string
+        x-omitempty: true
+        description: >
+          If set, the ID of the log for the task graph that this was part of.
+      client_node_uuid:
+        type: string
+        x-omitempty: true
+        description: >
+          If set, the client-defined ID of the node within this task's graph.
+
 
   UDFArrayDetails:
     description: Contains array details for multi-array query including uri, ranges buffers
@@ -2185,6 +2196,17 @@ definitions:
       timeout:
         description: "UDF-type timeout in seconds (default: 900)"
         type: integer
+      task_graph_uuid:
+        type: string
+        x-omitempty: true
+        description: >
+          If set, the ID of the log for the task graph that this was part of.
+      client_node_uuid:
+        type: string
+        x-omitempty: true
+        description: >
+          If set, the client-defined ID of the node within this task's graph.
+
 
   UDFImage:
     description: Defines a set of images related to a specific name
