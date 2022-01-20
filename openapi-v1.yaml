@@ -2719,6 +2719,20 @@ definitions:
         type: string
         description: output location of the exported file
 
+  GroupAncestor:
+    description: An ancestor of a group
+    type: object
+    properties:
+      id:
+        description: the globally unique id of the group
+        type: string
+      namespace:
+        description: The namespace of the group
+        type: string
+      name:
+        description: The name of the group
+        type: string
+
   Group:
     description: Attributes that describe the group itself, not any of the subgroups or assets
     type: object
@@ -2737,11 +2751,21 @@ definitions:
         description: A human readable description of the content of the group
         type: string
         x-omitempty: true
+      count:
+        description: The count of assets and direct subgroups of the group
+        type: integer
+        x-omitempty: false
+      ancestors:
+        description: The ancestors of the group. First is the top level group
+        type: array
+        items:
+          $ref: "#/definitions/GroupAncestor"
+        x-omitempty: false
     example:
       id: 0000-0001-0002-0003
       namespace: my-organization
       name: intro-to-genomics
-      path: /genomics-course/intro-to-genomics
+      count: 10
       description: contains arrays and notebooks for an 101 course on genomics with TileDB
 
   GroupCreate:
