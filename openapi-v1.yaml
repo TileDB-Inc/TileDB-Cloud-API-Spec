@@ -2375,6 +2375,16 @@ definitions:
         description: SQL query parameters
         type: array
         items: {}
+      task_graph_uuid:
+        type: string
+        x-omitempty: true
+        description: >
+          If set, the ID of the log for the task graph that this was part of.
+      client_node_uuid:
+        type: string
+        x-omitempty: true
+        description: >
+          If set, the client-defined ID of the node within this task's graph.
 
   NotebookStatus:
     description: Status details of a notebook server
