@@ -1770,11 +1770,6 @@ definitions:
         type: boolean
         x-omitempty: true
         example: true
-      favorite_uuid:
-        description: The favorite UUID if the array if is_favorite is true
-        type: string
-        x-omitempty: true
-        example: "00000000-0000-0000-0000-000000000000"
 
   ArrayInfoUpdate:
     description: metadata of an array
@@ -2413,15 +2408,14 @@ definitions:
     description: A user-favorite array item
     type: object
     properties:
-      id:
-        type: string
-        description: unique UUID of the favorite
-      created_at:
-        description: Datetime the favorite was created in UTC
-        type: string
-        format: date-time
       array_uuid:
         description: unique UUID of the array
+        type: string
+      namespace:
+        description: the namespace of the array
+        type: string
+      name:
+        description: the name of the array
         type: string
 
   ArrayFavoritesData:
@@ -2441,15 +2435,14 @@ definitions:
     description: A user-favorite notebook item
     type: object
     properties:
-      id:
-        type: string
-        description: unique UUID of the favorite
-      created_at:
-        description: Datetime the favorite was created in UTC
-        type: string
-        format: date-time
       notebook_uuid:
         description: unique UUID of the notebook
+        type: string
+      namespace:
+        description: the namespace of the notebook
+        type: string
+      name:
+        description: the name of the notebook
         type: string
 
   NotebookFavoritesData:
@@ -2469,15 +2462,14 @@ definitions:
     description: A user-favorite UDF item
     type: object
     properties:
-      id:
-        type: string
-        description: unique UUID of the favorite
-      created_at:
-        description: Datetime the favorite was created in UTC
-        type: string
-        format: date-time
       udf_uuid:
         description: unique UUID of the UDF
+        type: string
+      namespace:
+        description: the namespace of the UDF
+        type: string
+      name:
+        description: the name of the UDF
         type: string
 
   UDFFavoritesData:
@@ -2497,15 +2489,14 @@ definitions:
     description: A user-favorite MLModel item
     type: object
     properties:
-      id:
-        type: string
-        description: unique UUID of the favorite
-      created_at:
-        description: Datetime the favorite was created in UTC
-        type: string
-        format: date-time
       mlmodel_uuid:
         description: unique UUID of the MLModel
+        type: string
+      namespace:
+        description: the namespace of the MLModel
+        type: string
+      name:
+        description: the name of the MLModel
         type: string
 
   MLModelFavoritesData:
@@ -2520,18 +2511,6 @@ definitions:
           $ref: "#/definitions/ArrayInfo"
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
-
-  FavoriteCreate:
-    description: Request body to add a favorite
-    type: object
-    required:
-      - name
-      - namespace
-    properties:
-      name:
-        type: string
-      namespace:
-        type: string
 
   InvitationType:
     description: List of values that InvitationType can take
@@ -5866,30 +5845,13 @@ paths:
           required: false
       tags:
         - favorites
-      description: Fetch all array favorites of connected user
+      description: Fetch a page of array favorites of connected user
       operationId: listArrayFavorites
       responses:
         200:
           description: Available array favorites are returned
           schema:
             $ref: "#/definitions/ArrayFavoritesData"
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      tags:
-        - favorites
-      description: Add a new array favorite
-      operationId: addArrayFavorite
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/FavoriteCreate'
-      responses:
-        204:
-          description: Item added to favorites successfully
         default:
           description: error response
           schema:
@@ -5914,40 +5876,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /arrays/favorites/{id}:
-    parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
-        description: The UUID of the array favorite
-    get:
-      tags:
-        - favorites
-      description: Fetch specific array favorite of a user
-      operationId: getArrayFavorite
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/ArrayFavorite'
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    delete:
-      tags:
-        - favorites
-      description: Delete specific array favorite
-      operationId: deleteArrayFavorite
-      responses:
-        204:
-          description: Array favorite item deleted successfully
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
   /arrays/favorites/{namespace}/{name}:
     parameters:
       - type: string
@@ -5964,12 +5892,36 @@ paths:
       tags:
         - favorites
       description: Fetch array favorite of a specific array
-      operationId: getArrayFavoriteForArray
+      operationId: getArrayFavorite
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/ArrayFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - favorites
+      description: Add a new array favorite
+      operationId: addArrayFavorite
+      responses:
+        204:
+          description: Item added to favorites successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - favorites
+      description: Delete specific array favorite
+      operationId: deleteArrayFavorite
+      responses:
+        204:
+          description: array favorite item deleted successfully
         default:
           description: error response
           schema:
@@ -5995,30 +5947,13 @@ paths:
           required: false
       tags:
         - favorites
-      description: Fetch all notebook favorites of connected user
+      description: Fetch a page of notebook favorites of connected user
       operationId: listNotebookFavorites
       responses:
         200:
           description: Available notebook favorites are returned
           schema:
             $ref: "#/definitions/NotebookFavoritesData"
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      tags:
-        - favorites
-      description: Add a new notebook favorite
-      operationId: addNotebookFavorite
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/FavoriteCreate'
-      responses:
-        204:
-          description: Item added to favorites successfully
         default:
           description: error response
           schema:
@@ -6043,41 +5978,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-
-  /notebooks/favorites/{id}:
-    parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
-        description: The UUID of the notebook favorite
-    get:
-      tags:
-        - favorites
-      description: Fetch specific notebook favorite of a user
-      operationId: getNotebookFavorite
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/NotebookFavorite'
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    delete:
-      tags:
-        - favorites
-      description: Delete specific notebook favorite
-      operationId: deleteNotebookFavorite
-      responses:
-        204:
-          description: Notebook favorite item deleted successfully
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
   /notebooks/favorites/{namespace}/{name}:
     parameters:
       - type: string
@@ -6094,12 +5994,36 @@ paths:
       tags:
         - favorites
       description: Fetch notebook favorite of a specific notebook
-      operationId: getNotebookFavoriteForNotebook
+      operationId: getNotebookFavorite
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/NotebookFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - favorites
+      description: Add a new notebook favorite
+      operationId: addNotebookFavorite
+      responses:
+        204:
+          description: Item added to favorites successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - favorites
+      description: Delete specific notebook favorite
+      operationId: deleteNotebookFavorite
+      responses:
+        204:
+          description: notebook favorite item deleted successfully
         default:
           description: error response
           schema:
@@ -6120,30 +6044,13 @@ paths:
           required: false
       tags:
         - favorites
-      description: Fetch all ML models favorites of connected user
+      description: Fetch a page of ML models favorites of connected user
       operationId: listMLModelFavorites
       responses:
         200:
           description: Available ML models favorites are returned
           schema:
             $ref: "#/definitions/MLModelFavoritesData"
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      tags:
-        - favorites
-      description: Add a new ML model favorite
-      operationId: addMLModelFavorite
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/FavoriteCreate'
-      responses:
-        204:
-          description: Item added to favorites successfully
         default:
           description: error response
           schema:
@@ -6168,40 +6075,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /ml_models/favorites/{id}:
-    parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
-        description: The UUID of the ML model favorite
-    get:
-      tags:
-        - favorites
-      description: Fetch specific ML model favorite of a user
-      operationId: getMLModelFavorite
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/MLModelFavorite'
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    delete:
-      tags:
-        - favorites
-      description: Delete specific ML model favorite
-      operationId: deleteMLModelFavorite
-      responses:
-        204:
-          description: ML model favorite item deleted successfully
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
   /ml_models/favorites/{namespace}/{name}:
     parameters:
       - type: string
@@ -6218,12 +6091,36 @@ paths:
       tags:
         - favorites
       description: Fetch ML model favorite of a specific ML model
-      operationId: getMLModelFavoriteForMLModel
+      operationId: getMLModelFavorite
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/MLModelFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - favorites
+      description: Add a new ML model favorite
+      operationId: addMLModelFavorite
+      responses:
+        204:
+          description: Item added to favorites successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - favorites
+      description: Delete specific ML model favorite
+      operationId: deleteMLModelFavorite
+      responses:
+        204:
+          description: ML model favorite item deleted successfully
         default:
           description: error response
           schema:
@@ -6244,30 +6141,13 @@ paths:
           required: false
       tags:
         - favorites
-      description: Fetch all UDF favorites of connected user
+      description: Fetch a page of UDF favorites of connected user
       operationId: listUDFFavorites
       responses:
         200:
           description: Available UDF favorites are returned
           schema:
             $ref: "#/definitions/UDFFavoritesData"
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      tags:
-        - favorites
-      description: Add a new UDF favorite
-      operationId: addUDFFavorite
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/FavoriteCreate'
-      responses:
-        204:
-          description: Item added to favorites successfully
         default:
           description: error response
           schema:
@@ -6292,40 +6172,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /udfs/favorites/{id}:
-    parameters:
-      - type: string
-        name: id
-        in: path
-        required: true
-        description: The UUID of the UDF favorite
-    get:
-      tags:
-        - favorites
-      description: Fetch specific UDF favorite of a user
-      operationId: getUDFFavorite
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/UDFFavorite'
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    delete:
-      tags:
-        - favorites
-      description: Delete specific UDF favorite
-      operationId: deleteUDFFavorite
-      responses:
-        204:
-          description: UDF favorite item deleted successfully
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
   /udfs/favorites/{namespace}/{name}:
     parameters:
       - type: string
@@ -6342,12 +6188,36 @@ paths:
       tags:
         - favorites
       description: Fetch UDF favorite of a specific UDF
-      operationId: getUDFFavoriteForUDF
+      operationId: getUDFFavorite
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/UDFFavorite'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - favorites
+      description: Add a new UDF favorite
+      operationId: addUDFFavorite
+      responses:
+        204:
+          description: Item added to favorites successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - favorites
+      description: Delete specific UDF favorite
+      operationId: deleteUDFFavorite
+      responses:
+        204:
+          description: UDF favorite item deleted successfully
         default:
           description: error response
           schema:
