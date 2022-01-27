@@ -2761,6 +2761,20 @@ definitions:
         items:
           $ref: "#/definitions/GroupAncestor"
         x-omitempty: false
+      share_count:
+        description: number of unique namespaces this array is shared with
+        type: number
+        format: integer
+      last_accessed:
+        description: Datetime group was last accessed in UTC
+        type: string
+        format: date-time
+      allowed_actions:
+        description: list of actions user is allowed to do on this group
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArrayActions"
     example:
       id: 0000-0001-0002-0003
       namespace: my-organization
