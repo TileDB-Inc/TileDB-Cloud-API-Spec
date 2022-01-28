@@ -2851,6 +2851,24 @@ definitions:
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
 
+  GroupAsset:
+    description: A group asset
+    type: object
+    properties:
+      namespace:
+        description: The namespace of the asset
+        type: string
+      name:
+        description: The name of the asset
+        type: string
+
+  GroupAssets:
+    description: An array of assets to be used with batch operations
+    type: array
+    x-omitempty: true
+    items:
+      $ref: "#/definitions/GroupAsset"
+
   TaskGraphLogStatus:
     description: The status of a given task graph execution.
     type: string
@@ -6638,6 +6656,47 @@ paths:
       responses:
         204:
           description: asset removed successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{namespace}/{name}/assets:
+    parameters:
+      - name: namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: name
+        type: string
+        in: path
+        required: true
+        description: The name of the group
+      - name: GroupAssets
+        in: body
+        schema:
+          $ref: '#/definitions/GroupAssets'
+    post:
+      description: Batch operation, adds all the assets to a group
+      operationId: addAssets
+      tags:
+        - groups
+      responses:
+        204:
+          description: all assets added successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      description: Batch operation, removes all the assets from a group
+      operationId: removeAssets
+      tags:
+        - groups
+      responses:
+        204:
+          description: all assets removed successfully
         default:
           description: error response
           schema:
