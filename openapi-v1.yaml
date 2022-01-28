@@ -961,7 +961,8 @@ definitions:
     enum:
       - SQL
       - UDF
-      - QUERY
+      - QUERY_READ
+      - QUERY_WRITE
       - GENERIC_UDF
 
   ArrayTaskStatus:
