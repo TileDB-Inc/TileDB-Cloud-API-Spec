@@ -2786,6 +2786,9 @@ definitions:
     description: Initial attributes for the creation of a new group
     type: object
     properties:
+      name:
+        description: The name of the group. If must be unique within the group.
+        type: string
       parent:
         description: The name of the parent of the group. If empty, then the new group will be a top level group.
         type: string
@@ -6521,18 +6524,13 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /groups/{namespace}/{name}:
+  /groups/{namespace}:
     parameters:
       - name: namespace
         type: string
         in: path
         required: true
         description: The namespace of the group
-      - name: name
-        type: string
-        in: path
-        required: true
-        description: The name of the group
     post:
       description: Creates a new, empty group in the namespace.
       operationId: createGroup
@@ -6550,6 +6548,19 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /groups/{namespace}/{name}:
+    parameters:
+      - name: namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: name
+        type: string
+        in: path
+        required: true
+        description: The name or id of the group
     get:
       description: Returns the contents, assets and subgroups, of the group
       operationId: listGroup
