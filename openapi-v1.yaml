@@ -2762,7 +2762,7 @@ definitions:
           $ref: "#/definitions/GroupAncestor"
         x-omitempty: false
       share_count:
-        description: number of unique namespaces this array is shared with
+        description: number of unique namespaces this group is shared with
         type: number
         format: integer
       last_accessed:
