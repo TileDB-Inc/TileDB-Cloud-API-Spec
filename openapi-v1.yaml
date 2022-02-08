@@ -2803,79 +2803,386 @@ definitions:
         type: string
         description: namespace copied to
 
-  Group:
-    description: Attributes that describe the group itself, not any of the subgroups or assets
+  GroupActions:
+    description: actions a user can take on a group
+    type: string
+    enum:
+      # Read: read contents
+      - read
+      # Write: add a new asset
+      - write
+      # Edit: update attributes, add and remove assets
+      - edit
+
+  GroupInfo:
+    description: metadata of a group
     type: object
     properties:
       id:
-        description: the globally unique id of the group
+        description: unique ID of registered group
         type: string
-        x-omitempty: true
+        example: "00000000-0000-0000-0000-000000000000"
       namespace:
-        description: The namespace of the group
+        description: namespace group is in
         type: string
+        example: "user1"
       name:
-        description: The name of the group. It is unique within the namespace. No 2 groups can have the same name
+        description: name of group
         type: string
+        example: myarray1
       description:
-        description: A human readable description of the content of the group
+        description: description of group
+        type: string
+        x-nullable: true
+      uri:
+        description: uri of group
+        type: string
+        example: "s3://bucket/asset"
+      tiledb_uri:
+        description: uri for access through TileDB cloud
+        type: string
+        x-omitempty: false
+      asset_count:
+        description: A count of direct array members
+        type: number
+        format: int32
+        example: 12
+        x-omitempty: false
+      group_count:
+        description: A count of direct group members
+        type: number
+        format: int32
+        example: 4
+        x-omitempty: false
+      size:
+        description: A count of direct members. This is the sum of asset_count and group_count
+        type: number
+        format: int32
+        example: 16
+        x-omitempty: false
+      last_accessed:
+        description: Datetime groups was last accessed in UTC
+        type: string
+        format: date-time
+      allowed_actions:
+        description: list of actions user is allowed to do on this group
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/GroupActions"
+      logo:
+        description: logo (base64 encoded) for the gruop. Optional
+        type: string
+      access_credentials_name:
+        description: the name of the access credentials to use. if unset, the default credentials will be used
+        type: string
+      share_count:
+        description: number of unique namespaces this group is shared with
+        type: number
+        format: int32
+      public_share:
+        description: Suggests if the group was shared to public by owner
+        type: boolean
+        x-omitempty: false
+        example: true
+      tags:
+        description: optional tags for group
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-]
+      license_id:
         type: string
         x-omitempty: true
-    example:
-      id: 0000-0001-0002-0003
-      namespace: my-organization
-      name: intro-to-genomics
-      path: /genomics-course/intro-to-genomics
-      description: contains arrays and notebooks for an 101 course on genomics with TileDB
+        description: License identifier from SPDX License List or Custom
+      license_text:
+        type: string
+        x-omitempty: true
+        description: License text
 
-  GroupCreate:
-    description: Initial attributes for the creation of a new group
+  GroupEntry:
+    description: Object describing a single member of a group, which can be an array or a group
     type: object
     properties:
-      parent:
-        description: The name of the parent of the group. If empty, then the new group will be a top level group.
-        type: string
+      group:
+        description: the metadata of the entry if it is a group, null if it is an array
+        $ref: '#/definitions/GroupInfo'
+      array:
+        description: the metadata of the entry if it is an array, null if it is a group
+        $ref: '#/definitions/ArrayInfo'
+
+  GroupContents:
+    description: Object including a page of members of a group and pagination metadata
+    type: object
+    properties:
+      entries:
+        description: Groups members
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/GroupEntry"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
+  GroupBrowserData:
+    description: Object including group info and pagination metadata
+    type: object
+    properties:
+      groups:
+        description: Groups Info
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/GroupInfo"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
+  GroupBrowserFilterData:
+    description: Object with data to fill browser filter
+    type: object
+    properties:
+      namespaces:
+        description: list of all unique namespaces to display
+        type: array
+        x-omitempty: false
+        items:
+          type: string
+
+  GroupContentsFilterData:
+    description: Object with data to fill contents filter
+    type: object
+    properties:
+      namespaces:
+        description: list of all unique namespaces to display
+        type: array
+        x-omitempty: false
+        items:
+          type: string
+
+  GroupCreate:
+    description: Initial attributes for the creation of a group.
+    type: object
+    properties:
       description:
-        description: A human readable description of the content of the group
+        description: A human readable description of the contents of the group.
         type: string
-    example:
-      parent: genomics-course
-      description: contains arrays and notebooks for an 101 course on genomics with TileDB
+      name:
+        description: The name of the group. If must be unique within the group.
+        type: string
+      parent:
+        description: The unique name or id of the parent of the group. If empty, then the new group will be a top level group.
+        type: string
+      uri:
+        description: uri of group.
+        type: string
+        x-omitempty: false
+      logo:
+        description: logo (base64 encoded) for the group. Optional
+        type: string
+      access_credentials_name:
+        description: the name of the access credentials to use. if unset, the default credentials will be used.
+        type: string
+      tags:
+        description: optional tags for groups.
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-].
+      license_id:
+        type: string
+        x-omitempty: true
+        description: License identifier from SPDX License List or Custom.
+      license_text:
+        type: string
+        x-omitempty: true
+        description: License text
+
+  GroupRegister:
+    description: Initial attributes for the registration of a an existing group.
+    type: object
+    properties:
+      description:
+        description: A human readable description of the contents of the group.
+        type: string
+      name:
+        description: The name of the group. If must be unique within the group.
+        type: string
+      parent:
+        description: The unique name or id of the parent of the group. If empty, then the new group will be a top level group.
+        type: string
+      uri:
+        description: uri of group.
+        type: string
+        x-omitempty: false
+      logo:
+        description: logo (base64 encoded) for the group. Optional
+        type: string
+      access_credentials_name:
+        description: the name of the access credentials to use. if unset, the default credentials will be used.
+        type: string
+      tags:
+        description: optional tags for groups.
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-].
+      license_id:
+        type: string
+        x-omitempty: true
+        description: License identifier from SPDX License List or Custom.
+      license_text:
+        type: string
+        x-omitempty: true
+        description: License text
 
   GroupUpdate:
     description: Updates for a group. New values for the attributes.
     type: object
     properties:
-      name:
-        description: The new name of the group
-        type: string
       description:
-        description: A new human readable description of the content of the group
+        description: A human readable description of the content of the group
         type: string
-    example:
-      name: intro-to-genomics
-      description: contains arrays and notebooks for an 101 course on genomics with TileDB
+      name:
+        description: The name of the group. If must be unique within the group.
+        type: string
+      logo:
+        description: logo (base64 encoded) for the group. Optional
+        type: string
+      access_credentials_name:
+        description: the name of the access credentials to use. if unset, the default credentials will be used
+        type: string
+      tags:
+        description: optional tags for groups
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-]
+      license_id:
+        type: string
+        x-omitempty: true
+        description: License identifier from SPDX License List or Custom
+      license_text:
+        type: string
+        x-omitempty: true
+        description: License text
 
-  GroupListing:
-    description: The contents of a group i.e attributes, subgroups and assets
-    allOf:
-      - $ref: '#/definitions/Group'
-      - type: object
-        properties:
-          groups:
-            description: Contains one page of subgroups of the group.
-            type: array
-            x-omitempty: true
-            items:
-              $ref: "#/definitions/Group"
-          assets:
-            description: Contains one page of assets of the group as ArrayInfos
-            type: array
-            x-omitempty: true
-            items:
-              $ref: "#/definitions/ArrayInfo"
-          pagination_metadata:
-            $ref: "#/definitions/PaginationMetadata"
+  GroupMemberType:
+    description: File types that can be included in groups
+    type: string
+    enum:
+      # Group
+      - group
+      # Array
+      - array
+
+  GroupMemberAssetType:
+    description: Specific file types of group members
+    type: string
+    enum:
+      # Group
+      - group
+      # Array
+      - array
+      # Notebook
+      - notebook
+      # Dashboard
+      - dashboard
+      # UDF
+      - user_defined_function
+      # ML Model
+      - ml_model
+      # Files
+      - file
+
+  GroupMember:
+    description: A groups member, array or another groups, to add or remove from an existing group.
+    type: object
+    properties:
+      namespace:
+        description: The namespace of the asset.
+        type: string
+      name:
+        description: The name or id of the asset.
+        type: string
+      member_type:
+        $ref: '#/definitions/GroupMemberType'
+
+  GroupChanges:
+    description: A request to change the members of a group. Contains assets to add or remove.
+    type: object
+    properties:
+      add:
+        description: the assets, arrays or groups, to add to the group.
+        type: array
+        items:
+          $ref: '#/definitions/GroupMember'
+      remove:
+        description: the assets, arrays or groups, to remove from the group.
+        type: array
+        items:
+          $ref: '#/definitions/GroupMember'
+
+  GroupSharing:
+    description: sharing state of a group with a namespace
+    type: object
+    properties:
+      group_actions:
+        description: List of permitted actions for the group and all subgroups
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/GroupActions"
+        example:
+          - read
+          - write
+      array_actions:
+        description: List of permitted actions for all the subarrays of the group
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArrayActions"
+        example:
+          - read
+          - write
+      namespace:
+        description: namespace being granted group access can be a user or organization
+        type: string
+        example: "MyOrganization"
+      namespace_type:
+        description: details on if the namespace is a organization or user
+        type: string
+        example: "organization"
+
+  GroupSharingRequest:
+    description: a request to share a group and all the contents with a namespace
+    type: object
+    properties:
+      group_actions:
+        description: List of permitted actions for the group and all subgroups
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/GroupActions"
+        example:
+          - read
+          - write
+      array_actions:
+        description: List of permitted actions for all the subarrays of the group
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArrayActions"
+        example:
+          - read
+          - write
+      namespace:
+        description: namespace being granted group access can be a user or organization
+        type: string
+        example: "MyOrganization"
 
   #
   # Task graph messages
@@ -6555,16 +6862,25 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /groups/{namespace}:
-    parameters:
-      - name: namespace
-        type: string
-        in: path
-        required: true
-        description: The namespace to operate on
+  /groups/browser/owned/filters:
     get:
-      description: Returns one page of top level groups in namespace.
-      operationId: listTopLevelGroups
+      tags:
+        - groups
+      description: Fetch data to initialize filters for the groups browser
+      responses:
+        200:
+          description: Filter data
+          schema:
+            $ref: "#/definitions/GroupBrowserFilterData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/browser/owned:
+    get:
+      description: Returns one page of owned groups.
+      operationId: listOwnedGroups
       tags:
         - groups
       parameters:
@@ -6578,30 +6894,402 @@ paths:
           description: pagination limit
           type: integer
           required: false
+        - name: search
+          in: query
+          description: search string that will look at name, namespace or description fields
+          required: false
+          type: string
+        - name: namespace
+          in: query
+          description: namespace
+          required: false
+          type: string
+        - name: orderby
+          in: query
+          description: sort by which field valid values include last_accessed, size, name
+          required: false
+          type: string
+        - name: permissions
+          in: query
+          description: permissions valid values include read, read_write, write, admin
+          required: false
+          type: string
+        - name: tag
+          in: query
+          description: tag to search for, more than one can be included
+          required: false
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+        - name: exclude_tag
+          in: query
+          description: tags to exclude matching array in results, more than one can be included
+          required: false
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+        - name: flat
+          in: query
+          description: if true, ignores the nesting of groups and searches all of them
+          type: boolean
+        - name: parent
+          in: query
+          description: search only the children of the groups with this uuid
+          type: string
+          required: false
       responses:
         200:
           description: the group contents
           schema:
-            $ref: '#/definitions/GroupListing'
+            $ref: '#/definitions/GroupBrowserData'
         default:
           description: error response
           schema:
             $ref: "#/definitions/Error"
 
-  /groups/{namespace}/{name}:
+  /groups/browser/shared/filters:
+    get:
+      tags:
+        - groups
+      description: Fetch data to initialize filters for the groups browser
+      responses:
+        200:
+          description: Filter data
+          schema:
+            $ref: "#/definitions/GroupBrowserFilterData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/browser/shared:
+    get:
+      description: Returns one page of shared groups.
+      operationId: listSharedGroups
+      tags:
+        - groups
+      parameters:
+        - name: page
+          in: query
+          description: pagination offset
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit
+          type: integer
+          required: false
+        - name: search
+          in: query
+          description: search string that will look at name, namespace or description fields
+          required: false
+          type: string
+        - name: namespace
+          in: query
+          description: namespace
+          required: false
+          type: string
+        - name: orderby
+          in: query
+          description: sort by which field valid values include last_accessed, size, name
+          required: false
+          type: string
+        - name: permissions
+          in: query
+          description: permissions valid values include read, read_write, write, admin
+          required: false
+          type: string
+        - name: tag
+          in: query
+          description: tag to search for, more than one can be included
+          required: false
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+        - name: exclude_tag
+          in: query
+          description: tags to exclude matching array in results, more than one can be included
+          required: false
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+        - name: flat
+          in: query
+          description: if true, ignores the nesting of groups and searches all of them
+          type: boolean
+        - name: parent
+          in: query
+          description: search only the children of the groups with this uuid
+          type: string
+          required: false
+      responses:
+        200:
+          description: the group contents
+          schema:
+            $ref: '#/definitions/GroupBrowserData'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/browser/public/filters:
+    get:
+      tags:
+        - groups
+      description: Fetch data to initialize filters for the groups browser
+      responses:
+        200:
+          description: Filter data
+          schema:
+            $ref: "#/definitions/GroupBrowserFilterData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/browser/public:
+    get:
+      description: Returns one page of public groups.
+      operationId: listPublicGroups
+      tags:
+        - groups
+      parameters:
+        - name: page
+          in: query
+          description: pagination offset
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit
+          type: integer
+          required: false
+        - name: search
+          in: query
+          description: search string that will look at name, namespace or description fields
+          required: false
+          type: string
+        - name: namespace
+          in: query
+          description: namespace
+          required: false
+          type: string
+        - name: orderby
+          in: query
+          description: sort by which field valid values include last_accessed, size, name
+          required: false
+          type: string
+        - name: permissions
+          in: query
+          description: permissions valid values include read, read_write, write, admin
+          required: false
+          type: string
+        - name: tag
+          in: query
+          description: tag to search for, more than one can be included
+          required: false
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+        - name: exclude_tag
+          in: query
+          description: tags to exclude matching array in results, more than one can be included
+          required: false
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+        - name: flat
+          in: query
+          description: if true, ignores the nesting of groups and searches all of them
+          type: boolean
+        - name: parent
+          in: query
+          description: search only the children of the groups with this uuid
+          type: string
+          required: false
+      responses:
+        200:
+          description: the group contents
+          schema:
+            $ref: '#/definitions/GroupBrowserData'
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{group_namespace}/{group_name}/contents/filters:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+    get:
+      tags:
+        - groups
+      description: Fetch data to initialize filters for the group contents
+      responses:
+        200:
+          description: Filter data
+          schema:
+            $ref: "#/definitions/GroupContentsFilterData"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{group_namespace}/{group_name}/contents:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+    post:
+      description: Changes the contents of the group by adding/removing members.
+      operationId: changeGroupContents
+      tags:
+        - groups
+      parameters:
+        - in: body
+          name: GroupChanges
+          schema:
+            $ref: '#/definitions/GroupChanges'
+      responses:
+        204:
+          description: all changes applied successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    get:
+      description: Returns the contents of the group
+      operationId: getGroupContents
+      tags:
+        - groups
+      parameters:
+        - name: page
+          in: query
+          description: pagination offset for assets
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit for assets
+          type: integer
+          required: false
+        - name: namespace
+          in: query
+          description: namespace to search for
+          required: false
+          type: string
+        - name: search
+          in: query
+          description: search string that will look at name, namespace or description fields
+          required: false
+          type: string
+        - name: orderby
+          in: query
+          description: sort by which field valid values include last_accessed, size, name
+          required: false
+          type: string
+        - name: tag
+          in: query
+          description: tag to search for, more than one can be included
+          required: false
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+        - name: exclude_tag
+          in: query
+          description: tags to exclude matching array in results, more than one can be included
+          required: false
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+        - name: member_type
+          in: query
+          description: member type to search for, more than one can be included
+          required: false
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+        - name: exclude_member_type
+          in: query
+          description: member type to exclude matching groups in results, more than one can be included
+          required: false
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+      responses:
+        200:
+          description: the group contents
+          schema:
+            $ref: "#/definitions/GroupContents"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{namespace}/{array}/register:
     parameters:
       - name: namespace
         type: string
         in: path
         required: true
         description: The namespace of the group
-      - name: name
+      - name: array
         type: string
         in: path
         required: true
-        description: The name of the group
+        description: The unique name or id of the group
     post:
-      description: Creates a new, empty group in the namespace.
+      description: Registers an existing group in the namespace.
+      operationId: registerGroup
+      tags:
+        - groups
+      parameters:
+        - in: body
+          name: GroupRegister
+          schema:
+            $ref: '#/definitions/GroupRegister'
+      responses:
+        204:
+          description: group created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{namespace}/create:
+    parameters:
+      - name: namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+    post:
+      description: Creates a new group in the namespace.
       operationId: createGroup
       tags:
         - groups
@@ -6617,35 +7305,82 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /groups/{group_namespace}/{group_name}/share:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
     get:
-      description: Returns the contents, assets and subgroups, of the group
-      operationId: listGroup
+      description: Get all sharing details of the group
       tags:
         - groups
-      parameters:
-        - name: output
-          in: query
-          required: false
-          type: string
-          enum:
-            - attributes # return only the group
-            - groups     # return one page of subgroups
-            - assets     # return one page of assets
-        - name: page
-          in: query
-          description: pagination offset for assets
-          type: integer
-          required: false
-        - name: per_page
-          in: query
-          description: pagination limit for assets
-          type: integer
-          required: false
+      operationId: getGroupSharingPolicies
       responses:
         200:
-          description: the group contents
+          description: List of all specific sharing policies
           schema:
-            $ref: '#/definitions/GroupListing'
+            type: array
+            x-omitempty: true
+            items:
+              $ref: "#/definitions/GroupSharing"
+        404:
+          description: Group does not exist or user does not have permissions to view group-sharing policies
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      description: Share a group with a namespace
+      tags:
+        - groups
+      operationId: shareGroup
+      parameters:
+        - name: group_sharing_request
+          in: body
+          description: Namespace and list of permissions to share with. Sharing is recursive, it is applied to all reachable subgroups and arrays of the group. An empty list of permissions will remove the namespace; if permissions already exist they will be deleted then new ones added. In the event of a failure, the new policies will be rolled back to prevent partial policies, and it's likely the group will not be shared with the namespace at all.
+          schema:
+            $ref: "#/definitions/GroupSharingRequest"
+          required: true
+      responses:
+        204:
+          description: Group shared successfully
+        404:
+          description: Group does not exist or user does not have permissions to share group
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{group_namespace}/{group_name}:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+    get:
+      description: Returns the the group
+      operationId: getGroup
+      tags:
+        - groups
+      responses:
+        200:
+          description: the group metadata
+          schema:
+            $ref: '#/definitions/GroupInfo'
         default:
           description: error response
           schema:
@@ -6668,60 +7403,13 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     delete:
-      description: Deletes the group and all the subgroups recursively. The assets are not deleted nor are not relocated to any other group
+      description: Deletes the group. The assets are not deleted nor are not relocated to any other group
       operationId: deleteGroup
       tags:
         - groups
       responses:
         204:
           description: group deleted successfully
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
-  /groups/{namespace}/{name}/{asset_namespace}/{asset_name}:
-    parameters:
-      - name: namespace
-        type: string
-        in: path
-        required: true
-        description: The namespace of the group
-      - name: name
-        type: string
-        in: path
-        required: true
-        description: The name of the group
-      - name: asset_namespace
-        type: string
-        in: path
-        required: true
-        description: The namespace of the asset
-      - name: asset_name
-        type: string
-        in: path
-        required: true
-        description: The name of the asset
-    post:
-      description: Adds an asset(array, notebook, udf etc) to a group
-      operationId: addAsset
-      tags:
-        - groups
-      responses:
-        204:
-          description: asset added successfully
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    delete:
-      description: Removes an asset from a group
-      operationId: removeAsset
-      tags:
-        - groups
-      responses:
-        204:
-          description: asset removed successfully
         default:
           description: error response
           schema:
