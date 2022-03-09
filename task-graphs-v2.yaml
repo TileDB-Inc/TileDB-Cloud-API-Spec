@@ -150,9 +150,7 @@ definitions:
     x-nullable: True
     properties:
       default_value:
-        $ref: '#/definitions/TGImmediateValue'
-      result_format:
-        $ref: '#/definitions/ResultFormat'
+        $ref: '#/definitions/TGArgument'
       datatype:
         description: >
           An annotation of what datatype this node is supposed to be.
@@ -174,7 +172,9 @@ definitions:
         items:
           type: string
       query:
-        description: The text of the SQL query to execute.
+        description: >
+          The text of the SQL query to execute. Parameters are substituted in
+          for `?`s, just as in a regular MariaDB query.
         type: string
       parameters:
         description: >
@@ -193,8 +193,9 @@ definitions:
     properties:
       registered_udf_name:
         description: >
-          If set, the registered UDF to execute. Either this or
-          `executable_code` should be set, but not both.
+          If set, the name of the registered UDF to execute, in the format
+          `namespace/name`. Either this or `executable_code` should be set,
+          but not both.
         type: string
         x-nullable: true
       executable_code:
@@ -333,7 +334,7 @@ definitions:
         x-nullable: true
         description: Substitutes the value of this node at call time.
       array:
-        $ref: '#/definitions/TGArrayNodeData'
+        $ref: '#/definitions/UDFArrayDetails'
       immediate:
         $ref: '#/definitions/TGImmediateValue'
       __escape__:
