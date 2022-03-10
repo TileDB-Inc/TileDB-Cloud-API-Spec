@@ -2713,6 +2713,17 @@ definitions:
         type: string
         description: name of the file created
 
+  FileUploaded:
+    description: Uploaded file name and information
+    type: object
+    properties:
+      output_uri:
+        type: string
+        description: output location of the TileDB File
+      file_name:
+        type: string
+        description: name of the file uploaded
+
   FileExport:
     description: Output information required to export a file
     type: object
@@ -6261,6 +6272,47 @@ paths:
           description: File created
           schema:
             $ref: "#/definitions/FileCreated"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /files/{namespace}/upload:
+    parameters:
+      - type: string
+        name: namespace
+        in: path
+        required: true
+        description: The namespace of the file
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
+    post:
+      description: Upload a tiledb file at the specified location
+      tags:
+        - files
+      operationId: HandleUploadFile
+      parameters:
+        - in: formData
+          name: input_file
+          type: file
+          required: true
+          description: the file to upload
+        - in: formData
+          name: output_uri
+          type: string
+          description: output location of the TileDB File
+        - in: formData
+          name: name
+          type: string
+          description: name to set for registered file
+      responses:
+        201:
+          description: File uploaded
+          schema:
+            $ref: "#/definitions/FileUploaded"
         default:
           description: error response
           schema:
