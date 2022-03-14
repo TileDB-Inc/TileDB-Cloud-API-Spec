@@ -39,7 +39,7 @@ definitions:
       - tiledb_json
         # The format used to encode argument values for a task graph: JSON
         # as deeply as possible, but any value that cannot be JSON-encoded
-        # is replaced with a TGArgument.
+        # is replaced with a TGArgValue.
       - native  # DEPRECATED. Use the language-specific values instead.
       # TODO: Would it make sense to have an `auto` value?
       # For instance, if a function results in a JSON-serializable value,
@@ -181,7 +181,7 @@ definitions:
     x-nullable: True
     properties:
       default_value:
-        $ref: '#/definitions/TGArgument'
+        $ref: '#/definitions/TGArgValue'
       datatype:
         description: >
           An annotation of what datatype this node is supposed to be.
@@ -213,7 +213,7 @@ definitions:
           Fixed-length. Arguments must be in JSON format.
         type: array
         items:
-          $ref: '#/definitions/TGArgument'
+          $ref: '#/definitions/TGArgValue'
       result_format:
         $ref: '#/definitions/ResultFormat'
 
@@ -292,7 +292,7 @@ definitions:
         type: string
         x-nullable: true
       value:
-        $ref: '#/definitions/TGArgument'
+        $ref: '#/definitions/TGArgValue'
 
   TGUDFEnvironment:
     description: Metadata about the environment where we want to execute a UDF.
@@ -309,7 +309,7 @@ definitions:
   # Parameters
   #
 
-  TGArgument:
+  TGArgValue:
     description: >
       An argument provided to a node. This is one of a direct value (i.e.,
       a raw JSON value) or a `TGSentinel`.
@@ -339,7 +339,6 @@ definitions:
               }
             }}
           }
-
 
   # The below messages are not used directly in any API definitions,
   # but are included as documentation of data encodings.
