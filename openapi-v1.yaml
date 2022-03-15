@@ -5105,8 +5105,8 @@ paths:
         - udf
       operationId: deleteUDFInfo
       responses:
-        202:
-          description: UDF delete successfully
+        204:
+          description: UDF deleted successfully
         default:
           description: error response
           schema:
