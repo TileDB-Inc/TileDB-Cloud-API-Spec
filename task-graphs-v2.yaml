@@ -402,7 +402,7 @@ paths:
     post:
       description: >
         Register a task graph in the given namespace, with the given name.
-      operationId: registerTaskGraph
+      operationId: registerRegisteredTaskGraph
       tags:
         - registered_task_graphs
       parameters:
@@ -444,7 +444,7 @@ paths:
       tags:
         - registered_task_graphs
       responses:
-        202:
+        204:
           description: Task graph successfully deleted.
         default:
           description: error response
