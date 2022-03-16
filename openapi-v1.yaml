@@ -1528,6 +1528,8 @@ definitions:
       - ml_model
       # Files
       - file
+      # Task graphs
+      - registered_task_graph
 
   FilePropertyName:
     description: File property assigned to a specific file (array)
