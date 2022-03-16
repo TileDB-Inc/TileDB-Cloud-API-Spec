@@ -53,6 +53,37 @@ definitions:
       - r
       - python
 
+  TaskGraphActions:
+    description: actions a user can take on a UDF
+    type: string
+    enum:
+      # Fetch task graph
+      - fetch_task_graph
+      # Share task graph with others
+      - share_task_graph
+
+  TaskGraphSharing:
+    description: details for sharing a given registered task graph
+    type: object
+    properties:
+      actions:
+        description: List of permitted actions
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/TaskGraphActions"
+        example:
+          - fetch_task_graph
+          - share_task_graph
+      namespace:
+        description: namespace being granted array access can be a user or organization
+        type: string
+        example: "MyOrganization"
+      namespace_type:
+        description: details on if the namespace is a organization or user
+        type: string
+        example: "organization"
+
   #
   # Graph structure
   #
@@ -366,8 +397,6 @@ definitions:
     description: >
       Placeholder to reserve the `UDFArrayDetails` name before merging these
       messages into `openapi-v1.yaml`.
-  UDFSharing:
-    description: Placeholder to reserve `UDFSharing`.
   Error:
     description: Placeholder to reserve `Error`.
 
@@ -475,7 +504,7 @@ paths:
             type: array
             x-omitempty: true
             items:
-              $ref: '#/definitions/UDFSharing'
+              $ref: '#/definitions/TaskGraphSharing'
         404:
           description: >
             The task graph does not exist (or the user does not have permission
@@ -492,7 +521,7 @@ paths:
         - registered_task_graphs
       operationId: shareRegisteredTaskGraph
       parameters:
-        - name: udf_sharing
+        - name: task_graph_sharing
           in: body
           description: >
             Namespace and list of permissions to share with.
@@ -502,7 +531,7 @@ paths:
             will be rolled back to prevent partial policies, and it's likely
             the UDF will not be shared with the namespace at all.
           schema:
-            $ref: '#/definitions/UDFSharing'
+            $ref: '#/definitions/TaskGraphSharing'
           required: true
       responses:
         204:
