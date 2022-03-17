@@ -1543,6 +1543,10 @@ definitions:
       - udf_language
       # Is dashboard
       - is_dashboard
+      # - Defines whether or not the file will be automatically pruned to the version_pruning_limit
+      - version_pruning_enabled
+      # - The number of versions to keep for a given file. Only used if version_pruning_enabled is true 
+      - version_pruning_limit
 
   PricingType:
     description: Pricing types
