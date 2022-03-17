@@ -1687,6 +1687,7 @@ definitions:
         type: number
         format: uint64
         example: 1024
+        x-nullable: true
       last_accessed:
         description: Datetime array was last accessed in UTC
         type: string
