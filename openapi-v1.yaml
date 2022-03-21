@@ -5298,6 +5298,47 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /notebooks/{namespace}/upload:
+    parameters:
+      - type: string
+        name: namespace
+        in: path
+        required: true
+        description: The namespace of the notebook
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
+    post:
+      description: Upload a notebook at the specified location
+      tags:
+        - notebook
+      operationId: HandleUploadNotebook
+      parameters:
+        - in: formData
+          name: input_file
+          type: file
+          required: true
+          description: the notebook to upload
+        - in: formData
+          name: output_uri
+          type: string
+          description: output location of the TileDB File
+        - in: formData
+          name: name
+          type: string
+          description: name to set for registered file
+      responses:
+        201:
+          description: File uploaded
+          schema:
+            $ref: "#/definitions/FileUploaded"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /notebooks/{namespace}/{array}/end_timestamps:
     parameters:
       - name: namespace
