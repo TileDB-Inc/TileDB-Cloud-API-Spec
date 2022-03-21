@@ -5312,6 +5312,8 @@ paths:
         required: false
     post:
       description: Upload a notebook at the specified location
+      consumes:
+        - multipart/form-data
       tags:
         - notebook
       operationId: HandleUploadNotebook
