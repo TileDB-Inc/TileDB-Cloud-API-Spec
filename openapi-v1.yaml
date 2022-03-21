@@ -2740,6 +2740,28 @@ definitions:
         type: string
         description: output location of the exported file
 
+  NotebookCopy:
+    description: Output information required to copy a notebook
+    type: object
+    properties:
+      output_uri:
+        type: string
+        description: output location of the TileDB File
+      name:
+        type: string
+        description: name to set for registered notebook
+
+  NotebookCopied:
+    description: Copied notebook uri and information
+    type: object
+    properties:
+      output_uri:
+        type: string
+        description: output location of the TileDB Notebook
+      file_name:
+        type: string
+        description: name of the notebook created
+
   Group:
     description: Attributes that describe the group itself, not any of the subgroups or assets
     type: object
@@ -5293,6 +5315,39 @@ paths:
       responses:
         204:
           description: notebook name updated successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /notebooks/{namespace}/{array}/copy:
+    parameters:
+      - type: string
+        name: namespace
+        in: path
+        required: true
+        description: The namespace of the notebook
+      - name: NotebookCopy
+        in: body
+        description: Input/Output information to create a new TileDB file
+        schema:
+          $ref: "#/definitions/NotebookCopy"
+        required: true
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
+    post:
+      description: Copy a tiledb notebook at the specified location
+      tags:
+        - files
+      operationId: HandleCopyNotebook
+      responses:
+        201:
+          description: Notebook copied
+          schema:
+            $ref: "#/definitions/NotebookCopied"
         default:
           description: error response
           schema:
