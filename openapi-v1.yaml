@@ -2803,6 +2803,34 @@ definitions:
         type: string
         description: namespace copied to
 
+  UDFCopy:
+    description: information required to copy a udf
+    type: object
+    properties:
+      output_uri:
+        type: string
+        description: output location of the TileDB File
+      namespace:
+        type: string
+        description: namespace to register the copy. If empty use the namespace of the request user
+      name:
+        type: string
+        description: name to set for the copy. If empty use the name as the original udf, if it not already used in the namespace
+
+  UDFCopied:
+    description: Copied udf uri and information
+    type: object
+    properties:
+      output_uri:
+        type: string
+        description: output location of the TileDB udf
+      namespace:
+        type: string
+        description: namespace of the copied udf
+      name:
+        type: string
+        description: name of the copied udf
+
   GroupActions:
     description: actions a user can take on a group
     type: string
@@ -5593,6 +5621,51 @@ paths:
           description: UDF shared successfully
         404:
           description: UDF does not exist or user does not have permissions to share UDF
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /udf/{namespace}/{name}/copy:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: name
+        in: path
+        description: name of UDFInfo
+        type: string
+        required: true
+    post:
+      description: Copy a tiledb udf at the specified location
+      tags:
+        - udf
+      operationId: HandleCopyUDF
+      parameters:
+        - name: UDFCopy
+          in: body
+          description: Input/Output information to copy a UDF
+          schema:
+            $ref: "#/definitions/UDFCopy"
+          required: true
+        - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+          in: header
+          description: Optional registered access credentials to use for creation
+          type: string
+          required: false
+        - name: end_timestamp
+          in: query
+          description: "Milliseconds since Unix epoch"
+          type: integer
+          format: uint64
+          required: false
+      responses:
+        201:
+          description: UDF copied
+          schema:
+            $ref: "#/definitions/UDFCopied"
         default:
           description: error response
           schema:
