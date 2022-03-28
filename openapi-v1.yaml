@@ -2750,6 +2750,9 @@ definitions:
       name:
         type: string
         description: name to set for registered notebook
+      namespace:
+        type: string
+        description: namespace to copy to
 
   NotebookCopied:
     description: Copied notebook uri and information
@@ -2758,9 +2761,12 @@ definitions:
       output_uri:
         type: string
         description: output location of the TileDB Notebook
-      file_name:
+      name:
         type: string
         description: name of the notebook created
+      namespace:
+        type: string
+        description: namespace copied to
 
   Group:
     description: Attributes that describe the group itself, not any of the subgroups or assets
@@ -5338,10 +5344,16 @@ paths:
         description: Optional registered access credentials to use for creation
         type: string
         required: false
+      - name: end_timestamp
+        in: query
+        description: "Milliseconds since Unix epoch, copy will use open_at functionality to copy notebook created at the specific timestamp"
+        type: integer
+        format: uint64
+        required: false
     post:
       description: Copy a tiledb notebook at the specified location
       tags:
-        - files
+        - notebook
       operationId: HandleCopyNotebook
       responses:
         201:
