@@ -142,15 +142,20 @@ definitions:
       - generic
 
   ResultFormat:
-    description: Results type
+    description: 'Data format of a result'
     type: string
     enum:
-      # native (i.e. cloud pickle)
-      - native
-      # JSON
+      - python_pickle
+      - r_serialization
       - json
-      # Arrow IPC format
       - arrow
+      - bytes
+        # Raw binary data, not interpreted by the loader.
+      - tiledb_json
+        # The format used to encode argument values for a task graph: JSON
+        # as deeply as possible, but any value that cannot be JSON-encoded
+        # is replaced with a TGArgValue.
+      - native  # DEPRECATED. Use the language-specific values instead.
 
   Layout:
     description: Layout of array
