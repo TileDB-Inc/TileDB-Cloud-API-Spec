@@ -2113,6 +2113,16 @@ definitions:
     description: Contains array details for multi-array query including uri, ranges buffers
     type: object
     properties:
+      parameter_id:
+        description: >
+          An optional client-generated identifier to distinguish between
+          multiple range/buffer requests from the same array in the same call.
+
+          This may be set for MultiArrayUDFs that use the `argument_json` style
+          of passing arrays.
+        type: string
+        x-nullable: true
+        x-omitempty: true
       uri:
         description: array to set ranges and buffers on, must be in tiledb:// format
         type: string
