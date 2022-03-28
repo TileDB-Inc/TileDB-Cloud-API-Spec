@@ -53,6 +53,37 @@ definitions:
       - r
       - python
 
+  TaskGraphActions:
+    description: actions a user can take on a UDF
+    type: string
+    enum:
+      # Fetch task graph
+      - fetch_task_graph
+      # Share task graph with others
+      - share_task_graph
+
+  TaskGraphSharing:
+    description: details for sharing a given registered task graph
+    type: object
+    properties:
+      actions:
+        description: List of permitted actions
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/TaskGraphActions"
+        example:
+          - fetch_task_graph
+          - share_task_graph
+      namespace:
+        description: namespace being granted array access can be a user or organization
+        type: string
+        example: "MyOrganization"
+      namespace_type:
+        description: details on if the namespace is a organization or user
+        type: string
+        example: "organization"
+
   #
   # Graph structure
   #
@@ -366,6 +397,150 @@ definitions:
     description: >
       Placeholder to reserve the `UDFArrayDetails` name before merging these
       messages into `openapi-v1.yaml`.
+  Error:
+    description: Placeholder to reserve `Error`.
 
-# Empty paths object to make this a valid OpenAPI document before merging.
-paths: {}
+paths:
+  /taskgraphs/{namespace}/registered/{name}:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this registered UDF.
+        type: string
+        required: true
+      - name: name
+        in: path
+        description: The name of the registered task graph.
+        type: string
+        required: true
+    get:
+      description: >
+        Fetch the contents of this registered task graph.
+      operationId: getRegisteredTaskGraph
+      tags:
+        - registered_task_graphs
+      responses:
+        200:
+          description: The contents of the registered task graph.
+          schema:
+            $ref: '#/definitions/RegisteredTaskGraph'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      description: >
+        Register a task graph in the given namespace, with the given name.
+      operationId: registerRegisteredTaskGraph
+      tags:
+        - registered_task_graphs
+      parameters:
+        - name: graph
+          in: body
+          description: Task graph to register.
+          schema:
+            $ref: '#/definitions/RegisteredTaskGraph'
+      responses:
+        204:
+          description: Task graph registered successfully.
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      description: >
+        Update the contents of an existing registered task graph.
+      operationId: updateRegisteredTaskGraph
+      tags:
+        - registered_task_graphs
+      parameters:
+        - name: graph
+          in: body
+          description: The new contents of the task graph.
+          schema:
+            $ref: '#/definitions/RegisteredTaskGraph'
+      responses:
+        204:
+          description: Task graph updated successfully.
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      description: >
+        Delete the given registered task graph.
+      operationId: deleteRegisteredTaskGraph
+      tags:
+        - registered_task_graphs
+      responses:
+        204:
+          description: Task graph successfully deleted.
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
+  /taskgraphs/{namespace}/registered/{name}/share:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns the registered task graph.
+        type: string
+        required: true
+      - name: name
+        in: path
+        description: The name of the task graph.
+        type: string
+        required: true
+    get:
+      description: Get sharing policies for the task graph.
+      tags:
+        - registered_task_graphs
+      operationId: getRegisteredTaskGraphSharingPolicies
+      responses:
+        200:
+          description: List of all specific sharing policies
+          schema:
+            type: array
+            x-omitempty: true
+            items:
+              $ref: '#/definitions/TaskGraphSharing'
+        404:
+          description: >
+            The task graph does not exist (or the user does not have permission
+            to view policies)
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      description: Share a task graph.
+      tags:
+        - registered_task_graphs
+      operationId: shareRegisteredTaskGraph
+      parameters:
+        - name: task_graph_sharing
+          in: body
+          description: >
+            Namespace and list of permissions to share with.
+            An empty list of permissions will remove the namespace;
+            if permissions already exist they will be deleted then
+            new ones added. In the event of a failure, the new policies
+            will be rolled back to prevent partial policies, and it's likely
+            the UDF will not be shared with the namespace at all.
+          schema:
+            $ref: '#/definitions/TaskGraphSharing'
+          required: true
+      responses:
+        204:
+          description: UDF shared successfully
+        404:
+          description: UDF does not exist or user does not have permissions to share UDF
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
