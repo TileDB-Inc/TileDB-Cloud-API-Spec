@@ -5333,6 +5333,11 @@ paths:
         in: path
         required: true
         description: The namespace of the notebook
+      - type: string
+        name: array
+        in: path
+        required: true
+        description: The name of the notebook
       - name: NotebookCopy
         in: body
         description: Input/Output information to create a new TileDB file
