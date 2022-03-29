@@ -2758,6 +2758,34 @@ definitions:
         type: string
         description: output location of the exported file
 
+  NotebookCopy:
+    description: Output information required to copy a notebook
+    type: object
+    properties:
+      output_uri:
+        type: string
+        description: output location of the TileDB File
+      name:
+        type: string
+        description: name to set for registered notebook
+      namespace:
+        type: string
+        description: namespace to copy to
+
+  NotebookCopied:
+    description: Copied notebook uri and information
+    type: object
+    properties:
+      output_uri:
+        type: string
+        description: output location of the TileDB Notebook
+      name:
+        type: string
+        description: name of the notebook created
+      namespace:
+        type: string
+        description: namespace copied to
+
   Group:
     description: Attributes that describe the group itself, not any of the subgroups or assets
     type: object
@@ -5311,6 +5339,50 @@ paths:
       responses:
         204:
           description: notebook name updated successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /notebooks/{namespace}/{array}/copy:
+    parameters:
+      - type: string
+        name: namespace
+        in: path
+        required: true
+        description: The namespace of the notebook
+      - type: string
+        name: array
+        in: path
+        required: true
+        description: The name of the notebook
+      - name: NotebookCopy
+        in: body
+        description: Input/Output information to create a new TileDB file
+        schema:
+          $ref: "#/definitions/NotebookCopy"
+        required: true
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
+      - name: end_timestamp
+        in: query
+        description: "Milliseconds since Unix epoch, copy will use open_at functionality to copy notebook created at the specific timestamp"
+        type: integer
+        format: uint64
+        required: false
+    post:
+      description: Copy a tiledb notebook at the specified location
+      tags:
+        - notebook
+      operationId: HandleCopyNotebook
+      responses:
+        201:
+          description: Notebook copied
+          schema:
+            $ref: "#/definitions/NotebookCopied"
         default:
           description: error response
           schema:
