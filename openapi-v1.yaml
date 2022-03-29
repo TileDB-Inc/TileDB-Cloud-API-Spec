@@ -2163,15 +2163,32 @@ definitions:
         description: optional raw text to store of serialized function, used for showing in UI
       result_format:
         $ref: "#/definitions/ResultFormat"
-        description: type of results (native, i.e cloud pickle or json or arrow)
-        x-omitempty: true
       task_name:
         description: name of task, optional
         type: string
       argument:
         type: string
-        description: Argument(s) to pass to UDF function, tuple or list of args/kwargs which can be in native or JSON format
+        description: >
+          Deprecated: Prefer to use `argument_json` instead.
+
+          Argument(s) to pass to UDF function, tuple or list of args/kwargs
+          which can be in native or JSON format
         x-omitempty: true
+      arguments_json:
+        type: array
+        description: >
+          A series of key-value pairs to be passed as arguments into the UDF.
+          See `TGUDFNodeData.arguments` for more information.
+
+          If this format is used to pass arguments, arrays will be passed into
+          the UDF as specified by the Node placeholders passed in here, rather
+          than the classic method of putting all array arguments in the first
+          parameter.
+
+          Either this or `argument` should be set.
+        items:
+          $ref: '#/definitions/TGUDFArgument'
+        x-nullable: true
       stored_param_uuids:
         type: array
         items:
@@ -2860,6 +2877,12 @@ definitions:
           pagination_metadata:
             $ref: "#/definitions/PaginationMetadata"
 
+  #
+  # Task graph messages
+  #
+
+  # Task graph logs
+
   TaskGraphLogStatus:
     description: The status of a given task graph execution.
     type: string
@@ -2989,6 +3012,52 @@ definitions:
           $ref: '#/definitions/TaskGraphLog'
       pagination_metadata:
         $ref: '#/definitions/PaginationMetadata'
+
+  # Registered task graphs
+
+  TGUDFArgument:
+    description: >
+      A single argument to a UDF. This may represent a positional argument or
+      a named argument, depending upon whether `name` is set.
+    type: object
+    properties:
+      name:
+        description: The name of the argument, if present.
+        type: string
+        x-nullable: true
+      value:
+        $ref: '#/definitions/TGArgValue'
+
+  TGArgValue:
+    description: >
+      An argument provided to a node. This is one of a direct value (i.e.,
+      a raw JSON value) or a `TGSentinel`.
+
+      For example this Python value:
+
+          {"a": [1, "pipe", range(30), None], "b": b"bytes"}
+
+      is encoded thusly (with included comments):
+
+          {  // A dictionary with string keys is JSON-encodable.
+            "a": [  // As is a list.
+              1,
+              "pipe",
+              {"__tiledb_sentinel__": {  // A `range` is replaced with its pickle.
+                "immediate": {
+                  "format": "python_pickle",
+                  "base64_data": "gASVIAAAAAAAAACMCGJ1aWx0aW5zlIwFcmFuZ2WUk5RLAEseSwGHlFKULg=="
+                }
+              }},
+              null
+            ],
+            "b": {"__tiledb_sentinel__": {  // Raw binary data is encoded into base64.
+              "immediate": {
+                "format": "bytes",
+                "base64_data": "Ynl0ZXM="
+              }
+            }}
+          }
 
 paths:
   /.stats:
