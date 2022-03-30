@@ -3184,6 +3184,49 @@ definitions:
         type: string
         example: "MyOrganization"
 
+  EmbeddedGroupMember:
+    description: A groups member, array or another group
+    type: object
+    properties:
+      uri:
+        description: uri of group.
+        type: string
+        x-omitempty: false
+      relative:
+        description: is the uri relative to the group?
+        type: boolean
+        x-omitempty: false
+      type:
+        $ref: '#/definitions/GroupMemberType'
+
+  EmbeddedGroupContents:
+    description: Object including all the members of an embedded group and all the metadata
+    type: object
+    properties:
+      members:
+        description: Groups members
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/EmbeddedGroupMember"
+      metadata:
+        $ref: "#/definitions/ArrayMetadata"
+
+  EmbeddedGroupUpdate:
+    description: A request to update the members of an embedded group. Contains assets to add or remove.
+    type: object
+    properties:
+      members_to_add:
+        description: the assets, arrays or groups, to add to the group.
+        type: array
+        items:
+          $ref: '#/definitions/EmbeddedGroupMember'
+      members_to_remove:
+        description: the uris of the assets, arrays or groups, to remove from the group.
+        type: array
+        items:
+          type: string
+
   #
   # Task graph messages
   #
@@ -7414,6 +7457,119 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  #
+  # Embedded groups API
+  #
+
+  /groups/{group_namespace}/{group_name}/embedded:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+      - name: type
+        type: string
+        in: query
+        required: true
+        description: The operation type read or write
+    post:
+      description: Fetches(type = read) or updates(type = write) the contents of an embedded group
+      operationId: fetchOrUpdateEmbeddedGroupContents
+      produces:
+        - application/json
+        - application/capnp
+      consumes:
+        - application/json
+        - application/capnp
+      tags:
+        - groups
+      responses:
+        200:
+          description: operation completed successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{group_namespace}/{group_name}/group_metadata:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+    get:
+      description: get metadata of a group
+      operationId: getGroupMetadataCapnp
+      tags:
+        - groups
+      parameters:
+        - name: start_timestamp
+          in: query
+          description: "Inclusive start of query period. Expressed as milliseconds since Unix epoch"
+          type: integer
+          format: uint64
+          required: false
+        - name: end_timestamp
+          in: query
+          description: "Inclusive end of query period. Expressed as milliseconds since Unix epoch"
+          type: integer
+          format: uint64
+          required: false
+      produces:
+        - application/json
+        - application/capnp
+      consumes:
+        - application/json
+        - application/capnp
+      responses:
+        200:
+          description: group metadata
+          schema:
+            $ref: "#/definitions/ArrayMetadata"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      description: update metadata of a group
+      operationId: updateGroupMetadataCapnp
+      tags:
+        - groups
+      produces:
+        - application/json
+        - application/capnp
+      consumes:
+        - application/json
+        - application/capnp
+      parameters:
+        - name: groupMetadataEntries
+          in: body
+          description: List of metadata entries
+          schema:
+            $ref: "#/definitions/ArrayMetadata"
+          required: true
+      responses:
+        200:
+          description: group metadata updated successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+
 
   /taskgraphs/{namespace}/log:
     post:
