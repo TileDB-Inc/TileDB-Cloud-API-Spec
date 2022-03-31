@@ -696,6 +696,113 @@ definitions:
       - "AWS"  # Amazon Web Services
       - "AZURE"  # Microsoft Azure
 
+GroupMetadataEntry:
+  type: object
+  description: key/value pair representing a group metadata map entry
+  properties:
+    key:
+      type: string
+    type:
+      type: string
+    valueNum:
+      type: integer
+      format: uint32
+    value:
+      type: array
+      items:
+        type: integer
+        format: uint8
+    del:
+      type: boolean
+
+GroupMetadata:
+  type: object
+  description: user's TileDB group metadata
+  properties:
+    entries:
+      description: List of metadata entries
+      type: array
+      x-omitempty: true
+      items:
+        $ref: "#/definitions/GroupMetadataEntry"
+
+GroupContents:
+  description: Object including a page of members of a group and pagination metadata
+  type: object
+  properties:
+    members:
+      description: Groups members
+      type: array
+      x-omitempty: false
+      items:
+        $ref: "#/definitions/GroupMembers"
+    metadata:
+      description: Group metadata 
+      type: object
+      x-omitempty: false
+      items:
+        $ref: "#/definitions/GroupMetadata"
+    pagination_metadata:
+      $ref: "#/definitions/PaginationMetadata"
+
+GroupCreate:
+  description: Initial attributes for the registration of a an existing group.
+  type: object
+  properties:
+    description:
+      description: A human readable description of the contents of the group.
+      type: string
+    name:
+      description: The name of the group. If must be unique within the group.
+      type: string
+    parent:
+      description: The unique name or id of the parent of the group. If empty, then the new group will be a top level group.
+      type: string
+    uri:
+      description: uri of group.
+      type: string
+      x-omitempty: false
+    logo:
+      description: logo (base64 encoded) for the group. Optional
+      type: string
+    access_credentials_name:
+      description: the name of the access credentials to use. if unset, the default credentials will be used.
+      type: string
+    tags:
+      description: optional tags for groups.
+      x-omitempty: false
+      type: array
+      items:
+        type: string
+        description: tag must be lowercase characters or hypen [a-z-].
+    license_id:
+      type: string
+      x-omitempty: true
+      description: License identifier from SPDX License List or Custom.
+    license_text:
+      type: string
+      x-omitempty: true
+      description: License text
+
+GroupContentsUpdate:
+  description: Updates the contents group
+  type: object
+  properties:
+    members_to_remove:
+      description: optional series of members to remove
+      x-omitempty: false
+      type: array
+      items:
+        type: string
+        description: uris of members to remove
+    members_to_add:
+      description: optional series of members to add
+      x-omitempty: false
+      type: array
+      items:
+        description: group members to add
+        $ref: GroupMember
+
 paths:
   /arrays/{namespace}/{array}/query/submit:
     parameters:
@@ -946,5 +1053,120 @@ paths:
           description: "The credential was deleted successfully"
         default:
           description: "Error response"
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{group_namespace}/{group_name}:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+    post:
+      description: Creates an empty group 
+      operationId: createGroup
+      tags:
+        - groups
+      responses:
+        201:
+          description: group created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{group_namespace}/{group_name}/contents:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+    post:
+      description: Returns the contents of the group
+      operationId: getGroupContents
+      tags:
+        - groups
+      responses:
+        200:
+          description: the group contents
+          schema:
+            $ref: "#/definitions/GroupContents"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      description: Change the contents of the group
+      operationId: updateGroupContents
+      tags:
+        - groups
+      parameters:
+        - in: body
+          name: GroupContentsUpdate
+          schema:
+            $ref: '#/definitions/GroupContentsUpdate'
+      responses:
+        204:
+          description: attributes changed successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{group_namespace}/{group_name}/metadata:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+    get:
+      description: get metadata on an array
+      tags:
+        - groups
+      operationId: getGroupMetadata
+      responses:
+        200:
+          description: group metadata for a group
+          schema:
+            $ref: "#/definitions/GroupMetadata"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      description: update metadata on a group
+      tags:
+        - groups
+      operationId: updateGroupMetadata
+      parameters:
+        - name: arrayMetadataEntries
+          in: body
+          description: List of metadata entries
+          schema:
+            $ref: "#/definitions/GroupMetadata"
+          required: true
+      responses:
+        200:
+          description: group metadata updated successfully
+        default:
+          description: error response
           schema:
             $ref: "#/definitions/Error"
