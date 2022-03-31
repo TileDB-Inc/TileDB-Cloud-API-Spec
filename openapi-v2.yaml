@@ -696,7 +696,7 @@ definitions:
       - "AWS"  # Amazon Web Services
       - "AZURE"  # Microsoft Azure
 
-GroupMetadataEntry:
+MetadataEntry:
   type: object
   description: key/value pair representing a group metadata map entry
   properties:
@@ -715,7 +715,7 @@ GroupMetadataEntry:
     del:
       type: boolean
 
-GroupMetadata:
+Metadata:
   type: object
   description: user's TileDB group metadata
   properties:
@@ -724,7 +724,7 @@ GroupMetadata:
       type: array
       x-omitempty: true
       items:
-        $ref: "#/definitions/GroupMetadataEntry"
+        $ref: "#/definitions/MetadataEntry"
 
 GroupContents:
   description: Object including a page of members of a group and pagination metadata
@@ -741,7 +741,7 @@ GroupContents:
       type: object
       x-omitempty: false
       items:
-        $ref: "#/definitions/GroupMetadata"
+        $ref: "#/definitions/Metadata"
     pagination_metadata:
       $ref: "#/definitions/PaginationMetadata"
 
@@ -799,6 +799,12 @@ GroupContentsUpdate:
       items:
         description: group members to add
         $ref: GroupMember
+
+TileDBConfig:
+  description: TileDB config used for interaction with the embedded library
+  type: array
+  items:
+    type: object
 
 paths:
   /arrays/{namespace}/{array}/query/submit:
@@ -1099,9 +1105,13 @@ paths:
         in: path
         required: true
         description: The unique name or id of the group
+      - name: config
+        in: body
+        schema:
+          $ref: '#/definitions/TileDBConfig'
     post:
       description: Returns the contents of the group
-      operationId: getGroupContents
+      operationId: retrieveGroupContents
       tags:
         - groups
       responses:
@@ -1143,42 +1153,35 @@ paths:
         in: path
         required: true
         description: The unique name or id of the group
-    get:
-      parameters:
-      - name: start_timestamp
-        description: start_timestamp for group in unix epoch
-        in: query
-        type: integer
-        format: uint64
-      - name: end_timestamp
-        description: start_timestamp for group in unix epoch
-        in: query
-        type: integer
-        format: uint64
+      - name: config
+        in: body
+        schema:
+          $ref: '#/definitions/TileDBConfig'
+    post:
       description: get metadata on an array
       tags:
         - groups
-      operationId: getGroupMetadata
+      operationId: retrieveMetadata
       responses:
         200:
-          description: group metadata for a group
+          description: retrieve metadata for a group
           schema:
-            $ref: "#/definitions/GroupMetadata"
+            $ref: "#/definitions/Metadata"
         default:
           description: error response
           schema:
             $ref: "#/definitions/Error"
-    post:
+    put:
       description: update metadata on a group
       tags:
         - groups
-      operationId: updateGroupMetadata
+      operationId: updateMetadata
       parameters:
-        - name: arrayMetadataEntries
+        - name: MetadataEntries
           in: body
           description: List of metadata entries
           schema:
-            $ref: "#/definitions/GroupMetadata"
+            $ref: "#/definitions/Metadata"
           required: true
       responses:
         200:
