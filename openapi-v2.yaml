@@ -1218,6 +1218,19 @@ paths:
         in: path
         required: true
         description: The unique name or id of the group
+    options:
+      description: can be used to check if the resource exists 
+      tags:
+        - groups
+      responses:
+        404:
+          description: the resource does not exist 
+        204:
+          description: the resource exists 
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     post:
       description: Returns the contents of the group
       operationId: getGroupContents
