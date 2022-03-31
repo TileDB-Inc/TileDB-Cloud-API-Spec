@@ -727,6 +727,18 @@ definitions:
           $ref: "#/definitions/MetadataEntry"
 
   GroupCreate:
+    type: object
+    description: information for creating a new group with the passed configuration 
+    required:
+      - config
+      - group_details
+    properties:
+      config:
+        $ref: "#/definitions/TileDBConfig"
+      group_details:
+        $ref: "#/definitions/GroupDetails"
+
+  GroupDetails:
     description: Initial attributes for the creation of a group.
     type: object
     properties:
@@ -781,33 +793,51 @@ definitions:
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
 
+  GroupContentsRetrieval:
+    description: Request the contents of a group
+    type: object
+    required:
+      - config
+    properties:
+      config:
+        description: config to use to retrieve the contents
+        $ref: "#/definitions/TileDBConfig"
+
   GroupContentsChanges:
     description: Updates the contents group
     type: object
     properties:
-      members_to_remove:
-        description: optional series of members to remove
-        x-omitempty: false
-        type: array
-        items:
-          type: string
-          description: uris of members to remove
-      members_to_add:
-        description: optional series of members to add
-        x-omitempty: false
-        type: array
-        items:
-          description: group members to add
-          $ref: "#/definitions/GroupMember"
+      config:
+        description: config to use to retrieve the contents
+        $ref: "#/definitions/TileDBConfig"
+      group_changes:
+        type: object
+        required:
+          - config
+        properties:
+          members_to_remove:
+            description: optional series of members to remove
+            x-omitempty: false
+            type: array
+            items:
+              type: string
+              description: uris of members to remove
+          members_to_add:
+            description: optional series of members to add
+            x-omitempty: false
+            type: array
+            items:
+              description: group members to add
+              $ref: "#/definitions/GroupMember"
 
   GroupMemberType:
     description: File types that can be included in groups
     type: string
     enum:
       # Group
-      - group
+      - GROUP
       # Array
-      - array
+      - ARRAY
 
   GroupMemberAssetType:
     description: Specific file types of group members
@@ -838,14 +868,28 @@ definitions:
       name:
         description: The name or id of the asset.
         type: string
-      member_type:
+      uri:
+        description: The uri of the asset.
+        type: string
+      relative:
+        description: if the member is relative to the path 
+        type: boolean
+      type:
         $ref: '#/definitions/GroupMemberType'
 
   TileDBConfig:
     description: TileDB config used for interaction with the embedded library
-    type: array
-    items:
-      type: object
+    type: object
+    properties:
+      entries:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string 
+            value:
+              type: string
 
 paths:
   /arrays/{namespace}/{array}/query/submit:
@@ -1162,6 +1206,38 @@ paths:
             $ref: "#/definitions/Error"
 
 
+
+  /groups/{group_namespace}:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
+    post:
+      description: Creates an empty group
+      operationId: createGroup
+      tags:
+        - groups
+      parameters:
+        - name: groupCreation
+          in: body
+          schema:
+            type: object
+            $ref: "#/definitions/GroupCreate"
+      responses:
+        201:
+          description: group created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /groups/{group_namespace}/{group_name}:
     parameters:
       - name: group_namespace
@@ -1193,26 +1269,20 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     post:
-      description: Creates an empty group 
-      operationId: createGroup
+      description: Retrieves the contents of a group
+      operationId: retrieveGroup
       tags:
         - groups
       parameters:
-        - name: groupCreation 
+        - name: groupRetrieval
           in: body
           schema:
-            type: object
-            required:
-              - config
-              - group_details
-            properties:
-              config:
-                $ref: "#/definitions/TileDBConfig"
-              group_details:
-                $ref: "#/definitions/GroupCreate"
+            $ref: "#/definitions/GroupContentsRetrieval"
       responses:
-        201:
+        200:
           description: group created successfully
+          schema:
+            $ref: "#/definitions/GroupContents"
         default:
           description: error response
           schema:
