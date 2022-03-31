@@ -765,9 +765,6 @@ GroupCreate:
     logo:
       description: logo (base64 encoded) for the group. Optional
       type: string
-    access_credentials_name:
-      description: the name of the access credentials to use. if unset, the default credentials will be used.
-      type: string
     tags:
       description: optional tags for groups.
       x-omitempty: false
@@ -1068,6 +1065,15 @@ paths:
         in: path
         required: true
         description: The unique name or id of the group
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
+      - name: GroupCreate
+        in: body
+        schema:
+          $ref: '#/definitions/GroupCreate'
     post:
       description: Creates an empty group 
       operationId: createGroup
