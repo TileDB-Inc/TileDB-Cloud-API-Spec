@@ -1144,6 +1144,17 @@ paths:
         required: true
         description: The unique name or id of the group
     get:
+      parameters:
+      - name: start_timestamp
+        description: start_timestamp for group in unix epoch
+        in: query
+        type: integer
+        format: uint64
+      - name: end_timestamp
+        description: start_timestamp for group in unix epoch
+        in: query
+        type: integer
+        format: uint64
       description: get metadata on an array
       tags:
         - groups
