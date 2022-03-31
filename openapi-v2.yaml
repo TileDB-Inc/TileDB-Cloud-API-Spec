@@ -1206,7 +1206,7 @@ paths:
             $ref: "#/definitions/Error"
 
 
-  /groups/{group_namespace}/{group_name}/contents:
+  /groups/{group_namespace}/{group_name}:
     parameters:
       - name: group_namespace
         type: string
