@@ -1179,6 +1179,19 @@ paths:
         description: Optional registered access credentials to use for creation
         type: string
         required: false
+    options:
+      description: can be used to check if the resource exists 
+      tags:
+        - groups
+      responses:
+        404:
+          description: the resource does not exist 
+        204:
+          description: the resource exists 
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
     post:
       description: Creates an empty group 
       operationId: createGroup
@@ -1200,57 +1213,6 @@ paths:
       responses:
         201:
           description: group created successfully
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-
-
-  /groups/{group_namespace}/{group_name}:
-    parameters:
-      - name: group_namespace
-        type: string
-        in: path
-        required: true
-        description: The namespace of the group
-      - name: group_name
-        type: string
-        in: path
-        required: true
-        description: The unique name or id of the group
-    options:
-      description: can be used to check if the resource exists 
-      tags:
-        - groups
-      responses:
-        404:
-          description: the resource does not exist 
-        204:
-          description: the resource exists 
-        default:
-          description: error response
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      description: Returns the contents of the group
-      operationId: getGroupContents
-      tags:
-        - groups
-      parameters:
-        - name: tiledbConfig 
-          in: body
-          schema:
-            type: object
-            required:
-              - config
-            properties:
-              config:
-                $ref: "#/definitions/TileDBConfig"
-      responses:
-        200:
-          description: the group contents
-          schema:
-            $ref: "#/definitions/GroupContents"
         default:
           description: error response
           schema:
