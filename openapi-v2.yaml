@@ -696,6 +696,157 @@ definitions:
       - "AWS"  # Amazon Web Services
       - "AZURE"  # Microsoft Azure
 
+  MetadataEntry:
+    type: object
+    description: key/value pair representing a group metadata map entry
+    properties:
+      key:
+        type: string
+      type:
+        type: string
+      valueNum:
+        type: integer
+        format: uint32
+      value:
+        type: array
+        items:
+          type: integer
+          format: uint8
+      del:
+        type: boolean
+
+  Metadata:
+    type: object
+    description: user's TileDB group metadata
+    properties:
+      entries:
+        description: List of metadata entries
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/MetadataEntry"
+
+  GroupCreate:
+    description: Initial attributes for the creation of a group.
+    type: object
+    properties:
+      description:
+        description: A human readable description of the contents of the group.
+        type: string
+      name:
+        description: The name of the group. If must be unique within the group.
+        type: string
+      parent:
+        description: The unique name or id of the parent of the group. If empty, then the new group will be a top level group.
+        type: string
+      uri:
+        description: uri of group.
+        type: string
+        x-omitempty: false
+      logo:
+        description: logo (base64 encoded) for the group. Optional
+        type: string
+      tags:
+        description: optional tags for groups.
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-].
+      license_id:
+        type: string
+        x-omitempty: true
+        description: License identifier from SPDX License List or Custom.
+      license_text:
+        type: string
+        x-omitempty: true
+        description: License text
+
+  GroupContents:
+    description: Object including a page of members of a group and pagination metadata
+    type: object
+    properties:
+      members:
+        description: Groups members
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/GroupMember"
+      metadata:
+        description: Group metadata 
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/Metadata"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
+  GroupContentsChanges:
+    description: Updates the contents group
+    type: object
+    properties:
+      members_to_remove:
+        description: optional series of members to remove
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: uris of members to remove
+      members_to_add:
+        description: optional series of members to add
+        x-omitempty: false
+        type: array
+        items:
+          description: group members to add
+          $ref: "#/definitions/GroupMember"
+
+  GroupMemberType:
+    description: File types that can be included in groups
+    type: string
+    enum:
+      # Group
+      - group
+      # Array
+      - array
+
+  GroupMemberAssetType:
+    description: Specific file types of group members
+    type: string
+    enum:
+      # Group
+      - group
+      # Array
+      - array
+      # Notebook
+      - notebook
+      # Dashboard
+      - dashboard
+      # UDF
+      - user_defined_function
+      # ML Model
+      - ml_model
+      # Files
+      - file
+
+  GroupMember:
+    description: A groups member, array or another groups, to add or remove from an existing group.
+    type: object
+    properties:
+      namespace:
+        description: The namespace of the asset.
+        type: string
+      name:
+        description: The name or id of the asset.
+        type: string
+      member_type:
+        $ref: '#/definitions/GroupMemberType'
+
+  TileDBConfig:
+    description: TileDB config used for interaction with the embedded library
+    type: array
+    items:
+      type: object
+
 paths:
   /arrays/{namespace}/{array}/query/submit:
     parameters:
@@ -946,5 +1097,148 @@ paths:
           description: "The credential was deleted successfully"
         default:
           description: "Error response"
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{group_namespace}/{group_name}/metadata:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+    post:
+      description: get metadata on an array using the requested config
+      tags:
+        - groups
+      parameters:
+        - name: tiledbConfig 
+          in: body
+          schema:
+            type: object
+            required:
+              - config
+            properties:
+              config:
+                $ref: "#/definitions/TileDBConfig"
+      responses:
+        200:
+          description: retrieve metadata for a group
+          schema:
+            $ref: "#/definitions/Metadata"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      description: update metadata on a group
+      tags:
+        - groups
+      operationId: updateMetadata
+      parameters:
+        - name: updateMetadata
+          in: body
+          schema:
+            type: object
+            required:
+              - config
+              - entries
+            properties:
+              config:
+                $ref: "#/definitions/TileDBConfig"
+              entries:
+                $ref: "#/definitions/Metadata"
+      responses:
+        200:
+          description: group metadata updated successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+
+  /groups/{group_namespace}/{group_name}:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
+    options:
+      description: can be used to check if the resource exists 
+      tags:
+        - groups
+      responses:
+        404:
+          description: the resource does not exist 
+        204:
+          description: the resource exists 
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      description: Creates an empty group 
+      operationId: createGroup
+      tags:
+        - groups
+      parameters:
+        - name: groupCreation 
+          in: body
+          schema:
+            type: object
+            required:
+              - config
+              - group_details
+            properties:
+              config:
+                $ref: "#/definitions/TileDBConfig"
+              group_details:
+                $ref: "#/definitions/GroupCreate"
+      responses:
+        201:
+          description: group created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      description: Change the contents of the group
+      operationId: updateGroupContents
+      tags:
+        - groups
+      parameters:
+        - name: groupUpdateContents 
+          in: body
+          schema:
+            type: object
+            required:
+              - config
+              - group_changes
+            properties:
+              config:
+                $ref: "#/definitions/TileDBConfig"
+              group_changes:
+                $ref: "#/definitions/GroupContentsChanges"
+      responses:
+        204:
+          description: attributes changed successfully
+        default:
+          description: error response
           schema:
             $ref: "#/definitions/Error"
