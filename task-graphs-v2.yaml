@@ -236,6 +236,13 @@ definitions:
           for R).
         type: string
         x-nullable: true
+      source_text:
+        description: >
+          Optionally, the source text for the code passed in `executable_code`.
+          *For reference only; only the code in `executable_code` is actually
+          executed.* This will be included in activity logs and may be useful
+          for debugging.
+        type: string
       environment:
         $ref: '#/definitions/TGUDFEnvironment'
       arguments:
@@ -300,6 +307,12 @@ definitions:
     properties:
       language:
         $ref: '#/definitions/UDFLanguage'
+      language_version:
+        description: >
+          The language version used to execute this UDF. Neither this nor
+          `language` needs to be set for registered UDFs, since the language
+          and version are stored server-side with the UDF itself.
+        type: string
       image_name:
         description: >
           The name of the image to use for the execution environment.
