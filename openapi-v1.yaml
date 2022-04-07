@@ -2057,6 +2057,13 @@ definitions:
         type: string
         description: Docker image name to use for UDF
         x-omitempty: true
+      resource_class:
+        type: string
+        description: >
+          The resource class to use for the UDF execution. Resource classes define resource limits for memory and CPUs.
+          If this is empty, then the UDF will execute in the standard resource class of the TileDB Cloud provider.
+        x-omitempty: true
+        example: standard
       exec:
         type: string
         description: Type-specific executable text
@@ -2151,6 +2158,13 @@ definitions:
         type: string
         description: Docker image name to use for UDF
         x-omitempty: true
+      resource_class:
+        type: string
+        description: >
+          The resource class to use for the UDF execution. Resource classes define resource limits for memory and CPUs.
+          If this is empty, then the UDF will execute in the standard resource class of the TileDB Cloud provider.
+        x-omitempty: true
+        example: standard
       exec:
         type: string
         description: Type-specific executable text
