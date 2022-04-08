@@ -708,16 +708,16 @@ definitions:
         type: integer
         format: uint32
       value:
-        type: array
-        items:
-          type: integer
-          format: uint8
+        x-go-type:
+          type: "json.RawMessage" 
+          hints:
+            noValidation: true
       del:
         type: boolean
 
   Metadata:
     type: object
-    description: user's TileDB group metadata
+    description: user's TileDB metadata
     properties:
       entries:
         description: List of metadata entries
@@ -726,7 +726,7 @@ definitions:
         items:
           $ref: "#/definitions/MetadataEntry"
 
-  GroupCreate:
+  GroupCreationRequest:
     type: object
     description: information for creating a new group with the passed configuration 
     required:
@@ -736,64 +736,57 @@ definitions:
       config:
         $ref: "#/definitions/TileDBConfig"
       group_details:
-        $ref: "#/definitions/GroupDetails"
+        description: Initial attributes for the creation of a group.
+        type: object
+        properties:
+          description:
+            description: A human readable description of the contents of the group.
+            type: string
+          name:
+            description: The name of the group. If must be unique within the group.
+            type: string
+          parent:
+            description: The unique name or id of the parent of the group. If empty, then the new group will be a top level group.
+            type: string
+          uri:
+            description: uri of group.
+            type: string
+            x-omitempty: false
+          logo:
+            description: logo (base64 encoded) for the group. Optional
+            type: string
+          tags:
+            description: optional tags for groups.
+            x-omitempty: false
+            type: array
+            items:
+              type: string
+              description: tag must be lowercase characters or hypen [a-z-].
+          license_id:
+            type: string
+            x-omitempty: true
+            description: License identifier from SPDX License List or Custom.
+          license_text:
+            type: string
+            x-omitempty: true
+            description: License text
 
-  GroupDetails:
-    description: Initial attributes for the creation of a group.
-    type: object
-    properties:
-      description:
-        description: A human readable description of the contents of the group.
-        type: string
-      name:
-        description: The name of the group. If must be unique within the group.
-        type: string
-      parent:
-        description: The unique name or id of the parent of the group. If empty, then the new group will be a top level group.
-        type: string
-      uri:
-        description: uri of group.
-        type: string
-        x-omitempty: false
-      logo:
-        description: logo (base64 encoded) for the group. Optional
-        type: string
-      tags:
-        description: optional tags for groups.
-        x-omitempty: false
-        type: array
-        items:
-          type: string
-          description: tag must be lowercase characters or hypen [a-z-].
-      license_id:
-        type: string
-        x-omitempty: true
-        description: License identifier from SPDX License List or Custom.
-      license_text:
-        type: string
-        x-omitempty: true
-        description: License text
-
-  GroupContents:
+  GroupContentsRetrievalResponse:
     description: Object including a page of members of a group and pagination metadata
     type: object
     properties:
       members:
         description: Groups members
         type: array
-        x-omitempty: false
+        x-omitempty: true
         items:
           $ref: "#/definitions/GroupMember"
       metadata:
         description: Group metadata 
-        type: array
-        x-omitempty: false
-        items:
-          $ref: "#/definitions/Metadata"
-      pagination_metadata:
-        $ref: "#/definitions/PaginationMetadata"
+        x-omitempty: true
+        $ref: "#/definitions/Metadata"
 
-  GroupContentsRetrieval:
+  GroupContentsRetrievalRequest:
     description: Request the contents of a group
     type: object
     required:
@@ -803,7 +796,7 @@ definitions:
         description: config to use to retrieve the contents
         $ref: "#/definitions/TileDBConfig"
 
-  GroupContentsChanges:
+  GroupContentsChangesRequest:
     description: Updates the contents group
     type: object
     properties:
@@ -829,6 +822,30 @@ definitions:
             items:
               description: group members to add
               $ref: "#/definitions/GroupMember"
+
+  GroupMetadataUpdateRequest:
+    description: Updates the metadata of a group
+    type: object
+    required:
+      - config
+      - metadata
+    properties:
+      config:
+        description: config to use to retrieve the contents
+        $ref: "#/definitions/TileDBConfig"
+      metadata:
+        $ref: "#/definitions/Metadata"
+
+  GroupMetadataRetrievalRequest:
+    description: Retrieves the metadata of a group
+    type: object
+    required:
+      - config
+    properties:
+      config:
+        type: object
+        description: config to use to retrieve the contents
+        $ref: "#/definitions/TileDBConfig"
 
   GroupMemberType:
     description: File types that can be included in groups
@@ -1161,15 +1178,11 @@ paths:
       tags:
         - groups
       parameters:
-        - name: tiledbConfig 
+        - name: metadataRetrieval
           in: body
           schema:
             type: object
-            required:
-              - config
-            properties:
-              config:
-                $ref: "#/definitions/TileDBConfig"
+            $ref: "#/definitions/GroupMetadataRetrievalRequest"
       responses:
         200:
           description: retrieve metadata for a group
@@ -1183,20 +1196,12 @@ paths:
       description: update metadata on a group
       tags:
         - groups
-      operationId: updateMetadata
       parameters:
-        - name: updateMetadata
+        - name: metadataUpdating
           in: body
           schema:
             type: object
-            required:
-              - config
-              - entries
-            properties:
-              config:
-                $ref: "#/definitions/TileDBConfig"
-              entries:
-                $ref: "#/definitions/Metadata"
+            $ref: "#/definitions/GroupMetadataUpdateRequest"
       responses:
         200:
           description: group metadata updated successfully
@@ -1229,7 +1234,7 @@ paths:
           in: body
           schema:
             type: object
-            $ref: "#/definitions/GroupCreate"
+            $ref: "#/definitions/GroupCreationRequest"
       responses:
         201:
           description: group created successfully
@@ -1277,12 +1282,12 @@ paths:
         - name: groupRetrieval
           in: body
           schema:
-            $ref: "#/definitions/GroupContentsRetrieval"
+            $ref: "#/definitions/GroupContentsRetrievalRequest"
       responses:
         200:
           description: group created successfully
           schema:
-            $ref: "#/definitions/GroupContents"
+            $ref: "#/definitions/GroupContentsRetrievalResponse"
         default:
           description: error response
           schema:
@@ -1304,7 +1309,7 @@ paths:
               config:
                 $ref: "#/definitions/TileDBConfig"
               group_changes:
-                $ref: "#/definitions/GroupContentsChanges"
+                $ref: "#/definitions/GroupContentsChangesRequest"
       responses:
         204:
           description: attributes changed successfully
