@@ -1387,3 +1387,15 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+    delete:
+      description: Deregisters a group
+      operationId: deregisterGroup
+      tags:
+        - groups
+      responses:
+        200:
+          description: group deregistered successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
