@@ -771,6 +771,58 @@ definitions:
             x-omitempty: true
             description: License text
 
+  GroupRegistrationRequest:
+    type: object
+    description: information for creating a new group with the passed configuration 
+    required:
+      - config
+      - group_details
+    properties:
+      config:
+        $ref: "#/definitions/TileDBConfig"
+      group_details:
+        description: Initial attributes for the creation of a group.
+        type: object
+        properties:
+          description:
+            description: A human readable description of the contents of the group.
+            type: string
+          name:
+            description: The name of the group. If must be unique within the group.
+            type: string
+          parent:
+            description: The unique name or id of the parent of the group. If empty, then the new group will be a top level group.
+            type: string
+          uri:
+            description: uri of group.
+            type: string
+            x-omitempty: false
+          logo:
+            description: logo (base64 encoded) for the group. Optional
+            type: string
+          tags:
+            description: optional tags for groups.
+            x-omitempty: false
+            type: array
+            items:
+              type: string
+              description: tag must be lowercase characters or hypen [a-z-].
+          license_id:
+            type: string
+            x-omitempty: true
+            description: License identifier from SPDX License List or Custom.
+          license_text:
+            type: string
+            x-omitempty: true
+            description: License text
+          region:
+            type: string
+            x-omitempty: true
+            description: region of the group 
+          access_credentials_name:
+            description: the name of the access credentials to use. if unset, the default credentials will be used.
+            type: string
+
   GroupContentsRetrievalResponse:
     description: Object including a page of members of a group and pagination metadata
     type: object
@@ -1235,6 +1287,24 @@ paths:
           schema:
             type: object
             $ref: "#/definitions/GroupCreationRequest"
+      responses:
+        201:
+          description: group created successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      description: Registers an already existing group 
+      operationId: registerGroup
+      tags:
+        - groups
+      parameters:
+        - name: groupRegistration
+          in: body
+          schema:
+            type: object
+            $ref: "#/definitions/GroupRegistrationRequest"
       responses:
         201:
           description: group created successfully
