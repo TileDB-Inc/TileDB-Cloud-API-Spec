@@ -1437,6 +1437,7 @@ definitions:
       description:
         description: Organization description
         type: string
+        x-nullable: true
       users:
         type: array
         x-omitempty: true
