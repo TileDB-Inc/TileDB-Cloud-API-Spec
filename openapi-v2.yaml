@@ -931,18 +931,12 @@ definitions:
     description: A groups member, array or another groups, to add or remove from an existing group.
     type: object
     properties:
-      namespace:
-        description: The namespace of the asset.
-        type: string
       name:
-        description: The name or id of the asset.
+        description: The name of the member 
         type: string
       uri:
-        description: The uri of the asset.
+        description: The uri of the member
         type: string
-      relative:
-        description: if the member is relative to the path 
-        type: boolean
       type:
         $ref: '#/definitions/GroupMemberType'
 
