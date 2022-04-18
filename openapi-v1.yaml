@@ -3219,6 +3219,22 @@ definitions:
 
   # Task graph logs
 
+  TaskGraphLogRunLocation:
+    description: >
+      The location where an individual node of a task graph is executed.
+    type: string
+    enum:
+      - server
+        # The node is executed server-side. This node will appear in the
+        # ArrayTask logs.
+      - client
+        # The node is executed client-side. This node will NOT appear in the
+        # ArrayTask logs since no action will have been performed.
+      - virtual
+        # The node is not executed at all. This node represents an input or
+        # other node that is a component of the graph but is not a true step
+        # that actually executes code.
+
   TaskGraphLogStatus:
     description: The status of a given task graph execution.
     type: string
@@ -3323,6 +3339,8 @@ definitions:
         description: >
           The client_node_uuid of each node that this node depends upon.
           Used to define the structure of the graph.
+      run_location:
+        $ref: '#/definitions/TaskGraphLogRunLocation'
       executions:
         type: array
         items:
