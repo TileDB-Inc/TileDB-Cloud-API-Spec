@@ -730,7 +730,6 @@ definitions:
     type: object
     description: information for creating a new group with the passed configuration 
     required:
-      - config
       - group_details
     properties:
       config:
@@ -789,8 +788,6 @@ definitions:
   GroupContentsRetrievalRequest:
     description: Request the contents of a group
     type: object
-    required:
-      - config
     properties:
       config:
         description: config to use to retrieve the contents
@@ -805,8 +802,6 @@ definitions:
         $ref: "#/definitions/TileDBConfig"
       group_changes:
         type: object
-        required:
-          - config
         properties:
           members_to_remove:
             description: optional series of members to remove
@@ -827,7 +822,6 @@ definitions:
     description: Updates the metadata of a group
     type: object
     required:
-      - config
       - metadata
     properties:
       config:
@@ -839,8 +833,6 @@ definitions:
   GroupMetadataRetrievalRequest:
     description: Retrieves the metadata of a group
     type: object
-    required:
-      - config
     properties:
       config:
         type: object
@@ -1303,7 +1295,6 @@ paths:
           schema:
             type: object
             required:
-              - config
               - group_changes
             properties:
               config:
