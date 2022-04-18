@@ -1356,14 +1356,7 @@ paths:
         - name: groupUpdateContents 
           in: body
           schema:
-            type: object
-            required:
-              - group_changes
-            properties:
-              config:
-                $ref: "#/definitions/TileDBConfig"
-              group_changes:
-                $ref: "#/definitions/GroupContentsChangesRequest"
+            $ref: "#/definitions/GroupContentsChangesRequest"
       responses:
         204:
           description: attributes changed successfully
