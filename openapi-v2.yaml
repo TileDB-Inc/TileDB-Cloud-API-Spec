@@ -775,7 +775,6 @@ definitions:
     type: object
     description: information for creating a new group with the passed configuration 
     required:
-      - config
       - group_details
     properties:
       config:
