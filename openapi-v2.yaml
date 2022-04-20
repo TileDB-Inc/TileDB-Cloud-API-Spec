@@ -744,9 +744,6 @@ definitions:
           name:
             description: The name of the group. If must be unique within the group.
             type: string
-          parent:
-            description: The unique name or id of the parent of the group. If empty, then the new group will be a top level group.
-            type: string
           uri:
             description: uri of group.
             type: string
