@@ -3835,7 +3835,7 @@ paths:
         200:
           description: array registered successfully
           schema:
-          $ref: "#/definitions/ArrayInfo"
+            $ref: "#/definitions/ArrayInfo"
         default:
           description: error response
           schema:
