@@ -3305,6 +3305,11 @@ definitions:
           completion.
       status:
         $ref: "#/definitions/TaskGraphLogStatus"
+      total_cost:
+        type: number
+        x-nullable: true
+        description: >
+          If present, the total cost of executing all nodes in this task graph.
       nodes:
         type: array
         items:
