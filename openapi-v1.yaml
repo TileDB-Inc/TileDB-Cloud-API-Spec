@@ -2721,6 +2721,9 @@ definitions:
       - organization:read
       - organization:read-write
       - organization:admin
+      - group:read
+      - group:read-write
+      - group:admin
 
   FileCreate:
     description: Input/Output information required to create a new file
