@@ -2718,6 +2718,9 @@ definitions:
       - array:read
       - array:read-write
       - array:admin
+      - organization:read
+      - organization:read-write
+      - organization:admin
 
   FileCreate:
     description: Input/Output information required to create a new file
