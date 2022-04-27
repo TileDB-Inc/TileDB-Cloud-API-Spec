@@ -2788,6 +2788,8 @@ definitions:
   NotebookCopied:
     description: Copied notebook uri and information
     type: object
+    required:
+      - id
     properties:
       output_uri:
         type: string
@@ -2798,6 +2800,11 @@ definitions:
       namespace:
         type: string
         description: namespace copied to
+      id:
+        description: unique ID of the copied notebook
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+        x-omitempty: false
 
   UDFCopy:
     description: information required to copy a udf
