@@ -2753,6 +2753,8 @@ definitions:
   FileUploaded:
     description: Uploaded file name and information
     type: object
+    required:
+      - id
     properties:
       output_uri:
         type: string
@@ -2760,6 +2762,11 @@ definitions:
       file_name:
         type: string
         description: name of the file uploaded
+      id:
+        description: unique ID of the uploaded file
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+        x-omitempty: false
 
   FileExport:
     description: Output information required to export a file
