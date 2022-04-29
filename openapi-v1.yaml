@@ -2742,6 +2742,8 @@ definitions:
   FileCreated:
     description: Created file name and information
     type: object
+    required:
+      - id
     properties:
       output_uri:
         type: string
@@ -2749,6 +2751,11 @@ definitions:
       file_name:
         type: string
         description: name of the file created
+      id:
+        description: unique ID of the created file
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+        x-omitempty: false
 
   FileUploaded:
     description: Uploaded file name and information
