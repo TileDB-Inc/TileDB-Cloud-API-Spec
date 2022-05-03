@@ -973,18 +973,13 @@ definitions:
     description: Status of array task
     type: string
     enum:
-      # QUEUED
       - QUEUED
-      # FAILED
       - FAILED
-      # COMPLETED
       - COMPLETED
-      # RUNNING
       - RUNNING
-      # DENIED
       - DENIED
-      # UNKNOWN
       - UNKNOWN
+      - CANCELLED
 
   ArrayTaskLog:
     description: Array task stderr/stdout logs
@@ -3393,6 +3388,16 @@ definitions:
           $ref: "#/definitions/TaskGraphLog"
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
+
+  TaskGraphClientNodeStatus:
+    description: >
+      A report of the execution status of a node that ran on the client side.
+    type: object
+    properties:
+      client_node_uuid:
+        type: string
+      status:
+        $ref: '#/definitions/ArrayTaskStatus'
 
   # Registered task graphs
 
@@ -7677,3 +7682,34 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /taskgraphs/{namespace}/logs/{id}/report_client_node:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph log.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph log entry.
+        type: string
+        required: true
+    post:
+      operationId: reportClientNode
+      tags:
+        - task_graph_logs
+      parameters:
+        - name: report
+          in: body
+          description: The node status to report.
+          required: true
+          schema:
+            $ref: '#/definitions/TaskGraphClientNodeStatus'
+      responses:
+        204:
+          description: Status reported successfully.
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
