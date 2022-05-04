@@ -1307,11 +1307,6 @@ paths:
         in: path
         required: true
         description: The unique name or id of the group
-      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
-        in: header
-        description: Optional registered access credentials to use for creation
-        type: string
-        required: false
     options:
       description: can be used to check if the resource exists 
       tags:
