@@ -1208,7 +1208,8 @@ paths:
         required: true
         description: The unique name or id of the group
     post:
-      description: get metadata on an array using the requested config
+      operationId: getGroupMetadata
+      description: get metadata on a group using the requested config
       tags:
         - groups
       parameters:
@@ -1227,6 +1228,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     put:
+      operationId: updateGroupMetadata
       description: update metadata on a group
       tags:
         - groups
