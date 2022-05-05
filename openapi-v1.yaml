@@ -3332,6 +3332,32 @@ definitions:
         x-nullable: true
         description: >
           If present, the total cost of executing all nodes in this task graph.
+      access_cost:
+        type: number
+        x-nullable: true
+        description: >
+          If present, the total cost of access from execution of the nodes
+          in this task graph.
+      egress_cost:
+        type: number
+        x-nullable: true
+        description: >
+          If present, the total cost of access from execution of the nodes
+          in this task graph.
+      execution_time:
+        type: string
+        description: >
+          The total execution time of all the nodes in this graph, in ISO 8601
+          format with hours, minutes, and seconds.
+        example: "P15H22M0.45S"
+      status_count:
+        type: object
+        description: >
+          A mapping from `ArrayTaskStatus` string value to the number of nodes
+          in this graph that are in that status.
+        additionalProperties:
+          description: The number of nodes that are in the given state.
+          type: number
       nodes:
         type: array
         items:
@@ -3363,6 +3389,15 @@ definitions:
           Used to define the structure of the graph.
       run_location:
         $ref: "#/definitions/TaskGraphLogRunLocation"
+      status:
+        description: >
+          If present, the overall execution status of this node, taking into
+          account the latest execution information.
+
+          For nodes that have not yet been executed, this will be listed as
+          `QUEUED`. For nodes that are set to run locally and have not reported
+          any status information, this will be listed as `UNKNOWN`.
+        $ref: "#/definitions/ArrayTaskStatus"
       executions:
         type: array
         items:
