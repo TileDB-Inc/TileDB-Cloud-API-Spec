@@ -2828,6 +2828,82 @@ definitions:
         example: "00000000-0000-0000-0000-000000000000"
         x-omitempty: false
 
+  NotebookRegister:
+    description: Information required to register an existing TileDB cloud notebook
+    type: object
+    properties:
+      name:
+        description: name of notebook
+        type: string
+        example: mynotebook1
+      description:
+        description: description of notebook
+        type: string
+        x-nullable: true
+      uri:
+        description: uri of notebook
+        type: string
+        example: "s3://bucket/notebook"
+      logo:
+        description: logo (base64 encoded) for the notebook. Optional
+        type: string
+      tags:
+        description: optional tags for the notebook
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-]
+      license_id:
+        type: string
+        x-omitempty: true
+        description: License identifier from SPDX License List or Custom
+      license_text:
+        type: string
+        x-omitempty: true
+        description: License text
+      file_properties:
+        type: object
+        description: map of file properties created for this notebook
+        x-omitempty: true
+        additionalProperties:
+          type: string
+
+  NotebookCreate:
+    description: Information required to create a new empty notebook
+    type: object
+    properties:
+      name:
+        description: name of notebook
+        type: string
+        example: mynotebook1
+      description:
+        description: description of notebook
+        type: string
+        x-nullable: true
+      uri:
+        description: uri of notebook
+        type: string
+        example: "s3://bucket/notebook"
+      logo:
+        description: logo (base64 encoded) for the notebook. Optional
+        type: string
+      tags:
+        description: optional tags for the notebook
+        x-omitempty: false
+        type: array
+        items:
+          type: string
+          description: tag must be lowercase characters or hypen [a-z-]
+      license_id:
+        type: string
+        x-omitempty: true
+        description: License identifier from SPDX License List or Custom
+      license_text:
+        type: string
+        x-omitempty: true
+        description: License text
+
   UDFCopy:
     description: information required to copy a udf
     type: object
@@ -5934,6 +6010,84 @@ paths:
           description: Notebook copied
           schema:
             $ref: "#/definitions/NotebookCopied"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /notebooks/{namespace}/{array}/register:
+    parameters:
+      - type: string
+        name: namespace
+        in: path
+        required: true
+        description: The namespace of the notebook
+      - type: string
+        name: array
+        in: path
+        required: true
+        description: The name of the notebook
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for registration
+        type: string
+        required: false
+    post:
+      description: register a notebook at a specified URI registered to the given namespace
+      tags:
+        - notebook
+      operationId: registerNotebook
+      parameters:
+        - name: NotebookRegister
+          in: body
+          description: metadata associated with notebook
+          schema:
+            $ref: "#/definitions/NotebookRegister"
+          required: true
+      responses:
+        200:
+          description: notebook registered successfully
+          schema:
+            $ref: "#/definitions/ArrayInfo"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /notebooks/{namespace}/{array}/create:
+    parameters:
+      - type: string
+        name: namespace
+        in: path
+        required: true
+        description: The namespace of the notebook
+      - type: string
+        name: array
+        in: path
+        required: true
+        description: The name of the notebook
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
+    post:
+      description: create a new empty notebook at a specified URI registered to the given namespace
+      tags:
+        - notebook
+      operationId: createNotebook
+      parameters:
+        - name: NotebookCreate
+          in: body
+          description: metadata associated with notebook
+          schema:
+            $ref: "#/definitions/NotebookCreate"
+          required: true
+      responses:
+        200:
+          description: notebook created successfully
+          schema:
+            $ref: "#/definitions/ArrayInfo"
         default:
           description: error response
           schema:
