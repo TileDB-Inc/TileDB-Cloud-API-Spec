@@ -2841,7 +2841,7 @@ definitions:
         type: string
         x-nullable: true
       uri:
-        description: uri of notebook
+        description: uri with a TileDB wrapper notebook
         type: string
         example: "s3://bucket/notebook"
       logo:
@@ -2882,7 +2882,7 @@ definitions:
         type: string
         x-nullable: true
       uri:
-        description: uri of notebook
+        description: uri to store the new notebook
         type: string
         example: "s3://bucket/notebook"
       logo:
@@ -6015,7 +6015,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /notebooks/{namespace}/{array}/register:
+  /notebooks/{namespace}/register:
     parameters:
       - type: string
         name: namespace
@@ -6054,7 +6054,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /notebooks/{namespace}/{array}/create:
+  /notebooks/{namespace}/create:
     parameters:
       - type: string
         name: namespace
