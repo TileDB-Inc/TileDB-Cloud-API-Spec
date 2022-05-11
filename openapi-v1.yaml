@@ -6022,11 +6022,6 @@ paths:
         in: path
         required: true
         description: The namespace of the notebook
-      - type: string
-        name: array
-        in: path
-        required: true
-        description: The name of the notebook
       - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
         in: header
         description: Optional registered access credentials to use for registration
@@ -6061,11 +6056,6 @@ paths:
         in: path
         required: true
         description: The namespace of the notebook
-      - type: string
-        name: array
-        in: path
-        required: true
-        description: The name of the notebook
       - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
         in: header
         description: Optional registered access credentials to use for creation
