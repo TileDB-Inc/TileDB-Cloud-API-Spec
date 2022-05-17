@@ -3672,6 +3672,8 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/TGUDFArgument'
+      result_format:
+        $ref: '#/definitions/ResultFormat'
 
   TGUDFArgument:
     description: >
