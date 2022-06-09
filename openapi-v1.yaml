@@ -977,9 +977,10 @@ definitions:
       - FAILED
       - COMPLETED
       - RUNNING
-      - DENIED
+      - RESOURCES_UNAVAILABLE
       - UNKNOWN
       - CANCELLED
+      - DENIED  # Deprecated; used to mean RESOURCES_UNAVAILABLE.
 
   ArrayTaskLog:
     description: Array task stderr/stdout logs
