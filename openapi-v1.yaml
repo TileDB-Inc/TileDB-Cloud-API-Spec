@@ -968,6 +968,7 @@ definitions:
       - UDF
       - QUERY
       - GENERIC_UDF
+      - CLIENT_COMPUTATION
 
   ArrayTaskStatus:
     description: Status of array task
