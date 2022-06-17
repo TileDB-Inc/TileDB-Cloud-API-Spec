@@ -3107,6 +3107,7 @@ definitions:
       description:
         description: A human readable description of the content of the group
         type: string
+        x-nullable: true
       name:
         description: The name of the group. If must be unique within the group.
         type: string
