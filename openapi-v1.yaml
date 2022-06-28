@@ -2398,6 +2398,13 @@ definitions:
           using the results of your function.
           Defaults to false ("yes download results").'
         type: boolean
+      resource_class:
+        type: string
+        description: >
+          The resource class to use for the SQL execution. Resource classes define resource limits for memory and CPUs.
+          If this is empty, then the SQL will execute in the standard resource class of the TileDB Cloud provider.
+        x-omitempty: true
+        example: standard
       result_format:
         $ref: "#/definitions/ResultFormat"
         description: type of results (native, i.e cloud pickle or json or arrow)
