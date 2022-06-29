@@ -1325,6 +1325,7 @@ definitions:
       logo:
         description: the user's logo
         type: string
+        x-nullable: true
       last_activity_date:
         type: string
         format: date-time
@@ -1428,6 +1429,7 @@ definitions:
       logo:
         description: Organization logo
         type: string
+        x-nullable: true
       description:
         description: Organization description
         type: string
