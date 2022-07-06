@@ -2837,6 +2837,28 @@ definitions:
         example: "00000000-0000-0000-0000-000000000000"
         x-omitempty: false
 
+  CreateNotebook:
+    description: Metadata related with the creation of the notebook
+    type: object
+    required:
+      - output_uri
+      - name
+    properties:
+      output_uri:
+        type: string
+        description: the output uri of the notebook
+      name:
+        type: string
+        description: the name of the notebook
+      kernel:
+        type: string
+        enum:
+          # Create a notebook with R kernel
+          - r
+          # Create a notebook with IPython kernel
+          - python
+        description: the kernel of the notebook
+
   UDFCopy:
     description: information required to copy a udf
     type: object
@@ -6239,6 +6261,41 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /notebooks/{namespace}/create:
+    parameters:
+      - type: string
+        name: namespace
+        in: path
+        required: true
+        description: The namespace of the notebook
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
+    post:
+      description: Create a notebook at the specified location
+      produces:
+        - application/json
+      tags:
+        - notebook
+      operationId: HandleCreateNotebook
+      parameters:
+        - name: create_notebook
+          in: body
+          description: Metadata related with the creation of the notebook
+          schema:
+            $ref: "#/definitions/CreateNotebook"
+      responses:
+        201:
+          description: Notebook created
+          schema:
+            $ref: "#/definitions/FileUploaded"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"    
 
   /notebooks/{namespace}/{array}/end_timestamps:
     parameters:
