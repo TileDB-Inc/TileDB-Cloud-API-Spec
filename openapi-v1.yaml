@@ -6562,6 +6562,14 @@ paths:
         collectionFormat: multi
         items:
           type: string
+      - name: shared_to
+        in: query
+        description: namespaces to filter results of where there arrays were shared to 
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+            type: string
     get:
       tags:
         - array
@@ -7459,6 +7467,14 @@ paths:
           description: search only the children of the groups with this uuid
           type: string
           required: false
+        - name: shared_to
+          in: query
+          description: namespaces to filter results of where there groups were shared to 
+          required: false
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
       responses:
         200:
           description: the group contents
