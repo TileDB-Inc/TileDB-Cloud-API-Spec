@@ -2974,6 +2974,10 @@ definitions:
     description: Object describing a single member of a group, which can be an array or a group
     type: object
     properties:
+      member_id:
+        type: string
+        readOnly: true
+        description: The unique member id for the entry
       group:
         description: the metadata of the entry if it is a group, null if it is an array
         $ref: "#/definitions/GroupInfo"
