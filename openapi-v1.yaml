@@ -2459,6 +2459,16 @@ definitions:
         type: integer
         format: uint64
         example: 1073741824
+      storage_usage:
+        description: storage usage in bytes
+        type: integer
+        format: uint64
+        example: 1073741824
+      storage_limit:
+        description: storage allocated to notebook server in bytes
+        type: integer
+        format: uint64
+        example: 1073741824
       cpu_count:
         description: millicpu allocated to notebook server
         type: integer
