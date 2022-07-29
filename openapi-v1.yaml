@@ -6580,7 +6580,7 @@ paths:
           type: string
       - name: shared_to
         in: query
-        description: namespaces to filter results of where there arrays were shared to 
+        description: namespaces to filter results of where there arrays were shared to
         required: false
         type: array
         collectionFormat: multi
@@ -7485,7 +7485,7 @@ paths:
           required: false
         - name: shared_to
           in: query
-          description: namespaces to filter results of where there groups were shared to 
+          description: namespaces to filter results of where there groups were shared to
           required: false
           type: array
           collectionFormat: multi
