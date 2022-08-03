@@ -3767,6 +3767,15 @@ definitions:
           provider.
         type: string
         x-omitempty: true
+      run_client_side:
+        description: >
+          A hint that, if possible, this function should be executed on the
+          client side rather than on the server. Registered UDFs and functions
+          which take arrays as inputs can never be executed client-side. If the
+          client’s environment is incompatible, or the client does not support
+          client-side execution, the function will be executed on the server.
+        type: boolean
+        x-omitempty: true
 
 paths:
   /.stats:
