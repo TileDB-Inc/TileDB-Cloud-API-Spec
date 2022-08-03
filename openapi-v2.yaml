@@ -709,7 +709,7 @@ definitions:
         format: uint32
       value:
         x-go-type:
-          type: "json.RawMessage" 
+          type: "json.RawMessage"
           hints:
             noValidation: true
       del:
@@ -728,7 +728,7 @@ definitions:
 
   GroupCreationRequest:
     type: object
-    description: information for creating a new group with the passed configuration 
+    description: information for creating a new group with the passed configuration
     required:
       - group_details
     properties:
@@ -769,7 +769,7 @@ definitions:
 
   GroupRegistrationRequest:
     type: object
-    description: information for creating a new group with the passed configuration 
+    description: information for creating a new group with the passed configuration
     required:
       - group_details
     properties:
@@ -813,7 +813,7 @@ definitions:
           region:
             type: string
             x-omitempty: true
-            description: region of the group 
+            description: region of the group
           access_credentials_name:
             description: the name of the access credentials to use. if unset, the default credentials will be used.
             type: string
@@ -829,7 +829,7 @@ definitions:
         items:
           $ref: "#/definitions/GroupMember"
       metadata:
-        description: Group metadata 
+        description: Group metadata
         x-omitempty: true
         $ref: "#/definitions/Metadata"
 
@@ -920,7 +920,7 @@ definitions:
     type: object
     properties:
       name:
-        description: The name of the member 
+        description: The name of the member
         type: string
       uri:
         description: The uri of the member
@@ -938,9 +938,27 @@ definitions:
           type: object
           properties:
             key:
-              type: string 
+              type: string
             value:
               type: string
+
+  FileUploaded:
+    description: Uploaded file name and information
+    type: object
+    required:
+      - id
+    properties:
+      output_uri:
+        type: string
+        description: output location of the TileDB File
+      file_name:
+        type: string
+        description: name of the file uploaded
+      id:
+        description: unique ID of the uploaded file
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+        x-omitempty: false
 
 paths:
   /arrays/{namespace}/{array}/query/submit:
@@ -1246,8 +1264,6 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-
-
   /groups/{group_namespace}:
     parameters:
       - name: group_namespace
@@ -1279,7 +1295,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     put:
-      description: Registers an already existing group 
+      description: Registers an already existing group
       operationId: registerGroup
       tags:
         - groups
@@ -1315,14 +1331,14 @@ paths:
         type: string
         required: false
     options:
-      description: can be used to check if the resource exists 
+      description: can be used to check if the resource exists
       tags:
         - groups
       responses:
         404:
-          description: the resource does not exist 
+          description: the resource does not exist
         204:
-          description: the resource exists 
+          description: the resource exists
         default:
           description: error response
           schema:
@@ -1352,7 +1368,7 @@ paths:
       tags:
         - groups
       parameters:
-        - name: groupUpdateContents 
+        - name: groupUpdateContents
           in: body
           schema:
             $ref: "#/definitions/GroupContentsChangesRequest"
@@ -1371,6 +1387,68 @@ paths:
       responses:
         200:
           description: group deregistered successfully
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /files/{namespace}/{array}/upload:
+    parameters:
+      - type: string
+        name: namespace
+        in: path
+        required: true
+        description: The namespace of the file
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
+      - name: Content-Type
+        in: header
+        description: Content Type of input
+        type: string
+        required: true
+        default: application/octet-stream
+      - name: name
+        in: query
+        description: name of the TileDB array to create, if missing {array} is used
+        type: string
+        required: false
+      - name: filesize
+        in: query
+        description: size of the file to upload in bytes
+        type: integer
+        format: uint64
+        required: true
+    post:
+      description: Upload a file at the specified location and wrap it in TileDB Array
+      consumes:
+        - application/octet-stream
+      produces:
+        - application/json
+      tags:
+        - files
+      operationId: HandleUploadFile
+      parameters:
+        - name: file
+          in: body
+          description: file to upload
+          schema:
+            type: string
+            format: binary
+            description: File contents
+          required: true
+      responses:
+        201:
+          description: File uploaded
+          schema:
+            $ref: "#/definitions/FileUploaded"
         default:
           description: error response
           schema:
