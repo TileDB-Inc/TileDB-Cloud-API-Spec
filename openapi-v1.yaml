@@ -3615,6 +3615,31 @@ definitions:
     properties:
       layout:
         $ref: "#/definitions/Layout"
+      friendly_ranges:
+        description: >
+          The ranges to query against, in a user-friendly format. This is a
+          slightly more flexible format designed to be easier for an author
+          to use. This may also be Node data which yields these ranges.
+          (These will be processed by the client to turn into raw ranges.)
+
+          A single `[lo, hi]` span may be specified as:
+
+          - a scalar value (for `lo == hi`)
+          - a Slice (escaped in `"__tdbudf__": "__slice__"` format)
+          - a single-entry list (for `lo == hi`)
+          - a pair of values `[lo, hi]`
+
+          The ranges for a given dimension may be specified as:
+
+          - a single scalar value (for a single-value `[val, val]` span)
+          - a Slice (for exactly one `[lo, hi]` span)
+          - a list of spans as described above.
+
+          See the TileDB Cloud documentation for more details on the formats.
+
+          Either this or `ranges` must be specified, but not both.
+        type:
+          $ref: "#/definitions/TGArgValue"
       ranges:
         description: >
           The ranges to query against, or Node data which yields those ranges.
@@ -3633,9 +3658,10 @@ definitions:
           - `[[(lo node), (hi node)], ...]`
           - `[(node returning lo/hi pairs), ...]`
           - Or a mix of any of the above.
+
+          Either this or `user_ranges` must be specified, but not both.
         type:
           $ref: "#/definitions/TGArgValue"
-
 
   TGInputNodeData:
     description: >
@@ -6632,7 +6658,7 @@ paths:
           type: string
       - name: shared_to
         in: query
-        description: namespaces to filter results of where there arrays were shared to 
+        description: namespaces to filter results of where there arrays were shared to
         required: false
         type: array
         collectionFormat: multi
@@ -7537,7 +7563,7 @@ paths:
           required: false
         - name: shared_to
           in: query
-          description: namespaces to filter results of where there groups were shared to 
+          description: namespaces to filter results of where there groups were shared to
           required: false
           type: array
           collectionFormat: multi
