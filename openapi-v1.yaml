@@ -3776,6 +3776,13 @@ definitions:
           client-side execution, the function will be executed on the server.
         type: boolean
         x-omitempty: true
+      timeout:
+        description: >
+          The maximum length of time this UDF is allowed to execute for before
+          it is killed and fails. If not present (or zero), the function is
+          allowed to run indefinitely (subject to the server’s global limits).
+        type: number
+        x-nullable: true
 
 paths:
   /.stats:
