@@ -1923,6 +1923,8 @@ definitions:
       - stripe
       # Okta
       - okta
+      # PingIdentity
+      - pingidentity
 
   PublicShareFilter:
     description: Query parameter to get array metadatas
