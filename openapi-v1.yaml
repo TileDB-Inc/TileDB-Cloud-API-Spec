@@ -3627,6 +3627,11 @@ definitions:
           $ref: '#/definitions/TGArgValue'
       result_format:
         $ref: '#/definitions/ResultFormat'
+      namespace:
+        description: >
+          If set, the non-default namespace to execute this SQL query under.
+        type: string
+        x-nullable: true
 
   TGUDFNodeData:
     description: A node specifying the execution of a user-defined function.
@@ -3759,6 +3764,12 @@ definitions:
         description: >
           The name of the image to use for the execution environment.
         type: string
+      namespace:
+        description: >
+          If set, the non-default namespace to execute this UDF under (and to
+          query any Array Nodes that are used as inputs to this UDF).
+        type: string
+        x-nullable: true
       resource_class:
         description: >
           The resource class to use for the UDF execution. Resource classes
