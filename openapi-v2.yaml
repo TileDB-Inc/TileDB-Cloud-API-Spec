@@ -673,7 +673,9 @@ definitions:
         description: "The access key's secret. Never returned in responses."
         type: string
         x-go-custom-tag: 'tdbrest:"secret"'
-      # service role ARN is not yet supported.
+      role_arn:
+        description: "The role arn to use for a connection attempt"
+        type: string
 
   AzureCredential:
     description: "Credential information to access Microsoft Azure. Each supported property is the snake_case version of its name in an Azure Storage connection string."
