@@ -646,6 +646,13 @@ definitions:
             $ref: "#/definitions/AWSCredential"
           azure:
             $ref: "#/definitions/AzureCredential"
+      role:
+        description: "The role information itself. Exactly one sub-field may be set. The names match those in the CloudProvider enum."
+        type: object
+        x-omitempty: true
+        properties:
+          aws:
+            $ref: "#/definitions/AWSRole"
 
   AccessCredentialsData:
     description: Object including credentials and pagination metadata
@@ -673,7 +680,6 @@ definitions:
         description: "The access key's secret. Never returned in responses."
         type: string
         x-go-custom-tag: 'tdbrest:"secret"'
-      # service role ARN is not yet supported.
 
   AzureCredential:
     description: "Credential information to access Microsoft Azure. Each supported property is the snake_case version of its name in an Azure Storage connection string."
@@ -688,6 +694,23 @@ definitions:
         description: "The secret key. Never returned in responses."
         type: string
         x-go-custom-tag: 'tdbrest:"secret"'
+
+  AWSRole:
+    description: "Role information to access Amazon Web Services"
+    type: object
+    x-nullable: true
+    x-omitempty: true
+    properties:
+      role_arn:
+        description: "The role arn used to access"
+        x-go-name: "RoleARN"
+        type: string
+        example: arn:partition:service:region:account-id:resource-type:resource-id
+      external_id:
+        description: "The role external id used to access"
+        x-go-name: "RoleExternalID"
+        type: string
+        example: "MzU0M2UwMTItMWJhYy00NWUwLThmZDItZTgwYmQ1NjE5Yjhm" 
 
   CloudProvider:
     description: "A service where data is stored or computations take place."
