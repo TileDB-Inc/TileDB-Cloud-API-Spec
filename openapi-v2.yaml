@@ -1045,7 +1045,7 @@ paths:
         type: array
         items:
           type: string
-        description: Event values can be one or more of the following read, write, create, delete, register, deregister, comma separated
+        description: Event values can be one or more of the following estimated_result_sizes, non_empty_domain, read_schema, query_read, array_metadata_get, query_write, array_metadata_update, create, register, udf, max_buffer_sizes, info, update, deregister, run, delete
       - name: task_id
         in: query
         type: string
