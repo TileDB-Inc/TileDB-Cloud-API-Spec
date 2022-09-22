@@ -122,6 +122,8 @@ definitions:
       - array_metadata_update
       # estimated_result_sizes
       - estimated_result_sizes
+      # read_fragment_info
+      - read_fragment_info
 
   UDFLanguage:
     description: UDF Type
