@@ -1495,13 +1495,15 @@ definitions:
     properties:
       arrays:
         $ref: '#/definitions/StorageLocation'
-      notebooks:
-        $ref: '#/definitions/StorageLocation'
-      udfs:
+      files:
         $ref: '#/definitions/StorageLocation'
       ml_models:
         $ref: '#/definitions/StorageLocation'
-      files:
+      notebooks:
+        $ref: '#/definitions/StorageLocation'
+      task_graphs:
+        $ref: '#/definitions/StorageLocation'
+      udfs:
         $ref: '#/definitions/StorageLocation'
 
   StorageLocation:
