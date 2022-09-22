@@ -987,7 +987,7 @@ definitions:
       - RESOURCES_UNAVAILABLE
       - UNKNOWN
       - CANCELLED
-      - DENIED  # Deprecated; used to mean RESOURCES_UNAVAILABLE.
+      - DENIED # Deprecated; used to mean RESOURCES_UNAVAILABLE.
 
   ArrayTaskLog:
     description: Array task stderr/stdout logs
@@ -1371,7 +1371,7 @@ definitions:
           The name of the credentials used to create and access files in the
           `default_s3_path`, if needed.
       asset_locations:
-        $ref: '#/definitions/AssetLocations'
+        $ref: "#/definitions/AssetLocations"
       default_namespace_charged:
         description: Override the default namespace charged for actions when no namespace is specified
         type: string
@@ -1480,7 +1480,7 @@ definitions:
           `default_s3_path`, if needed.
         type: string
       asset_locations:
-        $ref: '#/definitions/AssetLocations'
+        $ref: "#/definitions/AssetLocations"
       stripe_connect:
         description: Denotes that the organization is able to apply pricing to arrays by means of Stripe Connect
         type: boolean
@@ -3529,7 +3529,7 @@ definitions:
       client_node_uuid:
         type: string
       status:
-        $ref: '#/definitions/ArrayTaskStatus'
+        $ref: "#/definitions/ArrayTaskStatus"
 
   # Registered task graphs
 
@@ -3571,7 +3571,7 @@ definitions:
       nodes:
         type: array
         items:
-          $ref: '#/definitions/RegisteredTaskGraphNode'
+          $ref: "#/definitions/RegisteredTaskGraphNode"
         description: >
           The structure of the graph, in the form of the nodes that make it up.
           As with `TaskGraphLog`, nodes must topologically sorted, so that any
@@ -3634,13 +3634,13 @@ definitions:
           The client_node_uuid of each node that this node depends upon.
           Used to define the structure of the graph.
       array_node:
-        $ref: '#/definitions/UDFArrayDetails'
+        $ref: "#/definitions/UDFArrayDetails"
       input_node:
-        $ref: '#/definitions/TGInputNodeData'
+        $ref: "#/definitions/TGInputNodeData"
       sql_node:
-        $ref: '#/definitions/TGSQLNodeData'
+        $ref: "#/definitions/TGSQLNodeData"
       udf_node:
-        $ref: '#/definitions/TGUDFNodeData'
+        $ref: "#/definitions/TGUDFNodeData"
 
   TGInputNodeData:
     description: >
@@ -3650,7 +3650,7 @@ definitions:
     x-nullable: True
     properties:
       default_value:
-        $ref: '#/definitions/TGArgValue'
+        $ref: "#/definitions/TGArgValue"
       datatype:
         description: >
           An annotation of what datatype this node is supposed to be.
@@ -3681,9 +3681,9 @@ definitions:
           Fixed-length. Arguments must be in JSON format.
         type: array
         items:
-          $ref: '#/definitions/TGArgValue'
+          $ref: "#/definitions/TGArgValue"
       result_format:
-        $ref: '#/definitions/ResultFormat'
+        $ref: "#/definitions/ResultFormat"
       namespace:
         description: >
           If set, the non-default namespace to execute this SQL query under.
@@ -3717,7 +3717,7 @@ definitions:
           for debugging.
         type: string
       environment:
-        $ref: '#/definitions/TGUDFEnvironment'
+        $ref: "#/definitions/TGUDFEnvironment"
       arguments:
         description: >
           The arguments to a UDF function. This encompasses both named and
@@ -3759,9 +3759,9 @@ definitions:
               ]
         type: array
         items:
-          $ref: '#/definitions/TGUDFArgument'
+          $ref: "#/definitions/TGUDFArgument"
       result_format:
-        $ref: '#/definitions/ResultFormat'
+        $ref: "#/definitions/ResultFormat"
 
   TGUDFArgument:
     description: >
@@ -3774,7 +3774,7 @@ definitions:
         type: string
         x-nullable: true
       value:
-        $ref: '#/definitions/TGArgValue'
+        $ref: "#/definitions/TGArgValue"
 
   TGArgValue:
     description: >
@@ -3810,7 +3810,7 @@ definitions:
     type: object
     properties:
       language:
-        $ref: '#/definitions/UDFLanguage'
+        $ref: "#/definitions/UDFLanguage"
       language_version:
         description: >
           The language version used to execute this UDF. Neither this nor
@@ -3844,6 +3844,195 @@ definitions:
           client-side execution, the function will be executed on the server.
         type: boolean
         x-omitempty: true
+
+  FragmentMetadata:
+    description: Fragment Metadata
+    type: object
+    # TODO: define all properties
+    properties:
+      fileSizes:
+        description: fixed sizes
+        type: array
+        items:
+          type: integer
+          format: uint64
+      fileVarSizes:
+        description: var length sizes
+        type: array
+        items:
+          type: integer
+          format: uint64
+      fileValiditySizes:
+        description: validity sizes
+        type: array
+        items:
+          type: integer
+          format: uint64
+      fragmentUri:
+        type: string
+      hasTimestamps:
+        type: boolean
+      hasDeleteMeta:
+        type: boolean
+      sparseTileNum:
+        type: integer
+        format: uint64
+      tileIndexBase:
+        type: integer
+        format: uint64
+      tileOffsets:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint64
+      tileVarOffsets:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint64
+      tileVarSizes:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint64
+      tileValidityOffsets:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint64
+      tileMinBuffer:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      tileMinVarBuffer:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      tileMaxBuffer:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      tileMaxVarBuffer:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      tileSums:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      tileNullCounts:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint64
+      fragmentMins:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      fragmentMaxs:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      fragmentSums:
+        type: array
+        items:
+          type: integer
+          format: uint64
+      fragmentNullCounts:
+        type: array
+        items:
+          type: integer
+          format: uint64
+      version:
+        type: integer
+        format: uint32
+      timestampRange:
+        type: array
+        items:
+          type: integer
+          format: uint64
+      # A pair of timestamps for fragment
+
+      lastTileCellNum:
+        type: integer
+        format: uint64
+
+      # TODO: handle!
+      # nonEmptyDomain @25 :NonEmptyDomainList;
+      # non empty domain
+
+      # TODO: handle!
+      # rtree @26 :Data;
+
+  SingleFragmentInfo:
+    description: Single Fragment info of an array
+    type: object
+    properties:
+      ArraySchemaName:
+        description: array schema name
+        type: string
+      meta:
+        description: fragment metadata
+        $ref: "#/definitions/FragmentMetadata"
+
+  FragmentInfo:
+    description: Fragment info of an array
+    type: object
+    properties:
+      arraySchemaAll:
+        description: map of all array schemas
+        type: object
+        additionalProperties:
+          $ref: "#/definitions/ArraySchema"
+      fragmentInfo:
+        description: information about fragments in the array
+        type: array
+        items:
+          $ref: "#/definitions/SingleFragmentInfo"
+      toVacuum:
+        description: the URIs of the fragments to vacuum
+        type: array
+        items:
+          type: string
+
+  FragmentInfoRequest:
+    description: Fragment info request
+    type: object
+    properties:
+      config:
+        description: config to use for opening
+        $ref: "#/definitions/TileDBConfig"
 
 paths:
   /.stats:
@@ -4180,6 +4369,46 @@ paths:
           description: array metadata updated successfully
         502:
           description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/{namespace}/{array}/fragment_info:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: Content-Type
+        in: header
+        description: Content Type of input and return mime
+        type: string
+        required: true
+        default: application/json
+    post:
+      description: fetch an array's fragment info
+      tags:
+        - array
+      operationId: fragmentInfo
+      parameters:
+        - name: fragmentInfoRequest
+          in: body
+          description: ArraySchema being created
+          schema:
+            $ref: "#/definitions/FragmentInfoRequest"
+          required: true
+      responses:
+        200:
+          description: fragment info
+          schema:
+            $ref: "#/definitions/FragmentInfo"
         default:
           description: error response
           schema:
@@ -6834,7 +7063,7 @@ paths:
         type: array
         collectionFormat: multi
         items:
-            type: string
+          type: string
     get:
       tags:
         - array
@@ -8393,7 +8622,7 @@ paths:
           description: The node status to report.
           required: true
           schema:
-            $ref: '#/definitions/TaskGraphClientNodeStatus'
+            $ref: "#/definitions/TaskGraphClientNodeStatus"
       responses:
         204:
           description: Status reported successfully.
@@ -8402,7 +8631,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
 
   # Task graphs: Registration
 
@@ -8434,7 +8663,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
     post:
       description: >
         Register a task graph in the given namespace, with the given name.
@@ -8446,7 +8675,7 @@ paths:
           in: body
           description: Task graph to register.
           schema:
-            $ref: '#/definitions/RegisteredTaskGraph'
+            $ref: "#/definitions/RegisteredTaskGraph"
       responses:
         204:
           description: Task graph registered successfully.
@@ -8455,7 +8684,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
     patch:
       description: >
         Update the contents of an existing registered task graph.
@@ -8467,7 +8696,7 @@ paths:
           in: body
           description: The new contents of the task graph.
           schema:
-            $ref: '#/definitions/RegisteredTaskGraph'
+            $ref: "#/definitions/RegisteredTaskGraph"
       responses:
         204:
           description: Task graph updated successfully.
@@ -8476,7 +8705,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
     delete:
       description: >
         Delete the given registered task graph.
@@ -8491,7 +8720,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
 
   /taskgraphs/{namespace}/registered/{name}/share:
     parameters:
@@ -8517,7 +8746,7 @@ paths:
             type: array
             x-omitempty: true
             items:
-              $ref: '#/definitions/TaskGraphSharing'
+              $ref: "#/definitions/TaskGraphSharing"
         404:
           description: >
             The task graph does not exist (or the user does not have permission
@@ -8529,7 +8758,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
     patch:
       description: Share a task graph.
       tags:
@@ -8546,7 +8775,7 @@ paths:
             will be rolled back to prevent partial policies, and it's likely
             the UDF will not be shared with the namespace at all.
           schema:
-            $ref: '#/definitions/TaskGraphSharing'
+            $ref: "#/definitions/TaskGraphSharing"
           required: true
       responses:
         204:
@@ -8560,4 +8789,4 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
