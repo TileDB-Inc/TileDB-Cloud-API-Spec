@@ -1481,6 +1481,8 @@ definitions:
         type: string
         description: The OpenID Connect client secret for this SSO instance.
         x-go-custom-tag: 'tdbrest:"secret"'
+      domain_setup:
+        $ref: '#/definitions/SSODomainSetup'
       verification_status:
         $ref: '#/definitions/DomainVerificationStatus'
       check_results:
@@ -1500,6 +1502,22 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/SSODomainConfig'
+
+  SSODomainSetup:
+    description: >
+      Configuration settings to verify ownership of a given domain. At least one
+      of these must be completed enable user login from the domain.
+    type: object
+    properties:
+      txt:
+        description: a DNS TXT record to set on the domain to claim.
+        type: string
+      cname_src:
+        description: a DNS name to set a CNAME record on
+        type: string
+      cname_dst:
+        description: the CNAME target of `cname_src`.
+        type: string
 
   Organization:
     description: Organization
