@@ -1505,6 +1505,8 @@ definitions:
         $ref: '#/definitions/StorageLocation'
       udfs:
         $ref: '#/definitions/StorageLocation'
+      groups:
+        $ref: '#/definitions/StorageLocation'
 
   StorageLocation:
     description: >
