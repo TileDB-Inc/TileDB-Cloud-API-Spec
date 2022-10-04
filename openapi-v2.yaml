@@ -646,6 +646,13 @@ definitions:
             $ref: "#/definitions/AWSCredential"
           azure:
             $ref: "#/definitions/AzureCredential"
+      role:
+        description: "The role information itself. Exactly one sub-field may be set. The names match those in the CloudProvider enum."
+        type: object
+        x-omitempty: true
+        properties:
+          aws:
+            $ref: "#/definitions/AWSRole"
 
   AccessCredentialsData:
     description: Object including credentials and pagination metadata
@@ -669,11 +676,15 @@ definitions:
       access_key_id:
         description: "The ID of the access key"
         type: string
+        x-go-custom-tag: 'validate:"required"'
       secret_access_key:
         description: "The access key's secret. Never returned in responses."
         type: string
-        x-go-custom-tag: 'tdbrest:"secret"'
-      # service role ARN is not yet supported.
+        x-go-custom-tag: 'tdbrest:"secret" validate:"required"'
+      endpoint:
+        description: "The endpoint used for this credential"
+        type: string
+        example: "https://example.us-west-2.amazonaws.com"
 
   AzureCredential:
     description: "Credential information to access Microsoft Azure. Each supported property is the snake_case version of its name in an Azure Storage connection string."
@@ -684,10 +695,35 @@ definitions:
       account_name:
         description: "The name of the Azure account to access"
         type: string
+        x-go-custom-tag: 'validate:"required"'
       account_key:
         description: "The secret key. Never returned in responses."
         type: string
-        x-go-custom-tag: 'tdbrest:"secret"'
+        x-go-custom-tag: 'tdbrest:"secret" validate:"required"'
+
+  AWSRole:
+    description: "Role information to access Amazon Web Services"
+    type: object
+    x-nullable: true
+    x-omitempty: true
+    properties:
+      role_arn:
+        description: "The role arn used to access"
+        x-go-name: "RoleARN"
+        type: string
+        example: arn:partition:service:region:account-id:resource-type:resource-id
+        x-go-custom-tag: 'validate:"required"'
+      external_id:
+        description: "The role external id used to access"
+        x-go-name: "RoleExternalID"
+        type: string
+        example: "MzU0M2UwMTItMWJhYy00NWUwLThmZDItZTgwYmQ1NjE5Yjhm"
+        x-go-custom-tag: 'validate:"required"'
+      endpoint:
+        description: "The endpoint used for this role"
+        x-go-name: "RoleEndpoint"
+        type: string
+        example: "https://example.us-west-2.amazonaws.com"
 
   CloudProvider:
     description: "A service where data is stored or computations take place."
@@ -709,7 +745,7 @@ definitions:
         format: uint32
       value:
         x-go-type:
-          type: "json.RawMessage"
+          type: "json.RawMessage" 
           hints:
             noValidation: true
       del:
@@ -728,7 +764,7 @@ definitions:
 
   GroupCreationRequest:
     type: object
-    description: information for creating a new group with the passed configuration
+    description: information for creating a new group with the passed configuration 
     required:
       - group_details
     properties:
@@ -769,7 +805,7 @@ definitions:
 
   GroupRegistrationRequest:
     type: object
-    description: information for creating a new group with the passed configuration
+    description: information for creating a new group with the passed configuration 
     required:
       - group_details
     properties:
@@ -813,7 +849,7 @@ definitions:
           region:
             type: string
             x-omitempty: true
-            description: region of the group
+            description: region of the group 
           access_credentials_name:
             description: the name of the access credentials to use. if unset, the default credentials will be used.
             type: string
@@ -829,7 +865,7 @@ definitions:
         items:
           $ref: "#/definitions/GroupMember"
       metadata:
-        description: Group metadata
+        description: Group metadata 
         x-omitempty: true
         $ref: "#/definitions/Metadata"
 
@@ -920,7 +956,7 @@ definitions:
     type: object
     properties:
       name:
-        description: The name of the member
+        description: The name of the member 
         type: string
       uri:
         description: The uri of the member
@@ -938,7 +974,7 @@ definitions:
           type: object
           properties:
             key:
-              type: string
+              type: string 
             value:
               type: string
 
@@ -1295,7 +1331,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     put:
-      description: Registers an already existing group
+      description: Registers an already existing group 
       operationId: registerGroup
       tags:
         - groups
@@ -1331,14 +1367,14 @@ paths:
         type: string
         required: false
     options:
-      description: can be used to check if the resource exists
+      description: can be used to check if the resource exists 
       tags:
         - groups
       responses:
         404:
-          description: the resource does not exist
+          description: the resource does not exist 
         204:
-          description: the resource exists
+          description: the resource exists 
         default:
           description: error response
           schema:
@@ -1368,7 +1404,7 @@ paths:
       tags:
         - groups
       parameters:
-        - name: groupUpdateContents
+        - name: groupUpdateContents 
           in: body
           schema:
             $ref: "#/definitions/GroupContentsChangesRequest"
