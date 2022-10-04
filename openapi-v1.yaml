@@ -1497,6 +1497,8 @@ definitions:
         $ref: '#/definitions/StorageLocation'
       files:
         $ref: '#/definitions/StorageLocation'
+      groups:
+        $ref: '#/definitions/StorageLocation'
       ml_models:
         $ref: '#/definitions/StorageLocation'
       notebooks:
@@ -1504,8 +1506,6 @@ definitions:
       task_graphs:
         $ref: '#/definitions/StorageLocation'
       udfs:
-        $ref: '#/definitions/StorageLocation'
-      groups:
         $ref: '#/definitions/StorageLocation'
 
   StorageLocation:
