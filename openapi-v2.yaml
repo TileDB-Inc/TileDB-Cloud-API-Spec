@@ -681,8 +681,10 @@ definitions:
         description: "The access key's secret. Never returned in responses."
         type: string
         x-go-custom-tag: 'tdbrest:"secret" validate:"required"'
+
       endpoint:
         description: "The endpoint used for this credential"
+        x-nullable: true
         type: string
         example: "https://example.us-west-2.amazonaws.com"
 
@@ -711,17 +713,17 @@ definitions:
         description: "The role arn used to access"
         x-go-name: "RoleARN"
         type: string
-        example: arn:partition:service:region:account-id:resource-type:resource-id
         x-go-custom-tag: 'validate:"required"'
+        example: arn:partition:service:region:account-id:resource-type:resource-id
       external_id:
         description: "The role external id used to access"
+        x-go-custom-tag: 'validate:"required"'
         x-go-name: "RoleExternalID"
         type: string
         example: "MzU0M2UwMTItMWJhYy00NWUwLThmZDItZTgwYmQ1NjE5Yjhm"
-        x-go-custom-tag: 'validate:"required"'
       endpoint:
+        x-nullable: true
         description: "The endpoint used for this role"
-        x-go-name: "RoleEndpoint"
         type: string
         example: "https://example.us-west-2.amazonaws.com"
 
