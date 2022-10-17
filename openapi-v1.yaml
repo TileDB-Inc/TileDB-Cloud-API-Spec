@@ -104,6 +104,8 @@ definitions:
       - query_read
       # query write operation
       - query_write
+      # query delete operation
+      - query_delete
       # create operation
       - create
       # delete operation
@@ -178,6 +180,8 @@ definitions:
       - READ
       # Write
       - WRITE
+      # Delete
+      - DELETE
 
   Querystatus:
     description: Status of query
