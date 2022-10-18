@@ -6198,6 +6198,13 @@ paths:
       tags:
         - organization
       description: Updates the configuration for the given SSO connection.
+      parameters:
+        - name: config
+          in: body
+          description: The changes to make to the configuration.
+          schema:
+            $ref: '#/definitions/SSODomainConfig'
+          required: true
       operationId: updateSSODomain
       responses:
         200:
