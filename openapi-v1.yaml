@@ -3865,6 +3865,8 @@ paths:
           examples:
             application/json:
               stats: "123"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -3889,6 +3891,8 @@ paths:
             x-omitempty: true
             items:
               $ref: "#/definitions/ArrayInfo"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -3914,6 +3918,8 @@ paths:
             x-omitempty: true
             items:
               $ref: "#/definitions/ArrayInfo"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -3945,6 +3951,8 @@ paths:
       responses:
         204:
           description: delete array successful
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -3965,6 +3973,8 @@ paths:
           description: get ArraySchema
           schema:
             $ref: "#/definitions/ArraySchema"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -3989,6 +3999,8 @@ paths:
       responses:
         204:
           description: schema created successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4043,6 +4055,8 @@ paths:
             x-omitempty: true
             items:
               $ref: "#/definitions/ArrayActivityLog"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4075,6 +4089,8 @@ paths:
           description: array activity
           schema:
             $ref: "#/definitions/ArrayActivityLog"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4100,6 +4116,8 @@ paths:
       responses:
         204:
           description: deregistered array successful
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4133,6 +4151,8 @@ paths:
           description: array metadata for an array
           schema:
             $ref: "#/definitions/ArrayMetadata"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4158,6 +4178,8 @@ paths:
       responses:
         200:
           description: array metadata updated successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4185,6 +4207,8 @@ paths:
           description: array metadata for an array
           schema:
             $ref: "#/definitions/ArrayInfo"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4204,6 +4228,8 @@ paths:
       responses:
         204:
           description: array metadata updated successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4239,6 +4265,8 @@ paths:
             description: "Milliseconds since Unix epoch, end_timestamp of selected fragment or latest timestamp if input timestamp is omitted"
             type: integer
             format: uint64
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4273,6 +4301,8 @@ paths:
           description: array registered successfully
           schema:
             $ref: "#/definitions/ArrayInfo"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4305,6 +4335,8 @@ paths:
       responses:
         204:
           description: array consolidated successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4337,6 +4369,8 @@ paths:
       responses:
         204:
           description: array vacuumed successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4369,6 +4403,8 @@ paths:
               $ref: "#/definitions/ArraySharing"
         404:
           description: Array does not exist or user does not have permissions to view array-sharing policies
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4390,6 +4426,8 @@ paths:
           description: Array shared successfully
         404:
           description: Array does not exist or user does not have permissions to share array
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4427,6 +4465,8 @@ paths:
           description: get the non empty domain of an array
           schema:
             $ref: "#/definitions/NonEmptyDomain"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4469,6 +4509,8 @@ paths:
           description: get the max buffer sizes of an array for a subarray
           schema:
             $ref: "#/definitions/MaxBufferSizes"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4526,6 +4568,8 @@ paths:
           schema:
             type: string
             format: binary
+        502:
+          description: Bad Gateway
         default:
           description: error response
           headers:
@@ -4596,6 +4640,8 @@ paths:
             $ref: "#/definitions/Query"
         204:
           description: query completed successfully with no return
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4652,6 +4698,8 @@ paths:
             application/json:
               data: '{"a1":[0,1,2,3,0,1,2,3]}'
 
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4700,6 +4748,8 @@ paths:
             application/x-ipynb+json:
               data: "abcd"
 
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4766,6 +4816,8 @@ paths:
             $ref: "#/definitions/Query"
         204:
           description: query completed successfully with no return
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4832,6 +4884,8 @@ paths:
             $ref: "#/definitions/Query"
         204:
           description: query completed successfully with no return
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4891,6 +4945,8 @@ paths:
                 - "test3"
                 - "test4"
                 - "test5"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4948,6 +5004,8 @@ paths:
                 - 27.3
                 - 28.4
               key5: "This is TileDB array metadata"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -4987,6 +5045,8 @@ paths:
               dim2:
                 - a
                 - c
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5029,6 +5089,8 @@ paths:
           description: list of timestamps in milliseconds, paginated
           schema:
             $ref: "#/definitions/ArrayEndTimestampData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5049,6 +5111,8 @@ paths:
               $ref: "#/definitions/LastAccessedArray"
           examples:
             application/json:
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5069,6 +5133,8 @@ paths:
           description: user details
           schema:
             $ref: "#/definitions/User"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5089,6 +5155,8 @@ paths:
       responses:
         204:
           description: user created successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5119,6 +5187,8 @@ paths:
           description: User password updated successfully
         404:
           description: User not found
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5133,6 +5203,8 @@ paths:
       responses:
         204:
           description: User email confirmed successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5157,6 +5229,8 @@ paths:
             $ref: "#/definitions/User"
         404:
           description: User does not exist
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5169,6 +5243,8 @@ paths:
       responses:
         204:
           description: user deleted
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5188,6 +5264,8 @@ paths:
       responses:
         204:
           description: user updated successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5213,6 +5291,8 @@ paths:
             type: array
             items:
               $ref: "#/definitions/AWSAccessCredentials"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5233,6 +5313,8 @@ paths:
       responses:
         204:
           description: AWS keys added successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5261,6 +5343,8 @@ paths:
           description: AWS keys are set
           schema:
             $ref: "#/definitions/AWSAccessCredentials"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5281,6 +5365,8 @@ paths:
       responses:
         204:
           description: AWS keys updated successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5294,6 +5380,8 @@ paths:
       responses:
         204:
           description: AWS credentials deleted
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5315,6 +5403,8 @@ paths:
       responses:
         204:
           description: organization created successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5338,6 +5428,8 @@ paths:
           description: Error finding organizations
         500:
           description: Request user not found, or has empty context
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5362,6 +5454,8 @@ paths:
             $ref: "#/definitions/Organization"
         404:
           description: Organization does not exist
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5374,6 +5468,8 @@ paths:
       responses:
         204:
           description: organization deleted
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5393,6 +5489,8 @@ paths:
       responses:
         204:
           description: organization updated successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5421,6 +5519,8 @@ paths:
       responses:
         204:
           description: user added to organization successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5451,6 +5551,8 @@ paths:
             $ref: "#/definitions/OrganizationUser"
         404:
           description: User is not in organization
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5464,6 +5566,8 @@ paths:
       responses:
         204:
           description: user delete from organization successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5484,6 +5588,8 @@ paths:
       responses:
         204:
           description: user update in organization successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5506,6 +5612,8 @@ paths:
           description: Session token
           schema:
             $ref: "#/definitions/Token"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5602,6 +5710,8 @@ paths:
           description: Array of all tasks user has access too
           schema:
             $ref: "#/definitions/ArrayTaskData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5643,6 +5753,8 @@ paths:
                 organization3: 2
         404:
           description: array tasks not found
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5668,6 +5780,8 @@ paths:
           description: Array task
           schema:
             $ref: "#/definitions/ArrayTask"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5704,6 +5818,8 @@ paths:
           description: results were not saved, or results have expored
           schema:
             $ref: "#/definitions/Error"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5727,6 +5843,8 @@ paths:
           description: token
           schema:
             $ref: "#/definitions/Token"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5745,6 +5863,8 @@ paths:
             x-omitempty: true
             items:
               $ref: "#/definitions/Token"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5763,6 +5883,8 @@ paths:
             x-omitempty: true
             items:
               $ref: "#/definitions/Token"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5783,6 +5905,8 @@ paths:
       responses:
         204:
           description: revokation successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5801,6 +5925,8 @@ paths:
             type: array
             items:
               $ref: "#/definitions/TokenScope"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5848,6 +5974,8 @@ paths:
             X-TILEDB-CLOUD-TASK-ID:
               type: string
               description: Task ID for just completed query
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5891,6 +6019,8 @@ paths:
           schema:
             type: string
             format: binary
+        502:
+          description: Bad Gateway
         default:
           description: error response
           headers:
@@ -5938,6 +6068,8 @@ paths:
           schema:
             type: string
             format: binary
+        502:
+          description: Bad Gateway
         default:
           description: error response
           headers:
@@ -5971,6 +6103,8 @@ paths:
             $ref: "#/definitions/UDFInfo"
         404:
           description: UDF not found
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -5990,6 +6124,8 @@ paths:
       responses:
         204:
           description: UDF registered successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6009,6 +6145,8 @@ paths:
       responses:
         204:
           description: UDF updated successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6021,6 +6159,8 @@ paths:
       responses:
         204:
           description: UDF deleted successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6053,6 +6193,8 @@ paths:
               $ref: "#/definitions/UDFSharing"
         404:
           description: UDF does not exist or user does not have permissions to view array-sharing policies
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6074,6 +6216,8 @@ paths:
           description: UDF shared successfully
         404:
           description: UDF does not exist or user does not have permissions to share UDF
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6119,6 +6263,8 @@ paths:
           description: UDF copied
           schema:
             $ref: "#/definitions/UDFCopied"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6157,6 +6303,8 @@ paths:
           description: list of timestamps in milliseconds, paginated
           schema:
             $ref: "#/definitions/ArrayEndTimestampData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6187,6 +6335,8 @@ paths:
             $ref: "#/definitions/Error"
         404:
           description: Notebook is not running
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6209,6 +6359,8 @@ paths:
           description: Notebook shutdown successfully
         404:
           description: Notebook is not running
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6241,6 +6393,8 @@ paths:
       responses:
         204:
           description: notebook name updated successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6285,6 +6439,8 @@ paths:
           description: Notebook copied
           schema:
             $ref: "#/definitions/NotebookCopied"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6328,6 +6484,8 @@ paths:
           description: File uploaded
           schema:
             $ref: "#/definitions/FileUploaded"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6366,6 +6524,8 @@ paths:
           description: list of timestamps in milliseconds, paginated
           schema:
             $ref: "#/definitions/ArrayEndTimestampData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6430,6 +6590,8 @@ paths:
           description: List of invitations and pagination metadata
           schema:
             $ref: "#/definitions/InvitationData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6452,6 +6614,8 @@ paths:
           description: Invitation was accepted successfully
         404:
           description: Could not find invitation identifier
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6484,6 +6648,8 @@ paths:
           description: Invitation cancelled successfully
         404:
           description: No invitation was found to cancel
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6511,6 +6677,8 @@ paths:
           description: Invitation cancelled successfully
         404:
           description: No invitation was found to cancel
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6547,6 +6715,8 @@ paths:
           description: Could not reach one or more recipients
           schema:
             $ref: "#/definitions/InvitationArrayShareEmail"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6578,6 +6748,8 @@ paths:
           description: Could not reach one or more recipients
           schema:
             $ref: "#/definitions/InvitationOrganizationJoinEmail"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6672,6 +6844,8 @@ paths:
           description: Array of array info that has been shared with the user
           schema:
             $ref: "#/definitions/ArrayBrowserData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6687,6 +6861,8 @@ paths:
           description: Array of array info that has been shared with the user
           schema:
             $ref: "#/definitions/ArrayBrowserSidebar"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6773,6 +6949,8 @@ paths:
           description: Array of array info that has been shared publically
           schema:
             $ref: "#/definitions/ArrayBrowserData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6788,6 +6966,8 @@ paths:
           description: Array of array info that has been shared publically
           schema:
             $ref: "#/definitions/ArrayBrowserSidebar"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6874,6 +7054,8 @@ paths:
           description: Array of array info that are owned directly by user or user's organizations
           schema:
             $ref: "#/definitions/ArrayBrowserData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6889,6 +7071,8 @@ paths:
           description: Array of array info that are owned directly by user or user's organizations
           schema:
             $ref: "#/definitions/ArrayBrowserSidebar"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6916,6 +7100,8 @@ paths:
           description: Available array favorites are returned
           schema:
             $ref: "#/definitions/ArrayFavoritesData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6935,6 +7121,8 @@ paths:
             x-omitempty: false
             items:
               $ref: "#/definitions/ArrayFavorite"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6962,6 +7150,8 @@ paths:
           description: OK
           schema:
             $ref: "#/definitions/ArrayFavorite"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6974,6 +7164,8 @@ paths:
       responses:
         204:
           description: Item added to favorites successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -6986,6 +7178,8 @@ paths:
       responses:
         204:
           description: array favorite item deleted successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7018,6 +7212,8 @@ paths:
           description: Available notebook favorites are returned
           schema:
             $ref: "#/definitions/NotebookFavoritesData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7037,6 +7233,8 @@ paths:
             x-omitempty: false
             items:
               $ref: "#/definitions/NotebookFavorite"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7064,6 +7262,8 @@ paths:
           description: OK
           schema:
             $ref: "#/definitions/NotebookFavorite"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7076,6 +7276,8 @@ paths:
       responses:
         204:
           description: Item added to favorites successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7088,6 +7290,8 @@ paths:
       responses:
         204:
           description: notebook favorite item deleted successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7115,6 +7319,8 @@ paths:
           description: Available ML models favorites are returned
           schema:
             $ref: "#/definitions/MLModelFavoritesData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7134,6 +7340,8 @@ paths:
             x-omitempty: false
             items:
               $ref: "#/definitions/MLModelFavorite"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7161,6 +7369,8 @@ paths:
           description: OK
           schema:
             $ref: "#/definitions/MLModelFavorite"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7173,6 +7383,8 @@ paths:
       responses:
         204:
           description: Item added to favorites successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7185,6 +7397,8 @@ paths:
       responses:
         204:
           description: ML model favorite item deleted successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7212,6 +7426,8 @@ paths:
           description: Available UDF favorites are returned
           schema:
             $ref: "#/definitions/UDFFavoritesData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7231,6 +7447,8 @@ paths:
             x-omitempty: false
             items:
               $ref: "#/definitions/UDFFavorite"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7258,6 +7476,8 @@ paths:
           description: OK
           schema:
             $ref: "#/definitions/UDFFavorite"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7270,6 +7490,8 @@ paths:
       responses:
         204:
           description: Item added to favorites successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7282,6 +7504,8 @@ paths:
       responses:
         204:
           description: UDF favorite item deleted successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7315,6 +7539,8 @@ paths:
           description: File created
           schema:
             $ref: "#/definitions/FileCreated"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7358,6 +7584,8 @@ paths:
           description: File uploaded
           schema:
             $ref: "#/definitions/FileUploaded"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7391,6 +7619,8 @@ paths:
           description: File exported
           schema:
             $ref: "#/definitions/FileExported"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7406,6 +7636,8 @@ paths:
           description: Filter data
           schema:
             $ref: "#/definitions/GroupBrowserFilterData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7478,6 +7710,8 @@ paths:
           description: the group contents
           schema:
             $ref: "#/definitions/GroupBrowserData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7493,6 +7727,8 @@ paths:
           description: Filter data
           schema:
             $ref: "#/definitions/GroupBrowserFilterData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7573,6 +7809,8 @@ paths:
           description: the group contents
           schema:
             $ref: "#/definitions/GroupBrowserData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7588,6 +7826,8 @@ paths:
           description: Filter data
           schema:
             $ref: "#/definitions/GroupBrowserFilterData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7660,6 +7900,8 @@ paths:
           description: the group contents
           schema:
             $ref: "#/definitions/GroupBrowserData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7686,6 +7928,8 @@ paths:
           description: Filter data
           schema:
             $ref: "#/definitions/GroupContentsFilterData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7716,6 +7960,8 @@ paths:
       responses:
         204:
           description: all changes applied successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7788,6 +8034,8 @@ paths:
           description: the group contents
           schema:
             $ref: "#/definitions/GroupContents"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7818,6 +8066,8 @@ paths:
       responses:
         204:
           description: group created successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7843,6 +8093,8 @@ paths:
       responses:
         204:
           description: group created successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7875,6 +8127,8 @@ paths:
               $ref: "#/definitions/GroupSharing"
         404:
           description: Group does not exist or user does not have permissions to view group-sharing policies
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7896,6 +8150,8 @@ paths:
           description: Group shared successfully
         404:
           description: Group does not exist or user does not have permissions to share group
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7923,6 +8179,8 @@ paths:
           description: the group metadata
           schema:
             $ref: "#/definitions/GroupInfo"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7940,6 +8198,8 @@ paths:
       responses:
         204:
           description: attributes changed successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7952,6 +8212,8 @@ paths:
       responses:
         204:
           description: group deleted successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -7981,6 +8243,8 @@ paths:
             the data the client sent, with the server-defined fields added in.
           schema:
             $ref: "#/definitions/TaskGraphLog"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -8045,6 +8309,8 @@ paths:
           description: The task graph logs that matched the user's query.
           schema:
             $ref: "#/definitions/TaskGraphLogsData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -8073,6 +8339,8 @@ paths:
           description: Information about the execution of a single task graph.
           schema:
             $ref: "#/definitions/TaskGraphLog"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -8096,6 +8364,8 @@ paths:
       responses:
         204:
           description: Log entry updated successfully.
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -8127,6 +8397,8 @@ paths:
       responses:
         204:
           description: Status reported successfully.
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -8157,6 +8429,8 @@ paths:
           description: The contents of the registered task graph.
           schema:
             $ref: '#/definitions/RegisteredTaskGraph'
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -8176,6 +8450,8 @@ paths:
       responses:
         204:
           description: Task graph registered successfully.
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -8195,6 +8471,8 @@ paths:
       responses:
         204:
           description: Task graph updated successfully.
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -8208,6 +8486,8 @@ paths:
       responses:
         204:
           description: Task graph successfully deleted.
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -8244,6 +8524,8 @@ paths:
             to view policies)
           schema:
             $ref: '#/definitions/Error'
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -8273,6 +8555,8 @@ paths:
           description: UDF does not exist or user does not have permissions to share UDF
           schema:
             $ref: '#/definitions/Error'
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:

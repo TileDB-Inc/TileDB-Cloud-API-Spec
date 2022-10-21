@@ -1066,6 +1066,8 @@ paths:
             description: The first 8-bytes contains a little-endian ordered unsigned integer that contains the total byte size of the following Query object. If 'read_all' was set, this will repeat with 0-padding until reaching a Query object with a non-incomplete status.
         204:
           description: query completed successfully with no return
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -1130,6 +1132,8 @@ paths:
           description: log of array activity
           schema:
               $ref: "#/definitions/ArrayActivityLogData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -1165,6 +1169,8 @@ paths:
           description: "Available credentials are returned"
           schema:
             $ref: "#/definitions/AccessCredentialsData"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -1185,6 +1191,8 @@ paths:
       responses:
         204:
           description: "The new credential was successfully added."
+        502:
+          description: Bad Gateway
         default:
           description: "error response"
           schema:
@@ -1213,6 +1221,8 @@ paths:
           description: "Credential exists and can be returned"
           schema:
             $ref: "#/definitions/AccessCredential"
+        502:
+          description: Bad Gateway
         default:
           description: "error response"
           schema:
@@ -1233,6 +1243,8 @@ paths:
       responses:
         204:
           description: "The credential was updated successfully"
+        502:
+          description: Bad Gateway
         default:
           description: "Error response"
           schema:
@@ -1246,6 +1258,8 @@ paths:
       responses:
         204:
           description: "The credential was deleted successfully"
+        502:
+          description: Bad Gateway
         default:
           description: "Error response"
           schema:
@@ -1279,6 +1293,8 @@ paths:
           description: retrieve metadata for a group
           schema:
             $ref: "#/definitions/Metadata"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -1297,6 +1313,8 @@ paths:
       responses:
         200:
           description: group metadata updated successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -1328,6 +1346,8 @@ paths:
       responses:
         201:
           description: group created successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -1346,6 +1366,8 @@ paths:
       responses:
         201:
           description: group created successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -1377,6 +1399,8 @@ paths:
           description: the resource does not exist 
         204:
           description: the resource exists 
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -1396,6 +1420,8 @@ paths:
           description: group created successfully
           schema:
             $ref: "#/definitions/GroupContentsRetrievalResponse"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -1413,6 +1439,8 @@ paths:
       responses:
         204:
           description: attributes changed successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -1425,6 +1453,8 @@ paths:
       responses:
         200:
           description: group deregistered successfully
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
@@ -1496,6 +1526,8 @@ paths:
           description: File uploaded
           schema:
             $ref: "#/definitions/FileUploaded"
+        502:
+          description: Bad Gateway
         default:
           description: error response
           schema:
