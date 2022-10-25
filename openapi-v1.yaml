@@ -1330,12 +1330,6 @@ definitions:
         description: the user's logo
         type: string
         x-nullable: true
-      last_activity_date:
-        type: string
-        format: date-time
-        description: when the user last logged in (set by the server)
-        readOnly: true
-        example: "1970-01-01 00:00:00"
       timezone:
         type: string
         example: Europe/Athens
