@@ -1488,6 +1488,11 @@ paths:
         description: name of the TileDB array to create, if missing {array} is used
         type: string
         required: false
+      - name: filename
+        in: query
+        description: original file name
+        type: string
+        required: false
       - name: filesize
         in: query
         description: size of the file to upload in bytes
