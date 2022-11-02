@@ -6228,6 +6228,32 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /organizations/{organization}/sso_domains/{uuid}/run_check:
+    parameters:
+      - name: organization
+        in: path
+        description: organization name
+        required: true
+        type: string
+      - name: uuid
+        in: path
+        description: configuration ID
+        required: true
+        type: string
+    post:
+      tags:
+        - organization
+      description: >
+        Immediately verify ownership of the specified SSO domain ownership
+        claim.
+      operationId: checkSSODomain
+      responses:
+        200:
+          description: >
+            The check executed. Detailed results are available in the response.
+          schema:
+            $ref: '#/definitions/DomainCheckResult'
+
   /session:
     parameters:
       - name: remember_me
