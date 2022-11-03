@@ -1286,7 +1286,6 @@ paths:
         - name: metadataRetrieval
           in: body
           schema:
-            type: object
             $ref: "#/definitions/GroupMetadataRetrievalRequest"
       responses:
         200:
@@ -1308,7 +1307,6 @@ paths:
         - name: metadataUpdating
           in: body
           schema:
-            type: object
             $ref: "#/definitions/GroupMetadataUpdateRequest"
       responses:
         200:
@@ -1341,7 +1339,6 @@ paths:
         - name: groupCreation
           in: body
           schema:
-            type: object
             $ref: "#/definitions/GroupCreationRequest"
       responses:
         201:
@@ -1361,7 +1358,6 @@ paths:
         - name: groupRegistration
           in: body
           schema:
-            type: object
             $ref: "#/definitions/GroupRegistrationRequest"
       responses:
         201:
