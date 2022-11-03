@@ -5,13 +5,13 @@ info:
   version: 1.4.0
 
 produces:
-- application/json
+  - application/json
 consumes:
-- application/json
+  - application/json
 
 schemes:
-- http
-- https
+  - http
+  - https
 
 basePath: /v2
 
@@ -23,14 +23,14 @@ securityDefinitions:
     in: header
     name: X-TILEDB-REST-API-KEY
   OAuth2:
-      type: oauth2
-      flow: accessCode
-      authorizationUrl: https://oauth2.tiledb.com/oauth2/authorize
-      tokenUrl: https://oauth2.tiledb.com/oauth2/token
-      scopes:
-        read: Grants read access
-        write: Grants write access
-        admin: Grants read and write access to administrative information
+    type: oauth2
+    flow: accessCode
+    authorizationUrl: https://oauth2.tiledb.com/oauth2/authorize
+    tokenUrl: https://oauth2.tiledb.com/oauth2/token
+    scopes:
+      read: Grants read access
+      write: Grants write access
+      admin: Grants read and write access to administrative information
 
 security:
   - BasicAuth: []
@@ -309,7 +309,6 @@ definitions:
           type: integer
           format: uint64
 
-
   Subarray:
     description: A Subarray
     type: object
@@ -414,7 +413,7 @@ definitions:
         $ref: "#/definitions/Subarray"
       readState:
         description: To handle incomplete read queries.
-        $ref: '#/definitions/ReadState'
+        $ref: "#/definitions/ReadState"
 
   Query:
     type: object
@@ -514,21 +513,21 @@ definitions:
       array_task_id:
         description: uuid of associated array task
         type: string
-        example:  "00000000-0000-0000-0000-000000000000"
+        example: "00000000-0000-0000-0000-000000000000"
       id:
         description: id of the activity
         type: string
-        example:  "00000000-0000-0000-0000-000000000000"
+        example: "00000000-0000-0000-0000-000000000000"
       query_ranges:
         description: ranges for query
         x-omitempty: true
         type: string
-        example: "{\"rows\":[{\"start\": 1, \"end\": 1},{\"start\": 3, \"end\": 4}],\"cols\":[{\"start\": 1, \"end\": 4}]}"
+        example: '{"rows":[{"start": 1, "end": 1},{"start": 3, "end": 4}],"cols":[{"start": 1, "end": 4}]}'
       query_stats:
         description: stats for query
         x-omitempty: true
         type: string
-        example: "{\"timers\": {\"Context.StorageManager.read_load_array_schema_from_uri.sum\": 0.0255293, \"...\": \"...\"}, \"counters\": {\"Context.StorageManager.read_unfiltered_byte_num\": 191, \"...\": \"...\"}}"
+        example: '{"timers": {"Context.StorageManager.read_load_array_schema_from_uri.sum": 0.0255293, "...": "..."}, "counters": {"Context.StorageManager.read_unfiltered_byte_num": 191, "...": "..."}}'
 
   ActivityEventType:
     description: Type of activity logged
@@ -604,7 +603,7 @@ definitions:
         example: 138
 
   Error:
-    type:  object
+    type: object
     properties:
       code:
         type: integer
@@ -731,8 +730,8 @@ definitions:
     description: "A service where data is stored or computations take place."
     type: "string"
     enum:
-      - "AWS"  # Amazon Web Services
-      - "AZURE"  # Microsoft Azure
+      - "AWS" # Amazon Web Services
+      - "AZURE" # Microsoft Azure
 
   MetadataEntry:
     type: object
@@ -747,7 +746,7 @@ definitions:
         format: uint32
       value:
         x-go-type:
-          type: "json.RawMessage" 
+          type: "json.RawMessage"
           hints:
             noValidation: true
       del:
@@ -766,7 +765,7 @@ definitions:
 
   GroupCreationRequest:
     type: object
-    description: information for creating a new group with the passed configuration 
+    description: information for creating a new group with the passed configuration
     required:
       - group_details
     properties:
@@ -807,7 +806,7 @@ definitions:
 
   GroupRegistrationRequest:
     type: object
-    description: information for creating a new group with the passed configuration 
+    description: information for creating a new group with the passed configuration
     required:
       - group_details
     properties:
@@ -851,7 +850,7 @@ definitions:
           region:
             type: string
             x-omitempty: true
-            description: region of the group 
+            description: region of the group
           access_credentials_name:
             description: the name of the access credentials to use. if unset, the default credentials will be used.
             type: string
@@ -867,7 +866,7 @@ definitions:
         items:
           $ref: "#/definitions/GroupMember"
       metadata:
-        description: Group metadata 
+        description: Group metadata
         x-omitempty: true
         $ref: "#/definitions/Metadata"
 
@@ -958,13 +957,13 @@ definitions:
     type: object
     properties:
       name:
-        description: The name of the member 
+        description: The name of the member
         type: string
       uri:
         description: The uri of the member
         type: string
       type:
-        $ref: '#/definitions/GroupMemberType'
+        $ref: "#/definitions/GroupMemberType"
 
   TileDBConfig:
     description: TileDB config used for interaction with the embedded library
@@ -976,7 +975,7 @@ definitions:
           type: object
           properties:
             key:
-              type: string 
+              type: string
             value:
               type: string
 
@@ -998,7 +997,59 @@ definitions:
         example: "00000000-0000-0000-0000-000000000000"
         x-omitempty: false
 
+  ArrayFetch:
+    description: Model for opening an array v2
+    type: object
+    properties:
+      config:
+        $ref: "#/definitions/TileDBConfig"
+      queryType:
+        description: Array opened for query type
+        $ref: "#/definitions/Querytype"
+
 paths:
+  /arrays/{namespace}/{array}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: Content-Type
+        in: header
+        description: Content Type of input and return mime
+        type: string
+        required: true
+        default: application/json
+    post:
+      description: Get a array at a specified URI registered to a group/project
+      tags:
+        - array
+      operationId: getArray
+      parameters:
+        - name: ArrayFetch
+          in: body
+          description: Details for array being fetched
+          schema:
+            $ref: "#/definitions/ArrayFetch"
+          required: true
+      responses:
+        200:
+          description: Array opened successfully
+          schema:
+            $ref: "#/definitions/Array"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /arrays/{namespace}/{array}/query/submit:
     parameters:
       - name: namespace
@@ -1131,7 +1182,7 @@ paths:
         200:
           description: log of array activity
           schema:
-              $ref: "#/definitions/ArrayActivityLogData"
+            $ref: "#/definitions/ArrayActivityLogData"
         502:
           description: Bad Gateway
         default:
@@ -1350,7 +1401,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     put:
-      description: Registers an already existing group 
+      description: Registers an already existing group
       operationId: registerGroup
       tags:
         - groups
@@ -1387,14 +1438,14 @@ paths:
         type: string
         required: false
     options:
-      description: can be used to check if the resource exists 
+      description: can be used to check if the resource exists
       tags:
         - groups
       responses:
         404:
-          description: the resource does not exist 
+          description: the resource does not exist
         204:
-          description: the resource exists 
+          description: the resource exists
         502:
           description: Bad Gateway
         default:
@@ -1428,7 +1479,7 @@ paths:
       tags:
         - groups
       parameters:
-        - name: groupUpdateContents 
+        - name: groupUpdateContents
           in: body
           schema:
             $ref: "#/definitions/GroupContentsChangesRequest"
