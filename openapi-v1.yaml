@@ -2744,6 +2744,9 @@ definitions:
         type: string
         x-omitempty: false
         example: "00000000-0000-0000-0000-000000000000"
+      logo:
+        description: logo (base64 encoded) for the gruop. Optional
+        type: string
       array_name:
         description: Name of the array, does not persist in database
         type: string
@@ -6586,6 +6589,30 @@ paths:
       responses:
         200:
           description: List of invitations and pagination metadata
+          schema:
+            $ref: "#/definitions/InvitationData"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /invitations/received/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: the namespace of the recipient of the invitations
+        type: string
+        required: true
+    get:
+      tags:
+        - invitation
+      description: Fetch a list of received invitations of the namespace
+      operationId: fetchReceivedInvitations
+      responses:
+        200:
+          description: List of invitations received and pagination metadata
           schema:
             $ref: "#/definitions/InvitationData"
         502:
