@@ -2678,6 +2678,27 @@ definitions:
           type: string
           format: email
 
+  InvitationArrayShareNSName:
+    description: Encapsulates information regarding inviting Users or Organizations(Owners+Admins) using namespace (NS) name to share array, same permissions for all invitees
+    type: object
+    required:
+      - actions
+      - namespaces_names
+    properties:
+      actions:
+        description: List of permitted actions
+        type: array
+        items:
+          $ref: "#/definitions/ArrayActions"
+        example:
+          - read
+          - write
+      namespaces_names:
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+
   InvitationOrganizationJoinEmail:
     description: Encapsulates information regarding inviting people using email to join organization, same permissions for all invitees
     type: object
