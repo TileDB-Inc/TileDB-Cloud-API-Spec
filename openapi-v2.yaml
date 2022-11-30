@@ -805,6 +805,39 @@ definitions:
             x-omitempty: true
             description: License text
 
+  InvitationOrganizationJoin:
+    description: Encapsulates information regarding inviting people using email to join organization, same permissions for all invitees
+    type: object
+    required:
+      - invitee_email
+      - names
+      - organization_role
+    properties:
+      actions:
+        description: List of permitted actions
+        type: array
+        items:
+          $ref: "#/definitions/NamespaceActions"
+        example:
+          - read
+          - write
+      organization_role:
+        description: Role of the invited namespace in the joined organization
+        $ref: "#/definitions/OrganizationRoles"
+        x-omitempty: false
+      invitee_email:
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+          format: email
+      names:
+        description: Usernames or UUIDs of the users 
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+
   GroupRegistrationRequest:
     type: object
     description: information for creating a new group with the passed configuration 
@@ -1195,6 +1228,37 @@ paths:
           description: Bad Gateway
         default:
           description: "error response"
+          schema:
+            $ref: "#/definitions/Error"
+            
+  /invitations/{organization}/join:
+    parameters:
+      - name: organization
+        in: path
+        description: name or UUID of organization
+        type: string
+        required: true
+    post:
+      tags:
+        - invitation
+      description: Sends email to multiple recipients with joining information regarding an organization
+      operationId: joinOrganization
+      parameters:
+        - name: invitation
+          in: body
+          description: list of email recipients or TileDB-cloud names
+          schema:
+            $ref: "#/definitions/InvitationOrganizationJoin"
+          required: true
+      responses:
+        204:
+          description: Email sent successfully to user for email confirmation link
+        400:
+          description: Bad Request
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
           schema:
             $ref: "#/definitions/Error"
 
