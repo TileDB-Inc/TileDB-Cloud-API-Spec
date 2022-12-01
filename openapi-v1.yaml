@@ -2682,7 +2682,7 @@ definitions:
     description: Encapsulates information regarding inviting people using email to join organization, same permissions for all invitees
     type: object
     required:
-      - invitee_email_or_name
+      - invitee_email
       - organization_role
     properties:
       actions:
@@ -2697,7 +2697,7 @@ definitions:
         description: Role of the invited namespace in the joined organization
         $ref: "#/definitions/OrganizationRoles"
         x-omitempty: false
-      invitee_email_or_name:
+      invitee_email:
         type: array
         x-omitempty: true
         items:
