@@ -2702,7 +2702,6 @@ definitions:
         x-omitempty: true
         items:
           type: string
-          format: email
 
   Invitation:
     description: Invitations to share or collaborate
