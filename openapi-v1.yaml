@@ -2676,7 +2676,6 @@ definitions:
         x-omitempty: true
         items:
           type: string
-          format: email
 
   InvitationOrganizationJoinEmail:
     description: Encapsulates information regarding inviting people using email to join organization, same permissions for all invitees
