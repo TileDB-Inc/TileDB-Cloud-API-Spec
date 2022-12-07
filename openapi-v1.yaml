@@ -6849,6 +6849,39 @@ paths:
             $ref: "#/definitions/Error"
 
   /arrays/browser/shared/sidebar:
+    parameters:
+      - name: file_type
+        in: query
+        description: file_type to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: exclude_file_type
+        in: query
+        description: file_type to exclude matching array in results, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: file_property
+        in: query
+        description: file_property key-value pair (comma separated, i.e. key,value) to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: shared_to
+        in: query
+        description: namespaces to filter results of where there groups were shared to
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
     get:
       tags:
         - array
@@ -6954,6 +6987,39 @@ paths:
             $ref: "#/definitions/Error"
 
   /arrays/browser/public/sidebar:
+    parameters:
+      - name: file_type
+        in: query
+        description: file_type to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: exclude_file_type
+        in: query
+        description: file_type to exclude matching array in results, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: file_property
+        in: query
+        description: file_property key-value pair (comma separated, i.e. key,value) to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: shared_to
+        in: query
+        description: namespaces to filter results of where there groups were shared to
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
     get:
       tags:
         - array
@@ -7059,6 +7125,39 @@ paths:
             $ref: "#/definitions/Error"
 
   /arrays/browser/owned/sidebar:
+    parameters:
+      - name: file_type
+        in: query
+        description: file_type to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: exclude_file_type
+        in: query
+        description: file_type to exclude matching array in results, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: file_property
+        in: query
+        description: file_property key-value pair (comma separated, i.e. key,value) to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: shared_to
+        in: query
+        description: namespaces to filter results of where there groups were shared to
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
     get:
       tags:
         - array
