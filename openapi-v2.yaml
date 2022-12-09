@@ -676,7 +676,7 @@ definitions:
       access_key_id:
         description: "The ID of the access key"
         type: string
-        x-go-custom-tag: 'validate:"required"'
+        x-go-custom-tag: 'tdbrest:"key_id" validate:"required"'
       secret_access_key:
         description: "The access key's secret. Never returned in responses."
         type: string
@@ -697,7 +697,7 @@ definitions:
       account_name:
         description: "The name of the Azure account to access"
         type: string
-        x-go-custom-tag: 'validate:"required"'
+        x-go-custom-tag: 'tdbrest:"key_id" validate:"required"'
       account_key:
         description: "The secret key. Never returned in responses."
         type: string
