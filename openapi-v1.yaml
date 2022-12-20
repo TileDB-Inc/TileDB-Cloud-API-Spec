@@ -2751,6 +2751,10 @@ definitions:
         description: Namespace of the owner of the invitation (user or organization)
         type: string
         example: "00000000-0000-0000-0000-000000000000"
+      inviter_user_uuid:
+        description: Unique ID of the user that sent the invitation
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
       user_namespace_uuid:
         description: Unique ID of the user accepted the invitation
         type: string
@@ -2769,8 +2773,18 @@ definitions:
         description: Role of the invited namespace in the joined organization
         $ref: "#/definitions/OrganizationRoles"
         x-omitempty: false
+      invitee_organization_uuid:
+        description: Unique ID of the organization whose user(s) accepted the invitation
+        type: string
+        x-omitempty: false
+        example: "00000000-0000-0000-0000-000000000000"
       array_uuid:
         description: Unique ID of the array
+        type: string
+        x-omitempty: false
+        example: "00000000-0000-0000-0000-000000000000"
+      group_uuid:
+        description: Unique ID of the group
         type: string
         x-omitempty: false
         example: "00000000-0000-0000-0000-000000000000"
@@ -2784,6 +2798,10 @@ definitions:
         example: "jane@doe.com"
       actions:
         description: A comma separated list of ArrayActions or NamespaceActions
+        type: string
+        example: "read,write"
+      group_actions:
+        description: A comma separated list of GroupActions
         type: string
         example: "read,write"
       status:
