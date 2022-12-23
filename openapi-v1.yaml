@@ -2703,7 +2703,7 @@ definitions:
         example:
           - read
           - write
-      invitee_email_or_name:
+      invitee_email_or_namespace:
         type: array
         x-omitempty: true
         items:
@@ -6786,15 +6786,15 @@ paths:
       description: Sends email to multiple recipients with sharing information regarding a group
       operationId: shareGroupByInvite
       parameters:
-        - name: group_email_invite
+        - name: email_invite
           in: body
-          description: list of email/name recipients
+          description: list of email/namespace recipients
           schema:
             $ref: "#/definitions/InvitationGroupShareEmail"
           required: true
       responses:
         204:
-          description: Email sent successfully to user for email confirmation link
+          description: Email sent successfully to user with an email confirmation link
         404:
           description: Could not reach one or more recipients
           schema:
