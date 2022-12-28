@@ -1692,6 +1692,59 @@ definitions:
         type: boolean
         example: false
 
+  NotificationsData:
+    description: Object including list of notifications and pagination metadata
+    type: object
+    properties:
+      notifications:
+        description: List of notifications
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/Notification"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
+  Notification:
+    description: Notification for a given namespace
+    type: object
+    properties:
+      id:
+        description: Unique ID of the notification
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      created_at:
+        description: Time when UDF notification was created (rfc3339)
+        type: string
+        format: date-time
+        readOnly: true
+      description:
+        description: The description of the notification
+        example: "You have been invited to join TileDB. Check your email"
+        type: string
+      read:
+        description: Suggests if the notification has been read by the user
+        type: boolean
+        x-omitempty: false
+        example: true
+      logo:
+        description: logo (base64 encoded) for the subject of the notification. (e.g. Logo of the array/organization that user has been invited)
+        type: string
+      type:
+        description: Type of the notification
+        $ref: "#/definitions/NotificationType"
+        example: organizationInvite
+        x-omitempty: false
+
+NotificationType:
+    description: type of the notification
+    type: string
+    enum:
+      # Invite to join an organization
+      - organizationInvite
+      # Invite to share an array
+      - arrayInvite
+
   Subscription:
     description: Subscription of a user (customer) to another user's arrays
     type: object
@@ -6520,6 +6573,32 @@ paths:
           description: list of timestamps in milliseconds, paginated
           schema:
             $ref: "#/definitions/ArrayEndTimestampData"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /notifications/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: the namespace we want notifications from
+        type: string
+        required: true
+    get:
+      tags:
+        - notifications
+      description: List notifications of a given namespace
+      operationId: listNotifications
+      produces:
+        - application/json
+      responses:
+        200:
+          description: list of notifications, paginated
+          schema:
+            $ref: "#/definitions/NotificationsData"
         502:
           description: Bad Gateway
         default:
