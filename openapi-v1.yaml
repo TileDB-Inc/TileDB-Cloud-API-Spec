@@ -9287,6 +9287,45 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /taskgraphs/{namespace}/logs/{id}/artifacts:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph log.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph log entry.
+        type: string
+        required: true
+    get:
+      description: retrieve the contents of the file as binary
+      operationId: getLogArtifacts
+      produces:
+        - application/octet-stream
+      tags:
+        - task_graph_logs
+      responses:
+        200:
+          description: downloaded artifacts
+          headers:
+            Content-Type:
+              type: string
+              description: Content Type of file
+            Content-Disposition:
+              type: string
+              description: Indicates if the content is expected to be displayed inline in the browser, or as an attachment, that is downloaded and saved locally.
+          schema:
+            type: file
+            format: byte
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
   # Task graphs: Registration
 
   /taskgraphs/{namespace}/registered/{name}:
