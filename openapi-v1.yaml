@@ -3527,6 +3527,57 @@ definitions:
       status:
         $ref: '#/definitions/ArrayTaskStatus'
 
+  # Task graph
+  TaskGraph:
+    description: Information about a task graph.
+    type: object
+    properties:
+      uuid:
+        type: string
+        readOnly: true
+        description: The server-generated UUID of the task graph.
+      namespace:
+        type: string
+        description: >
+          The namespace that owns this task graph.
+          When creating a task graph log, this is used as the namespace to
+          create the log in; thereafter it is read-only.
+      created_by:
+        type: string
+        readOnly: true
+        description: The name of the user who created this task graph log.
+      name:
+        type: string
+        description: >
+          A name for this task graph, displayed in the UI.
+          Does not need to be unique.
+      created_at:
+        type: string
+        format: date-time
+        readOnly: true
+        description: >
+          The date/time when this task graph was originally created.
+      nodes:
+        type: array
+        items:
+          $ref: "#/definitions/TaskGraphNodeMetadata"
+        description: >
+          The structure of the graph. This is provided by the client
+          when first setting up the task graph. 
+          This must be topographically sorted; that is, each node must appear
+          after all nodes that it depends upon.
+
+  TaskGraphs:
+    description: Information about a series of task graphs.
+    type: object
+    properties:
+      graphs:
+        type: array
+        items:
+          $ref: "#/definitions/TaskGraph"
+        description: >
+          The series of graphs.
+
   # Registered task graphs
 
   RegisteredTaskGraph:
@@ -8483,7 +8534,7 @@ paths:
         required: true
     post:
       description:  Stop a task graph execution in the given namespace using the associated log.
-      operationId: retryTaskGraph
+      operationId: stopTaskGraph
       tags:
         - registered_task_graphs
         - task_graph_logs
@@ -8498,6 +8549,175 @@ paths:
           description: error response
           schema:
             $ref: '#/definitions/Error'
+
+  # Task graphs
+  /v1/taskgraphs/{namespace}/graphs:
+    get:
+      description: >
+        Fetch the task graphs of a namespace the user has access to. The
+        returned entries will include only summary data, and will not include
+        information about the individual tasks that were executed. (This
+        information is available when requesting an individual task graph log.)
+
+        Entries in the response are ordered from newest to oldest. Pagination
+        parameters work as in other API methods; see PaginationMetadata.
+      operationId: listTaskGraphs
+      parameters:
+        - name: namespace
+          in: query
+          description: Include graphs for this namespace.
+          type: string
+          required: false
+        - name: created_by
+          in: query
+          description: Include graphs from only this user.
+          type: string
+          required: false
+        - name: search
+          in: query
+          description: search string that will look at name.
+          required: false
+          type: string
+        - name: start_time
+          in: query
+          description: Include graphs created after this time.
+          type: string
+          format: date-time
+          required: false
+        - name: end_time
+          in: query
+          description: Include graphs created before this time.
+          type: string
+          format: date-time
+          required: false
+        - name: page
+          in: query
+          description: pagination offset
+          type: integer
+          required: false
+        - name: per_page
+          in: query
+          description: pagination limit
+          type: integer
+          required: false
+      tags:
+        - task_graphs
+      responses:
+        200:
+          description: The task graphs that matched the user's query.
+          schema:
+            $ref: "#/definitions/TaskGraphs"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      description: >
+        Create a single task graph for execution.
+      operationId: createTaskGraph
+      tags:
+        - task_graphs
+      parameters:
+        - name: graph
+          in: body
+          description: Create the task graph.
+          schema:
+            $ref: "#/definitions/TaskGraph"
+          required: true
+      responses:
+        201:
+          description: Task graph created successfully.
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /taskgraphs/{namespace}/graphs/{id}:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph entry.
+        type: string
+        required: true
+    get:
+      description: >
+        Fetch information about a single task graph.
+      operationId: getTaskGraph
+      tags:
+        - task_graphs
+      responses:
+        200:
+          description: Information about the single task graph.
+          schema:
+            $ref: "#/definitions/TaskGraph"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      description: >
+        Update information about a single task graph execution.
+      operationId: updateTaskGraph
+      tags:
+        - task_graphs
+      parameters:
+        - name: log
+          in: body
+          description: Updates to make to the task graph.
+          schema:
+            $ref: "#/definitions/TaskGraph"
+          required: true
+      responses:
+        204:
+          description: Task graph updated successfully.
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /taskgraphs/{namespace}/graphs/{id}/submit:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph entry.
+        type: string
+        required: true
+    post:
+      description: >
+       Submit a single task graph for execution.
+      operationId: submitTaskGraph
+      tags:
+        - task_graphs
+        - task_graph_logs
+      responses:
+        202:
+          description: Information about the execution of a single task graph.
+          schema:
+            $ref: "#/definitions/TaskGraphLog"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
 
   # Task graphs: Registration
 
