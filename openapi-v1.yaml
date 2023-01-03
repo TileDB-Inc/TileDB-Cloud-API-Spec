@@ -9356,6 +9356,36 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /taskgraphs/{namespace}/logs/{id}/stop:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph log.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph log entry.
+        type: string
+        required: true
+    post:
+      description:  Stop a task graph execution in the given namespace using the associated log.
+      operationId: retryTaskGraph
+      tags:
+        - registered_task_graphs
+        - task_graph_logs
+      responses:
+        202:
+          description: Information about the execution of a single task graph.
+          schema:
+            $ref: "#/definitions/TaskGraphLog"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
   # Task graphs: Registration
 
   /taskgraphs/{namespace}/registered/{name}:
