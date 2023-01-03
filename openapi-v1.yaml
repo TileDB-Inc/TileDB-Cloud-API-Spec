@@ -9470,18 +9470,6 @@ paths:
           description: search string that will look at name.
           required: false
           type: string
-        - name: start_time
-          in: query
-          description: Include graphs created after this time.
-          type: string
-          format: date-time
-          required: false
-        - name: end_time
-          in: query
-          description: Include graphs created before this time.
-          type: string
-          format: date-time
-          required: false
         - name: page
           in: query
           description: pagination offset
