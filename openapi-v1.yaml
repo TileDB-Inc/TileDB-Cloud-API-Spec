@@ -8564,6 +8564,11 @@ paths:
       operationId: listTaskGraphs
       parameters:
         - name: namespace
+          in: path
+          description: Namespace for graphs
+          type: string
+          required: true
+        - name: namespace
           in: query
           description: Include graphs for this namespace.
           type: string
@@ -8620,6 +8625,11 @@ paths:
       tags:
         - task_graphs
       parameters:
+        - name: namespace
+          in: path
+          description: Include graphs for this namespace.
+          type: string
+          required: true
         - name: graph
           in: body
           description: Create the task graph.
@@ -8672,7 +8682,7 @@ paths:
       tags:
         - task_graphs
       parameters:
-        - name: log
+        - name: graph
           in: body
           description: Updates to make to the task graph.
           schema:
