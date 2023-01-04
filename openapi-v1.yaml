@@ -6768,7 +6768,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /invitations/{namespace}/{group}/group/share:
+  /invitations/group/{namespace}/{group}/share:
     parameters:
       - name: namespace
         in: path
