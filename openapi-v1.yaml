@@ -3560,7 +3560,7 @@ definitions:
       nodes:
         type: array
         items:
-          $ref: "#/definitions/TaskGraphNodeMetadata"
+          $ref: "#/definitions/RegisteredTaskGraphNode"
         description: >
           The structure of the graph. This is provided by the client
           when first setting up the task graph. 
