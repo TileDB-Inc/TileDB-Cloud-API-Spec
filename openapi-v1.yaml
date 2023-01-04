@@ -2751,7 +2751,7 @@ definitions:
         description: Namespace of the owner of the invitation (user or organization)
         type: string
         example: "00000000-0000-0000-0000-000000000000"
-      inviter_user_uuid:
+      inviter_uuid:
         description: Unique ID of the user that sent the invitation
         type: string
         example: "00000000-0000-0000-0000-000000000000"
@@ -2773,7 +2773,7 @@ definitions:
         description: Role of the invited namespace in the joined organization
         $ref: "#/definitions/OrganizationRoles"
         x-omitempty: false
-      invitee_organization_uuid:
+      organization_uuid:
         description: Unique ID of the organization whose user(s) accepted the invitation
         type: string
         x-omitempty: false
@@ -6768,7 +6768,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /invitations/{namespace}/{group}/share/group:
+  /invitations/{namespace}/{group}/group/share:
     parameters:
       - name: namespace
         in: path
