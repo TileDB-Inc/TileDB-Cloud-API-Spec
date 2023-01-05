@@ -3759,7 +3759,7 @@ definitions:
           $ref: "#/definitions/RegisteredTaskGraphNode"
         description: >
           The structure of the graph. This is provided by the client
-          when first setting up the task graph. 
+          when first setting up the task graph.
           This must be topographically sorted; that is, each node must appear
           after all nodes that it depends upon.
 
@@ -4078,7 +4078,18 @@ definitions:
         items:
           $ref: "#/definitions/TGUDFArgument"
       result_format:
-        $ref: "#/definitions/ResultFormat"
+        $ref: '#/definitions/ResultFormat'
+      resources:
+        type: object
+        description: >
+          The resources requested for this particular node
+        properties:
+          cpu:
+            type: string
+            example: 500m
+          memory:
+            type: string
+            example: 8Gi
 
   TGUDFArgument:
     description: >
