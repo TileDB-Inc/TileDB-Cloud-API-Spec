@@ -3809,6 +3809,17 @@ definitions:
           $ref: '#/definitions/TGUDFArgument'
       result_format:
         $ref: '#/definitions/ResultFormat'
+      resources:
+        type: object
+        description: >
+          The resources requested for this particular node
+        properties:
+          cpu:
+            type: string
+            example: 500m
+          memory:
+            type: string
+            example: 8Gi
 
   TGUDFArgument:
     description: >
