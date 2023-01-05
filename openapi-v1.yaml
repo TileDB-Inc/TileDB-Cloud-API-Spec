@@ -3756,7 +3756,7 @@ definitions:
       nodes:
         type: array
         items:
-          $ref: "#/definitions/RegisteredTaskGraphNode"
+          $ref: "#/definitions/TaskGraphNode"
         description: >
           The structure of the graph. This is provided by the client
           when first setting up the task graph.
@@ -3814,7 +3814,7 @@ definitions:
       nodes:
         type: array
         items:
-          $ref: "#/definitions/RegisteredTaskGraphNode"
+          $ref: '#/definitions/TaskGraphNode'
         description: >
           The structure of the graph, in the form of the nodes that make it up.
           As with `TaskGraphLog`, nodes must topologically sorted, so that any
@@ -3851,7 +3851,7 @@ definitions:
         type: string
         example: "organization"
 
-  RegisteredTaskGraphNode:
+  TaskGraphNode:
     description: >
       Information about a single node within a registered task graph.
       A single node represents one piece of data or a computational step;
