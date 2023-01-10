@@ -2703,7 +2703,7 @@ definitions:
         example:
           - read
           - write
-      invitee_email_or_namespace:
+      invitee_email_or_name:
         type: array
         x-omitempty: true
         items:
