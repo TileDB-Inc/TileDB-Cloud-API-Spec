@@ -6539,6 +6539,11 @@ paths:
         description: name/uri of array that is url-encoded to filter
         type: string
         required: false
+      - name: group
+        in: query
+        description: name or ID of group to filter
+        type: string
+        required: false
       - name: start
         in: query
         description: start time for tasks to filter by
