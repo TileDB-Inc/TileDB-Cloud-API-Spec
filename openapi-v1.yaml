@@ -2644,6 +2644,8 @@ definitions:
     enum:
       # Array share
       - ARRAY_SHARE
+      # Group share
+      - GROUP_SHARE
       # Join Organization
       - JOIN_ORGANIZATION
 
@@ -2672,6 +2674,36 @@ definitions:
           - read
           - write
       invitee_email:
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+
+  InvitationGroupShareEmail:
+    description: Encapsulates information regarding inviting people using email to share group, same permissions for all invitees
+    type: object
+    required:
+      - array_actions
+      - group_actions
+      - invitee_email_or_name
+    properties:
+      array_actions:
+        description: List of permitted array actions
+        type: array
+        items:
+          $ref: "#/definitions/ArrayActions"
+        example:
+          - read
+          - write
+      group_actions:
+        description: List of permitted group actions
+        type: array
+        items:
+          $ref: "#/definitions/GroupActions"
+        example:
+          - read
+          - write
+      invitee_email_or_name:
         type: array
         x-omitempty: true
         items:
@@ -2719,6 +2751,10 @@ definitions:
         description: Namespace of the owner of the invitation (user or organization)
         type: string
         example: "00000000-0000-0000-0000-000000000000"
+      inviter_uuid:
+        description: Unique ID of the user that sent the invitation
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
       user_namespace_uuid:
         description: Unique ID of the user accepted the invitation
         type: string
@@ -2737,8 +2773,18 @@ definitions:
         description: Role of the invited namespace in the joined organization
         $ref: "#/definitions/OrganizationRoles"
         x-omitempty: false
+      organization_uuid:
+        description: Unique ID of the organization whose user(s) accepted the invitation
+        type: string
+        x-omitempty: false
+        example: "00000000-0000-0000-0000-000000000000"
       array_uuid:
         description: Unique ID of the array
+        type: string
+        x-omitempty: false
+        example: "00000000-0000-0000-0000-000000000000"
+      group_uuid:
+        description: Unique ID of the group
         type: string
         x-omitempty: false
         example: "00000000-0000-0000-0000-000000000000"
@@ -2752,6 +2798,10 @@ definitions:
         example: "jane@doe.com"
       actions:
         description: A comma separated list of ArrayActions or NamespaceActions
+        type: string
+        example: "read,write"
+      group_actions:
+        description: A comma separated list of GroupActions
         type: string
         example: "read,write"
       status:
@@ -6716,6 +6766,44 @@ paths:
           description: Could not reach one or more recipients
           schema:
             $ref: "#/definitions/InvitationArrayShareEmail"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /invitations/group/{namespace}/{group}/share:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace group is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: group
+        in: path
+        description: name/uri of group that is url-encoded
+        type: string
+        required: true
+    post:
+      tags:
+        - invitation
+      description: Sends email to multiple recipients with sharing information regarding a group
+      operationId: shareGroupByInvite
+      parameters:
+        - name: email_invite
+          in: body
+          description: list of email/namespace recipients
+          schema:
+            $ref: "#/definitions/InvitationGroupShareEmail"
+          required: true
+      responses:
+        204:
+          description: Email sent successfully to user with an email confirmation link
+        404:
+          description: Could not reach one or more recipients
+          schema:
+            $ref: "#/definitions/InvitationGroupShareEmail"
         502:
           description: Bad Gateway
         default:
