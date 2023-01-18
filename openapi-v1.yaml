@@ -9349,59 +9349,20 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /taskgraphs/{namespace}/logs/{id}/artifacts:
+  /taskgraphs/{namespace}/executions/{id}/retry:
     parameters:
       - name: namespace
         in: path
-        description: The namespace that owns this task graph log.
+        description: The namespace that owns this task graph execution.
         type: string
         required: true
       - name: id
         in: path
-        description: The UUID of the task graph log entry.
-        type: string
-        required: true
-    get:
-      description: retrieve the contents of the file as binary
-      operationId: getLogArtifacts
-      produces:
-        - application/octet-stream
-      tags:
-        - task_graph_logs
-      responses:
-        200:
-          description: downloaded artifacts
-          headers:
-            Content-Type:
-              type: string
-              description: Content Type of file
-            Content-Disposition:
-              type: string
-              description: Indicates if the content is expected to be displayed inline in the browser, or as an attachment, that is downloaded and saved locally.
-          schema:
-            type: file
-            format: byte
-        502:
-          description: Bad Gateway
-        default:
-          description: error response
-          schema:
-            $ref: '#/definitions/Error'
-
-  /taskgraphs/{namespace}/logs/{id}/retry:
-    parameters:
-      - name: namespace
-        in: path
-        description: The namespace that owns this task graph log.
-        type: string
-        required: true
-      - name: id
-        in: path
-        description: The UUID of the task graph log entry.
+        description: The UUID of the task graph entry.
         type: string
         required: true
     post:
-      description:  Retry a task graph in the given namespace using the associated log.
+      description:  Retry a task graph in the given namespace using the associated execution id.
       operationId: retryTaskGraph
       tags:
         - registered_task_graphs
@@ -9418,20 +9379,20 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /taskgraphs/{namespace}/logs/{id}/stop:
+  /taskgraphs/{namespace}/executions/{id}/stop:
     parameters:
       - name: namespace
         in: path
-        description: The namespace that owns this task graph log.
+        description: The namespace that owns this task graph execution.
         type: string
         required: true
       - name: id
         in: path
-        description: The UUID of the task graph log entry.
+        description: The UUID of the task graph entry.
         type: string
         required: true
     post:
-      description:  Stop a task graph execution in the given namespace using the associated log.
+      description:  Stop a task graph execution in the given namespace using the associated associated execution id.
       operationId: stopTaskGraph
       tags:
         - registered_task_graphs
@@ -9466,31 +9427,6 @@ paths:
           description: Namespace for graphs
           type: string
           required: true
-        - name: namespace
-          in: query
-          description: Include graphs for this namespace.
-          type: string
-          required: false
-        - name: created_by
-          in: query
-          description: Include graphs from only this user.
-          type: string
-          required: false
-        - name: search
-          in: query
-          description: search string that will look at name.
-          required: false
-          type: string
-        - name: page
-          in: query
-          description: pagination offset
-          type: integer
-          required: false
-        - name: per_page
-          in: query
-          description: pagination limit
-          type: integer
-          required: false
       tags:
         - task_graphs
       responses:
@@ -9525,6 +9461,8 @@ paths:
       responses:
         201:
           description: Task graph created successfully.
+          schema:
+            $ref: "#/definitions/TaskGraph"
         502:
           description: Bad Gateway
         default:
@@ -9576,7 +9514,7 @@ paths:
           required: true
       responses:
         204:
-          description: Task graph updated successfully.
+          description: Task graph created successfully.
         502:
           description: Bad Gateway
         default:
