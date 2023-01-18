@@ -9349,7 +9349,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /taskgraphs/{namespace}/executions/{id}/retry:
+  /taskgraphs/{namespace}/executions/{id}/resubmit:
     parameters:
       - name: namespace
         in: path
@@ -9363,7 +9363,7 @@ paths:
         required: true
     post:
       description:  Retry a task graph in the given namespace using the associated execution id.
-      operationId: retryTaskGraph
+      operationId: resubmitTaskGraphExecution
       tags:
         - registered_task_graphs
         - task_graph_logs
