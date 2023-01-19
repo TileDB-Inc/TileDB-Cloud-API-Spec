@@ -6706,6 +6706,40 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /invitations/group/{invitation}/{namespace}/{group_name}/share:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace group is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: invitation
+        in: path
+        description: the ID of invitation about to be cancelled
+        type: string
+        required: true
+      - name: group_name
+        in: path
+        description: name/uuid of group that is url-encoded
+        type: string
+        required: true
+    delete:
+      description: Cancels group sharing invitation
+      tags:
+        - invitation
+      operationId: cancelShareGroupByInvite
+      responses:
+        204:
+          description: Invitation cancelled successfully
+        404:
+          description: No invitation was found to cancel
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /invitations/{invitation}/{organization}/join:
     parameters:
       - name: invitation
