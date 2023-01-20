@@ -4079,17 +4079,7 @@ definitions:
           $ref: "#/definitions/TGUDFArgument"
       result_format:
         $ref: '#/definitions/ResultFormat'
-      resources:
-        type: object
-        description: >
-          The resources requested for this particular node
-        properties:
-          cpu:
-            type: string
-            example: 500m
-          memory:
-            type: string
-            example: 8Gi
+
 
   TGUDFArgument:
     description: >
@@ -4162,6 +4152,20 @@ definitions:
           UDF will execute in the standard resource class of the TileDB Cloud
           provider.
         type: string
+        x-omitempty: true
+      resources:
+        type: object
+        description: >
+          The resources requested for this particular node. If resources are not 
+          specified resource_class is used, if it is not set the standard resource 
+          // defaults are used
+        properties:
+          cpu:
+            type: string
+            example: 500m
+          memory:
+            type: string
+            example: 8Gi
         x-omitempty: true
       run_client_side:
         description: >
