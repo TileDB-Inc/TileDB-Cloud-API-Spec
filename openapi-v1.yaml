@@ -7012,14 +7012,6 @@ paths:
         collectionFormat: multi
         items:
           type: string
-      - name: shared_to
-        in: query
-        description: namespaces to filter results of where there groups were shared to
-        required: false
-        type: array
-        collectionFormat: multi
-        items:
-          type: string
     get:
       tags:
         - array
@@ -7145,14 +7137,6 @@ paths:
       - name: file_property
         in: query
         description: file_property key-value pair (comma separated, i.e. key,value) to search for, more than one can be included
-        required: false
-        type: array
-        collectionFormat: multi
-        items:
-          type: string
-      - name: shared_to
-        in: query
-        description: namespaces to filter results of where there groups were shared to
         required: false
         type: array
         collectionFormat: multi
