@@ -8527,7 +8527,7 @@ paths:
             $ref: '#/definitions/Error'
 
   # Task graphs
-  /v1/taskgraphs/{namespace}/graphs:
+  /taskgraphs/{namespace}/graphs:
     get:
       description: >
         Fetch the task graphs of a namespace the user has access to. The
