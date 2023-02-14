@@ -3566,6 +3566,12 @@ definitions:
           when first setting up the task graph. 
           This must be topographically sorted; that is, each node must appear
           after all nodes that it depends upon.
+      parallelism:
+        type: integer
+        format: int64
+        description: >
+          Parallelism limits the max total parallel pods that can execute
+          at the same time in a workflow.
 
   TaskGraphs:
     description: Information about a series of task graphs.
