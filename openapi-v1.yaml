@@ -1011,6 +1011,10 @@ definitions:
         description: Optional task name
         type: string
         example: "subarray-multiplier"
+      username:
+        description: username that executed this task
+        type: string
+        example: "demo"
       description:
         description: Optional task description (Tasks purpose)
         type: string
