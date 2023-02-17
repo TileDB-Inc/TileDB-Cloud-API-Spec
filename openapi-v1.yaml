@@ -4270,7 +4270,7 @@ paths:
       - name: event_types
         in: query
         type: string
-        description: Event values can be one or more of the following read, write, create, delete, register, deregister, comma separated
+        description: Refer to ActivityEventType for possible values
       - name: task_id
         in: query
         type: string
