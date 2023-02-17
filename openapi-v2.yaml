@@ -804,6 +804,24 @@ definitions:
             x-omitempty: true
             description: License text
 
+  GroupCreationResponse:
+    type: object
+    description: results of the successful group creation request
+    properties:
+      id:
+        description: unique ID of the created group
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      name:
+        description: The name of the group. If must be unique within the group.
+        type: string
+        x-omitempty: false
+      tiledb_uri:
+        type: string
+        x-nullable: false
+        x-omitempty: false
+        description: TileDB URI for access
+
   GroupRegistrationRequest:
     type: object
     description: information for creating a new group with the passed configuration
@@ -854,6 +872,25 @@ definitions:
           access_credentials_name:
             description: the name of the access credentials to use. if unset, the default credentials will be used.
             type: string
+
+  GroupRegistrationResponse:
+    type: object
+    description: results of the successful group registration request
+    properties:
+      id:
+        description: unique ID of the registered group
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      name:
+        description: The name of the group. If must be unique within the group.
+        type: string
+        x-omitempty: false
+      tiledb_uri:
+        type: string
+        x-nullable: false
+        x-omitempty: false
+        description: TileDB URI for access
+
 
   GroupContentsRetrievalResponse:
     description: Object including a page of members of a group and pagination metadata
@@ -1394,6 +1431,8 @@ paths:
       responses:
         201:
           description: group created successfully
+          schema:
+            $ref: "#/definitions/GroupCreationResponse"
         502:
           description: Bad Gateway
         default:
@@ -1413,6 +1452,8 @@ paths:
       responses:
         201:
           description: group created successfully
+          schema:
+            $ref: "#/definitions/GroupRegistrationResponse"
         502:
           description: Bad Gateway
         default:
