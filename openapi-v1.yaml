@@ -3700,6 +3700,84 @@ definitions:
       udf_node:
         $ref: "#/definitions/TGUDFNodeData"
 
+  TGArrayNodeData:
+    description: >
+      The details of an array that should be queried and provided as the input
+      to a UDF Node. This is essentially a `UDFArrayDetails`, but you’re allowed
+      to provide most of the values as Nodes if you want.
+    type: object
+    x-nullable: true
+    properties:
+      uri:
+        description: >
+          The `tiledb://` URI of the array to query, or a Node which yields
+          that `tiledb://` URI.
+        type:
+          $ref: "#/definitions/TGArgValue"
+      ranges:
+        $ref: "#/definitions/TGQueryRanges"
+      buffers:
+        description: >
+          A list of buffers (attributes and dimensions) to fetch.
+          Can be provided either raw or as a node to be interpolated in.
+        type:
+          $ref: "#/definitions/TGArgValue"
+        x-omitempty: true
+
+  TGQueryRanges:
+    description: Parameterizable version of `QueryRanges`.
+    type: object
+    properties:
+      layout:
+        $ref: "#/definitions/Layout"
+      friendly_ranges:
+        description: >
+          The ranges to query against, in a user-friendly format. This is a
+          slightly more flexible format designed to be easier for an author
+          to use. This may also be Node data which yields these ranges.
+          (These will be processed by the client to turn into raw ranges.)
+
+          A single `[lo, hi]` span may be specified as:
+
+          - a scalar value (for `lo == hi`)
+          - a Slice (escaped in `"__tdbudf__": "__slice__"` format)
+          - a single-entry list (for `lo == hi`)
+          - a pair of values `[lo, hi]`
+
+          The ranges for a given dimension may be specified as:
+
+          - a single scalar value (for a single-value `[val, val]` span)
+          - a Slice (for exactly one `[lo, hi]` span)
+          - a list of spans as described above.
+
+          See the TileDB Cloud documentation for more details on the formats.
+
+          Either this or `ranges` must be specified, but not both.
+        type:
+          $ref: "#/definitions/TGArgValue"
+      ranges:
+        description: >
+          The ranges to query against, or Node data which yields those ranges.
+
+          The result must be in the QueryRanges format:
+
+              [
+                [d1lo1, d1hi1, d1lo2, d1hi2, ...],
+                [d2lo1, d2hi1, d2lo2, d2hi2, ...],
+                ...,
+              ]
+
+          but there are many ways to construct it:
+
+          - A node returning the entire `[[lo, hi, ...], ...]` list-of-lists.
+          - `[[(lo node), (hi node)], ...]`
+          - `[(node returning lo/hi pairs), ...]`
+          - Or a mix of any of the above.
+
+          Either this or `user_ranges` must be specified, but not both.
+        type:
+          $ref: "#/definitions/TGArgValue"
+
   TGInputNodeData:
     description: >
       Specifies that a node is an “input value”, allowing for parameterized
