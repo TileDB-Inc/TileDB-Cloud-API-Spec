@@ -914,13 +914,19 @@ definitions:
           $ref: "#/definitions/ArrayMetadataEntry"
 
   TileDBConfig:
+    description: TileDB config used for interaction with the embedded library
     type: object
-    description: user's TileDB config
     properties:
-      configs:
-        type: object
-        additionalProperties:
-          type: string
+      entries:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string 
+            value:
+              type: string
+
 
   ArrayActivityLog:
     description: Actvity of an Array
@@ -4093,6 +4099,24 @@ definitions:
         description: config to use for opening
         $ref: "#/definitions/TileDBConfig"
 
+  ArrayConsolidationRequest:
+    description: Request to consolidate an array
+    type: object
+    properties:
+      config:
+        type: object
+        description: config to use to retrieve the contents
+        $ref: "#/definitions/TileDBConfig"
+
+  ArrayVacuumRequest:
+    description: Request to consolidate an array
+    type: object
+    properties:
+      config:
+        type: object
+        description: config to use to retrieve the contents
+        $ref: "#/definitions/TileDBConfig"
+
 paths:
   /.stats:
     get:
@@ -4614,11 +4638,11 @@ paths:
         - array
       operationId: consolidateArray
       parameters:
-        - name: tiledb_config
+        - name: consolidate_request
           in: body
-          description: tiledb configuration
+          description: Consolidate Request
           schema:
-            $ref: "#/definitions/TileDBConfig"
+            $ref: "#/definitions/ArrayConsolidationRequest"
           required: true
       responses:
         204:
@@ -4648,11 +4672,11 @@ paths:
         - array
       operationId: vacuumArray
       parameters:
-        - name: tiledb_config
+        - name: vaccum_request
           in: body
-          description: tiledb configuration
+          description: Vaccum Request
           schema:
-            $ref: "#/definitions/TileDBConfig"
+            $ref: "#/definitions/ArrayVacuumRequest"
           required: true
       responses:
         204:
