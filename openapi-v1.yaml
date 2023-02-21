@@ -1058,6 +1058,11 @@ definitions:
       status:
         description: The status of an individual task
         $ref: "#/definitions/ArrayTaskStatus"
+      status_message:
+        description: The reason the array task status is in the state
+        type: string
+        x-nullable: true
+        x-omitempty: true
       start_time:
         description: Start time RFC3339 for job
         type: string
