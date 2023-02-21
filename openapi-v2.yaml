@@ -267,6 +267,12 @@ definitions:
         description: Is non-empty domain really empty?
         type: boolean
         example: False
+      sizes:
+        description: Number of elements in DomainArray for var length
+        type: array
+        items:
+          type: integer
+          format: uint64
 
   ArrayType:
     description: TileDB array type
