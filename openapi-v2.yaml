@@ -235,12 +235,35 @@ definitions:
       arraySchemaLatest:
         description: Latest array schema
         $ref: "#/definitions/ArraySchema"
+      arraySchemasAll:
+        description: Array's schemas
+        $ref: "#/definitions/ArraySchemaMap"
       arrayMetadata:
         description: Array's metadata
         $ref: "#/definitions/ArrayMetadata"
       nonEmptyDomain:
         description: Array's non empty domain
         $ref: "#/definitions/NonEmptyDomainList"
+
+  ArraySchemaMap:
+    type: object
+    description: array's schemas
+    properties:
+      entries:
+        description: List of array schemas entries
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArraySchemaEntry"
+
+  ArraySchemaEntry:
+    type: object
+    description: key/value pair representing an array schema map entry
+    properties:
+      key:
+        type: string
+      value:
+        $ref: "#/definitions/ArraySchema"
 
   NonEmptyDomainList:
     type: object
