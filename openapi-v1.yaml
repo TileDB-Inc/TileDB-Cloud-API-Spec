@@ -10,9 +10,10 @@ consumes:
   - application/json
 
 schemes:
+  - http
   - https
 
-basePath: api.tiledb.com/v1
+basePath: /v1
 
 securityDefinitions:
   BasicAuth:
