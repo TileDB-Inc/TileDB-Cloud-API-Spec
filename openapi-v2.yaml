@@ -368,6 +368,10 @@ definitions:
       - FILTER_BYTESHUFFLE
       # Positive-delta encoding filter.
       - FILTER_POSITIVE_DELTA
+      # Scale-float filter
+      - SCALE_FLOAT
+      # Webp filter
+      - WEBP
 
   Filter:
       description: Filter
