@@ -213,7 +213,6 @@ definitions:
     description: Represents an open array
     type: object
     required:
-      - timestamp
       - queryType
       - uri
     properties:
