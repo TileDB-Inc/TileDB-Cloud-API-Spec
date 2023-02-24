@@ -369,9 +369,15 @@ definitions:
       # Positive-delta encoding filter.
       - FILTER_POSITIVE_DELTA
       # Scale-float filter
-      - SCALE_FLOAT
+      - FILTER_SCALE_FLOAT
       # Webp filter
-      - WEBP
+      - FILTER_WEBP
+      # CHECKSUM_MD5 filter
+      - FILTER_CHECKSUM_MD5
+      # CHECKSUM_SHA256 filter
+      - FILTER_CHECKSUM_SHA256
+      # DICTIONARY filter
+      - FILTER_DICTIONARY
 
   Filter:
       description: Filter
@@ -382,10 +388,20 @@ definitions:
         type:
           description: Filter type
           $ref: "#/definitions/FilterType"
+        floatScaleConfig:
+          description: Filter type
+          $ref: "#/definitions/FloatScaleConfig"
         data:
           description: Filter data
           type: object
           properties:
+            text:
+              type: string
+            bytes:
+              type: array
+              items:
+                type: integer
+                format: uint8
             int8:
               type: integer
               format: int8
@@ -416,6 +432,20 @@ definitions:
             float64:
               type: integer
               format: double
+
+  FloatScaleConfig:
+    description: FloatScaleConfig
+    type: object
+    properties:
+      scale:
+        type: integer
+        format: double
+      offset:
+        type: integer
+        format: double
+      byteWidth:
+        type: integer
+        format: uint64
 
   FilterPipeline:
     description: One or more filters to apply
