@@ -3703,6 +3703,15 @@ definitions:
         $ref: '#/definitions/TGUDFNodeData'
       retry_strategy:
         $ref: '#/definitions/RetryStrategy'
+      expand_node_output:
+        type: string
+        x-nullable: true
+        description: >
+          Used to create dynamic tasks based on the output of another node.
+          The other node's output must be a JSON list of values. The expansion
+          process creates one task per item in the output list. The item is
+          also passed as an argument to each task. The value is the
+          client_node_uuid of the node that we want to expand.
 
   TGInputNodeData:
     description: >
