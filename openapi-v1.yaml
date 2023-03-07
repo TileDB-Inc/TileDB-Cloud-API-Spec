@@ -3770,11 +3770,21 @@ definitions:
       parallelism:
         type: integer
         format: int64
+        x-nullable: true
+        x-omitempty: true
         description: >
           Parallelism limits the max total parallel pods that can execute
           at the same time in a workflow.
       retry_strategy:
         $ref: '#/definitions/RetryStrategy'
+      deadline:
+        type: integer
+        format: int64
+        x-nullable: true
+        x-omitempty: true
+        description: >
+          Duration in seconds relative to the workflow start time which the
+          workflow is allowed to run before it gets terminated.
 
   TaskGraphs:
     description: Information about a series of task graphs.
@@ -3908,6 +3918,14 @@ definitions:
           process creates one task per item in the output list. The item is
           also passed as an argument to each task. The value is the
           client_node_uuid of the node that we want to expand.
+      deadline:
+        type: integer
+        format: int64
+        x-nullable: true
+        x-omitempty: true
+        description: >
+          Duration in seconds relative to the node start time which the
+          node is allowed to run before it gets terminated.
 
   TGArrayNodeData:
     description: >
