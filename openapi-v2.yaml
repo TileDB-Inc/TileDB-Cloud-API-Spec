@@ -253,6 +253,11 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/FragmentMetadata"
+      openedAtEndTimestamp:
+        description: The ending timestamp that the array was last opened at
+        type: number
+        format: uint64
+
 
   FragmentMetadata:
     type: object
