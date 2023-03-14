@@ -244,6 +244,397 @@ definitions:
       nonEmptyDomain:
         description: Array's non empty domain
         $ref: "#/definitions/NonEmptyDomainList"
+      arrayDirectory:
+        description: Array directory (for reads)
+        $ref: "#/definitions/ArrayDirectory"
+      fragmentMetadataAll:
+        description: metadata for all fragments (for reads)
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/FragmentMetadata"
+      openedAtEndTimestamp:
+        description: The ending timestamp that the array was last opened at
+        type: number
+        format: uint64
+
+
+  FragmentMetadata:
+    type: object
+    description: Metadata of a fragment
+    properties:
+      fileSizes:
+        description: The size of each attribute file
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      fileVarSizes:
+        description: The size of each var attribute file
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      fileValiditySizes:
+        description: The size of each validity attribute file
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      fragmentUri:
+        description: The uri of the fragment this metadata belongs to
+        type: string
+      hasTimestamps:
+        description: True if the fragment has timestamps
+        type: boolean
+      hasDeleteMeta:
+        description: True if the fragment has delete metadata
+        type: boolean
+      sparseTileNum:
+        description: The number of sparse tiles
+        type: number
+        format: uint64
+      tileIndexBase:
+        description: Used to track the tile index base between global order writes
+        type: number
+        format: uint64
+      tileOffsets:
+        description: Tile offsets in their attribute files
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint64
+      tileVarOffsets:
+        description: Variable tile offsets in their attribute files
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint64
+      tileVarSizes:
+        description: The sizes of the uncompressed variable tiles
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint64
+      tileValidityOffsets:
+        description: Validity tile offests in their attribute files
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint64
+      tileMinBuffer:
+        description: tile min buffers
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint8
+      tileMinVarBuffer:
+        description: tile min buffers for var length data
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint8
+      tileMaxBuffer:
+        description: tile max buffers
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint8
+      tileMaxVarBuffer:
+        description: tile max buffers for var length data
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint8
+      tileSums:
+        description: tile sum values
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint8
+      tileNullCounts:
+        description: tile null count values
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint64
+      fragmentMins:
+        description: fragment min values
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint8
+      fragmentMaxs:
+        description: fragment max values
+        type: array
+        x-omitempty: true
+        items:
+          type: array
+          items:
+            type: number
+            format: uint8
+      fragmentSums:
+        description: fragment sum values
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      fragmentNullCounts:
+        description: fragment null count values
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      version:
+        description: the format version of this metadata
+        type: integer
+        format: uint32
+      timestampRange:
+        description: A pair of timestamps for fragment
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      lastTileCellNum:
+        description: The number of cells in the last tile
+        type: integer
+        format: uint64
+      nonEmptyDomain:
+        description: The non empty domain of the fragment
+        $ref: "#/definitions/NonEmptyDomainList"
+      rtree:
+        description: The RTree for the MBRs serialized as a blob
+        type: string
+        format: binary
+      hasConsolidatedFooter:
+        description: if the fragment metadata footer appears in a consolidated file
+        type: boolean
+      gtOffsets:
+        description: The start offsets of the generic tiles stored in the metadata file
+        $ref: "#/definitions/GenericTileOffsets"
+
+  GenericTileOffsets:
+    type: object
+    description: Array directory (for reads)
+    properties:
+      rtree:
+        description: RTree serialized as a blob
+        type: number
+        format: uint64
+      tileOffsets:
+        description: tile offsets
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      tileVarOffsets:
+        description: variable tile offsets
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      tileVarSizes:
+        description: sizes of the uncompressed variable tiles offsets
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      tileValidityOffsets:
+        description: tile validity offsets
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      tileMinOffsets:
+        description: min tile offsets
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      tileMaxOffsets:
+        description: max tile offsets
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      tileSumOffsets:
+        description: tile sum offsets
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      tileNullCountOffsets:
+        description: null count offsets
+        type: array
+        x-omitempty: true
+        items:
+          type: number
+          format: uint64
+      fragmentMinMaxSumNullCountOffset:
+        description: fragment min/max/sum/nullcount offsets
+        type: number
+        format: uint64
+      processedConditionsOffsets:
+        description: processed conditions offsets
+        type: number
+        format: uint64
+
+  ArrayDirectory:
+    type: object
+    description: Array directory (for reads)
+    properties:
+      unfilteredFragmentUris:
+        description: fragment URIs
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+      consolidatedCommitUris:
+        description: consolidated commit URI set
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+      arraySchemaUris:
+        description: URIs of all the array schema files
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+      latestArraySchemaUri:
+        description: latest array schema URI.
+        type: string
+      arrayMetaUrisToVacuum:
+        description: the array metadata files to vacuum
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+      arrayMetaVacUrisToVacuum:
+        description: the array metadata vac files to vacuum
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+      commitUrisToConsolidate:
+        description: the commit files to consolidate
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+      commitUrisToVacuum:
+        description: the commit files to vacuum
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+      consolidatedCommitUrisToVacuum:
+        description: the consolidated commit files to vacuum
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+      fragmentMetaUris:
+        description: the URIs of the consolidated fragment metadata files
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+      timestampStart:
+        description: Only the files created after timestamp_start are listed
+        type: number
+        format: uint64
+      timestampEnd:
+        description: Only the files created before timestamp_end are listed
+        type: number
+        format: uint64
+      arrayMetaUris:
+        description: the timestamped filtered array metadata URIs, after removing the ones that need to be vacuumed and those that do not fall within
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/TimestampedURI"
+      deleteAndUpdateTileLocation:
+        description: the location of delete tiles
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/DeleteAndUpdateTileLocation"
+
+  DeleteAndUpdateTileLocation:
+    type: object
+    description: the location of delete tiles
+    properties:
+      uri:
+        description: the uri
+        type: string
+      conditionMarker:
+        type: string
+      offset:
+        type: number
+        format: uint64
+
+  TimestampedURI:
+    type: object
+    description: the timestamped filtered array metadata URIs, after removing the ones that need to be vacuumed and those that do not fall within
+    properties:
+      uri:
+        description: the uri
+        type: string
+      timestampStart:
+        description: start of timestamp
+        type: number
+        format: uint64
+      timestampEnd:
+        description: end of timestamp
+        type: number
+        format: uint64
 
   ArraySchemaMap:
     type: object
