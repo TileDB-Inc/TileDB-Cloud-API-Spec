@@ -3692,6 +3692,11 @@ definitions:
           `QUEUED`. For nodes that are set to run locally and have not reported
           any status information, this will be listed as `UNKNOWN`.
         $ref: "#/definitions/ArrayTaskStatus"
+      status_message:
+        description: The reason the array task status is in the state
+        type: string
+        x-nullable: true
+        x-omitempty: true
       executions:
         type: array
         items:
