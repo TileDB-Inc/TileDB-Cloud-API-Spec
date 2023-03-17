@@ -2854,6 +2854,58 @@ definitions:
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
 
+  InvitationDetails:
+    description: Object including invitation details such as the array shared or organization
+    type: object
+    properties:
+      array:
+        description: the array shared
+        x-omitempty: true
+        properties:
+          id:
+            type: string
+            description: array id
+          namespace:
+            type: string
+            description: the namespace that the array belongs to
+          name:
+            type: string
+            description: name of the array
+          file_type:
+            $ref: "#/definitions/FileType"
+            description: array file type
+            x-omitempty: true
+            x-nullable: true
+          file_properties:
+            type: object
+            description: map of file properties created for this array
+            x-omitempty: true
+            additionalProperties:
+              type: string
+      organization:
+        description: the organization that the user was invited to
+        x-omitempty: true
+        properties:
+          id:
+            type: string
+            description: organization id
+          namespace:
+            type: string
+            description: organization namespace
+      group:
+        description: the group shared
+        x-omitempty: true
+        properties:
+          id:
+            type: string
+            description: group id
+          namespace:
+            type: string
+            description: the namespace that the group belongs to
+          name:
+            type: string
+            description: the group name
+
   TokenScope:
     description: An api token scope available for creation
     type: string
@@ -7041,8 +7093,10 @@ paths:
       description: Accepts invitation
       operationId: acceptInvitation
       responses:
-        204:
+        200:
           description: Invitation was accepted successfully
+          schema:
+            $ref: "#/definitions/InvitationDetails"
         404:
           description: Could not find invitation identifier
         502:
