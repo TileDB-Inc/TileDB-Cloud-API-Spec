@@ -3943,6 +3943,9 @@ definitions:
           memory:
             type: string
             example: 8Gi
+          gpu:
+            type: integer
+            example: 1
         x-omitempty: true
       run_client_side:
         description: >
