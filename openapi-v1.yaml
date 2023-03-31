@@ -3716,16 +3716,14 @@ definitions:
         description: >
           The `tiledb://` URI of the array to query, or a Node which yields
           that `tiledb://` URI.
-        type:
-          $ref: "#/definitions/TGArgValue"
+        $ref: "#/definitions/TGArgValue"
       ranges:
         $ref: "#/definitions/TGQueryRanges"
       buffers:
         description: >
           A list of buffers (attributes and dimensions) to fetch.
           Can be provided either raw or as a node to be interpolated in.
-        type:
-          $ref: "#/definitions/TGArgValue"
+        $ref: "#/definitions/TGArgValue"
         x-omitempty: true
 
   TGQueryRanges:
@@ -3757,8 +3755,7 @@ definitions:
           See the TileDB Cloud documentation for more details on the formats.
 
           Either this or `ranges` must be specified, but not both.
-        type:
-          $ref: "#/definitions/TGArgValue"
+        $ref: "#/definitions/TGArgValue"
       ranges:
         description: >
           The ranges to query against, or Node data which yields those ranges.
@@ -3779,8 +3776,7 @@ definitions:
           - Or a mix of any of the above.
 
           Either this or `user_ranges` must be specified, but not both.
-        type:
-          $ref: "#/definitions/TGArgValue"
+        $ref: "#/definitions/TGArgValue"
 
   TGInputNodeData:
     description: >
