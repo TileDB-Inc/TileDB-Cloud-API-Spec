@@ -1800,9 +1800,10 @@ definitions:
         description: the name of the access credentials to use. if unset, the default credentials will be used
         type: string
       type:
-        description: Array type (dense, key-value, sparse)
-        type: string
+        description: Array type (dense, key-value, sparse). Calculation of array type runs after array has been registered. So, it is not available immediately.
         example: sparse
+        x-nullable: true
+        $ref: "#/definitions/ArrayType"
       share_count:
         description: number of unique namespaces this array is shared with
         type: number
