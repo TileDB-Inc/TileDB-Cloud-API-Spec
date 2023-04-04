@@ -1802,6 +1802,24 @@ definitions:
         example: "00000000-0000-0000-0000-000000000000"
         x-omitempty: false
 
+  NotebookUploaded:
+    description: Uploaded notebook name and information
+    type: object
+    required:
+      - id
+    properties:
+      output_uri:
+        type: string
+        description: output location of the TileDB Notebook
+      name:
+        type: string
+        description: name of the notebook uploaded
+      id:
+        description: unique ID of the uploaded notebook
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+        x-omitempty: false
+
   ArrayFetch:
     description: Model for opening an array v2
     type: object
@@ -2383,6 +2401,64 @@ paths:
           description: File uploaded
           schema:
             $ref: "#/definitions/FileUploaded"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /notebooks/{namespace}/{array}/upload:
+    parameters:
+      - name: namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the notebook
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: X-TILEDB-CLOUD-ACCESS-CREDENTIALS-NAME
+        in: header
+        description: Optional registered access credentials to use for creation
+        type: string
+        required: false
+      - name: name
+        in: query
+        description: name of the TileDB array to create, if missing {array} is used
+        type: string
+        required: false
+      - name: filesize
+        in: query
+        description: size of the notebook to upload in bytes
+        type: integer
+        format: uint64
+        required: true
+    post:
+      description: Upload a notebook at the specified location and wrap it in TileDB Array
+      consumes:
+        - application/octet-stream
+      produces:
+        - application/json
+      tags:
+        - notebooks
+      operationId: HandleUploadNotebook
+      parameters:
+        - name: notebook
+          in: body
+          description: notebook to upload
+          schema:
+            type: string
+            format: binary
+            description: Notebook contents
+          required: true
+      responses:
+        201:
+          description: Notebook uploaded
+          schema:
+            $ref: "#/definitions/NotebookUploaded"
         502:
           description: Bad Gateway
         default:
