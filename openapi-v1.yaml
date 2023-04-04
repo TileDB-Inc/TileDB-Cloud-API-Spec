@@ -8266,7 +8266,7 @@ paths:
           description: pagination limit
           type: integer
           required: false
-        - name: type
+        - name: group_type
           in: query
           description: filter by a specific group type
           required: false
@@ -8362,7 +8362,7 @@ paths:
           description: pagination limit
           type: integer
           required: false
-        - name: type
+        - name: group_type
           in: query
           description: filter by a specific group type
           required: false
@@ -8466,7 +8466,7 @@ paths:
           description: pagination limit
           type: integer
           required: false
-        - name: type
+        - name: group_type
           in: query
           description: filter by a specific group type
           required: false
