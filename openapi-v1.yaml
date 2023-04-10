@@ -972,6 +972,7 @@ definitions:
       - UDF
       - QUERY
       - GENERIC_UDF
+      - BATCH_UDF
       - CLIENT_COMPUTATION
 
   ArrayTaskStatus:
@@ -3375,6 +3376,14 @@ definitions:
       - cancelled
         # The client has cancelled further execution of the task graph.
 
+  TaskGraphType:
+    description: >
+      The type of a task graph.
+    type: string
+    enum:
+      - batch
+      - realtime
+
   TaskGraphLog:
     description: Logging information about the execution of a task graph.
     type: object
@@ -3465,6 +3474,11 @@ definitions:
           when first setting up the task graph. Thereafter, it is read-only.
           This must be topographically sorted; that is, each node must appear
           after all nodes that it depends upon.
+      task_graph_type:
+        $ref: "#/definitions/TaskGraphType"
+      task_graph_id:
+        type: string
+        description: The UUID of the task graph.
 
   TaskGraphNodeMetadata:
     description: Metadata about an individual node in a task graph.
@@ -3594,6 +3608,8 @@ definitions:
         description: >
           Duration in seconds relative to the workflow start time which the
           workflow is allowed to run before it gets terminated.
+      task_graph_type:
+        $ref: "#/definitions/TaskGraphType"
 
   TaskGraphs:
     description: Information about a series of task graphs.
