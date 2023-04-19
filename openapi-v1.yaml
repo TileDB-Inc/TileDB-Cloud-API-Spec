@@ -8238,6 +8238,12 @@ paths:
       tags:
         - groups
       description: Fetch data to initialize filters for the groups browser
+      parameters:
+        - name: namespace
+          in: query
+          description: namespace
+          required: false
+          type: string
       responses:
         200:
           description: Filter data
@@ -8334,6 +8340,12 @@ paths:
       tags:
         - groups
       description: Fetch data to initialize filters for the groups browser
+      parameters:
+        - name: namespace
+          in: query
+          description: namespace
+          required: false
+          type: string
       responses:
         200:
           description: Filter data
