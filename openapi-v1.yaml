@@ -8587,18 +8587,46 @@ paths:
         required: true
       - name: id
         in: path
-        description: The UUID of the task graph entry.
+        description: The UUID of the task graph execution (TaskGraphLog).
         type: string
         required: true
     post:
-      description:  Retry a task graph in the given namespace using the associated execution id.
+      description:  Resubmits a task graph in the given namespace using the associated execution id.
       operationId: resubmitTaskGraphExecution
       tags:
-        - registered_task_graphs
         - task_graph_logs
       responses:
         202:
-          description: Information about the execution of a single task graph.
+          description: Information about the task graph execution.
+          schema:
+            $ref: "#/definitions/TaskGraphLog"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
+  /taskgraphs/{namespace}/executions/{id}/retry:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph execution.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph execution (TaskGraphLog).
+        type: string
+        required: true
+    post:
+      description:  Retries failed tasks of a task graph in the given namespace using the associated execution id.
+      operationId: retryTaskGraphExecution
+      tags:
+        - task_graph_logs
+      responses:
+        202:
+          description: Information about the task graph execution.
           schema:
             $ref: "#/definitions/TaskGraphLog"
         502:
@@ -8617,18 +8645,17 @@ paths:
         required: true
       - name: id
         in: path
-        description: The UUID of the task graph entry.
+        description: The UUID of the task graph execution (TaskGraphLog).
         type: string
         required: true
     post:
-      description:  Stop a task graph execution in the given namespace using the associated associated execution id.
-      operationId: stopTaskGraph
+      description:  Stops a task graph execution in the given namespace using the associated associated execution id.
+      operationId: stopTaskGraphExecution
       tags:
-        - registered_task_graphs
         - task_graph_logs
       responses:
         202:
-          description: Information about the execution of a single task graph.
+          description: Information about the task graph execution.
           schema:
             $ref: "#/definitions/TaskGraphLog"
         502:
