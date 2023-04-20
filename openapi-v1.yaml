@@ -4019,6 +4019,23 @@ definitions:
       # Retry task transient errors
       - OnTransientError
 
+  TaskGraphRetryOptions:
+    description: TaskGraph retry options
+    type: object
+    properties:
+      retry_by_status:
+        description: Retry TaskGraph nodes by their status
+        $ref: '#/definitions/TaskGraphRetryByStatus'
+
+  TaskGraphRetryByStatus:
+    description: Retry TaskGraph nodes by their status
+    type: string
+    enum:
+      # Retry all failed nodes
+      - retry_failures
+      # Retry all nodes
+      - retry_all
+
 paths:
   /.stats:
     get:
@@ -8619,8 +8636,14 @@ paths:
         description: The UUID of the task graph execution (TaskGraphLog).
         type: string
         required: true
+      - name: retry_options
+        in: body
+        description: Retry options.
+        schema:
+          $ref: "#/definitions/TaskGraphRetryOptions"
+        required: true
     post:
-      description:  Retries failed tasks of a task graph in the given namespace using the associated execution id.
+      description: Retries a task graph execution in the given namespace using the associated execution id.
       operationId: retryTaskGraphExecution
       tags:
         - task_graph_logs
