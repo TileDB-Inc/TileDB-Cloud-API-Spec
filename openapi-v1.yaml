@@ -923,7 +923,7 @@ definitions:
           type: object
           properties:
             key:
-              type: string 
+              type: string
             value:
               type: string
 
@@ -6253,6 +6253,10 @@ paths:
             The check executed. Detailed results are available in the response.
           schema:
             $ref: '#/definitions/DomainCheckResult'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
 
   /session:
     parameters:
