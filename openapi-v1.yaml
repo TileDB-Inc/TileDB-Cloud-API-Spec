@@ -122,6 +122,8 @@ definitions:
       - array_metadata_update
       # estimated_result_sizes
       - estimated_result_sizes
+      # read_fragment_info
+      - read_fragment_info
 
   UDFLanguage:
     description: UDF Type
@@ -912,13 +914,19 @@ definitions:
           $ref: "#/definitions/ArrayMetadataEntry"
 
   TileDBConfig:
+    description: TileDB config used for interaction with the embedded library
     type: object
-    description: user's TileDB config
     properties:
-      configs:
-        type: object
-        additionalProperties:
-          type: string
+      entries:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string 
+            value:
+              type: string
+
 
   ArrayActivityLog:
     description: Actvity of an Array
@@ -986,7 +994,7 @@ definitions:
       - RESOURCES_UNAVAILABLE
       - UNKNOWN
       - CANCELLED
-      - DENIED  # Deprecated; used to mean RESOURCES_UNAVAILABLE.
+      - DENIED # Deprecated; used to mean RESOURCES_UNAVAILABLE.
 
   ArrayTaskLog:
     description: Array task stderr/stdout logs
@@ -1010,6 +1018,10 @@ definitions:
         description: Optional task name
         type: string
         example: "subarray-multiplier"
+      username:
+        description: username that executed this task
+        type: string
+        example: "demo"
       description:
         description: Optional task description (Tasks purpose)
         type: string
@@ -1375,7 +1387,7 @@ definitions:
           The name of the credentials used to create and access files in the
           `default_s3_path`, if needed.
       asset_locations:
-        $ref: '#/definitions/AssetLocations'
+        $ref: "#/definitions/AssetLocations"
       default_namespace_charged:
         description: Override the default namespace charged for actions when no namespace is specified
         type: string
@@ -1484,7 +1496,7 @@ definitions:
           `default_s3_path`, if needed.
         type: string
       asset_locations:
-        $ref: '#/definitions/AssetLocations'
+        $ref: "#/definitions/AssetLocations"
       stripe_connect:
         description: Denotes that the organization is able to apply pricing to arrays by means of Stripe Connect
         type: boolean
@@ -1608,6 +1620,10 @@ definitions:
       - udf_language
       # Is dashboard
       - is_dashboard
+      # version_pruning_limit
+      - version_pruning_limit
+      # version_pruning_enabled
+      - version_pruning_enabled
 
   PricingType:
     description: Pricing types
@@ -1790,9 +1806,10 @@ definitions:
         description: the name of the access credentials to use. if unset, the default credentials will be used
         type: string
       type:
-        description: Array type (dense, key-value, sparse)
-        type: string
+        description: Array type (dense, key-value, sparse). Calculation of array type runs after array has been registered. So, it is not available immediately.
         example: sparse
+        x-nullable: true
+        $ref: "#/definitions/ArrayType"
       share_count:
         description: number of unique namespaces this array is shared with
         type: number
@@ -1905,9 +1922,9 @@ definitions:
         example: myToken
       scope:
         description: "Optional scope to limit token, defaults to all permissions, current supported values are password_reset or *"
-        type: string
-        example: "*"
-        default: "*"
+        type: array
+        items:
+          $ref: "#/definitions/TokenScope"
 
   Token:
     description: A api token and its metadata
@@ -1929,9 +1946,9 @@ definitions:
         format: date-time
       scope:
         description: Optional scope to limit token, defaults to all permissions, current supported values are password_reset or *
-        type: string
-        example: "*"
-        default: "*"
+        type: array
+        items:
+          $ref: "#/definitions/TokenScope"
 
   AWSAccessCredentials:
     description: Model representing aws keys or service role, service roles are currently ignored, but will be preferred option in the future
@@ -2650,6 +2667,8 @@ definitions:
     enum:
       # Array share
       - ARRAY_SHARE
+      # Group share
+      - GROUP_SHARE
       # Join Organization
       - JOIN_ORGANIZATION
 
@@ -2678,6 +2697,36 @@ definitions:
           - read
           - write
       invitee_email:
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+
+  InvitationGroupShareEmail:
+    description: Encapsulates information regarding inviting people using email to share group, same permissions for all invitees
+    type: object
+    required:
+      - array_actions
+      - group_actions
+      - invitee_email_or_name
+    properties:
+      array_actions:
+        description: List of permitted array actions
+        type: array
+        items:
+          $ref: "#/definitions/ArrayActions"
+        example:
+          - read
+          - write
+      group_actions:
+        description: List of permitted group actions
+        type: array
+        items:
+          $ref: "#/definitions/GroupActions"
+        example:
+          - read
+          - write
+      invitee_email_or_name:
         type: array
         x-omitempty: true
         items:
@@ -2725,6 +2774,10 @@ definitions:
         description: Namespace of the owner of the invitation (user or organization)
         type: string
         example: "00000000-0000-0000-0000-000000000000"
+      inviter_uuid:
+        description: Unique ID of the user that sent the invitation
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
       user_namespace_uuid:
         description: Unique ID of the user accepted the invitation
         type: string
@@ -2743,8 +2796,18 @@ definitions:
         description: Role of the invited namespace in the joined organization
         $ref: "#/definitions/OrganizationRoles"
         x-omitempty: false
+      organization_uuid:
+        description: Unique ID of the organization whose user(s) accepted the invitation
+        type: string
+        x-omitempty: false
+        example: "00000000-0000-0000-0000-000000000000"
       array_uuid:
         description: Unique ID of the array
+        type: string
+        x-omitempty: false
+        example: "00000000-0000-0000-0000-000000000000"
+      group_uuid:
+        description: Unique ID of the group
         type: string
         x-omitempty: false
         example: "00000000-0000-0000-0000-000000000000"
@@ -2758,6 +2821,10 @@ definitions:
         example: "jane@doe.com"
       actions:
         description: A comma separated list of ArrayActions or NamespaceActions
+        type: string
+        example: "read,write"
+      group_actions:
+        description: A comma separated list of GroupActions
         type: string
         example: "read,write"
       status:
@@ -2954,6 +3021,20 @@ definitions:
       # Edit: update attributes, add and remove assets
       - edit
 
+  GroupType:
+    description: Group type is a hint for the groups contents and TileDB Cloud may use a specialized viewer for each type
+    type: string
+    enum:
+      - vcf
+      - soma
+      - bioimg
+
+  GroupTypeMetadataKey:
+    description: A group type is stored in the group metadata using this key
+    type: string
+    enum:
+      - dataset_type
+
   GroupInfo:
     description: metadata of a group
     type: object
@@ -3010,6 +3091,10 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/GroupActions"
+      group_type:
+        description: the type of the group
+        $ref: "#/definitions/GroupType"
+        x-omitempty: true
       logo:
         description: logo (base64 encoded) for the gruop. Optional
         type: string
@@ -3092,6 +3177,12 @@ definitions:
         x-omitempty: false
         items:
           type: string
+      group_types:
+        description: list of all available group types to display
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/GroupType"
 
   GroupContentsFilterData:
     description: Object with data to fill contents filter
@@ -3549,7 +3640,7 @@ definitions:
       client_node_uuid:
         type: string
       status:
-        $ref: '#/definitions/ArrayTaskStatus'
+        $ref: "#/definitions/ArrayTaskStatus"
 
   # Task graph
   TaskGraph:
@@ -3725,11 +3816,11 @@ definitions:
           The client_node_uuid of each node that this node depends upon.
           Used to define the structure of the graph.
       array_node:
-        $ref: '#/definitions/UDFArrayDetails'
+        $ref: "#/definitions/UDFArrayDetails"
       input_node:
-        $ref: '#/definitions/TGInputNodeData'
+        $ref: "#/definitions/TGInputNodeData"
       sql_node:
-        $ref: '#/definitions/TGSQLNodeData'
+        $ref: "#/definitions/TGSQLNodeData"
       udf_node:
         $ref: '#/definitions/TGUDFNodeData'
       retry_strategy:
@@ -3752,6 +3843,80 @@ definitions:
           Duration in seconds relative to the node start time which the
           node is allowed to run before it gets terminated.
 
+  TGArrayNodeData:
+    description: >
+      The details of an array that should be queried and provided as the input
+      to a UDF Node. This is essentially a `UDFArrayDetails`, but you’re allowed
+      to provide most of the values as Nodes if you want.
+    type: object
+    x-nullable: true
+    properties:
+      uri:
+        description: >
+          The `tiledb://` URI of the array to query, or a Node which yields
+          that `tiledb://` URI.
+        $ref: "#/definitions/TGArgValue"
+      ranges:
+        $ref: "#/definitions/TGQueryRanges"
+      buffers:
+        description: >
+          A list of buffers (attributes and dimensions) to fetch.
+          Can be provided either raw or as a node to be interpolated in.
+        $ref: "#/definitions/TGArgValue"
+        x-omitempty: true
+
+  TGQueryRanges:
+    description: Parameterizable version of `QueryRanges`.
+    type: object
+    properties:
+      layout:
+        $ref: "#/definitions/Layout"
+      friendly_ranges:
+        description: >
+          The ranges to query against, in a user-friendly format. This is a
+          slightly more flexible format designed to be easier for an author
+          to use. This may also be Node data which yields these ranges.
+          (These will be processed by the client to turn into raw ranges.)
+
+          A single `[lo, hi]` span may be specified as:
+
+          - a scalar value (for `lo == hi`)
+          - a Slice (escaped in `"__tdbudf__": "__slice__"` format)
+          - a single-entry list (for `lo == hi`)
+          - a pair of values `[lo, hi]`
+
+          The ranges for a given dimension may be specified as:
+
+          - a single scalar value (for a single-value `[val, val]` span)
+          - a Slice (for exactly one `[lo, hi]` span)
+          - a list of spans as described above.
+
+          See the TileDB Cloud documentation for more details on the formats.
+
+          Either this or `ranges` must be specified, but not both.
+        $ref: "#/definitions/TGArgValue"
+      ranges:
+        description: >
+          The ranges to query against, or Node data which yields those ranges.
+
+          The result must be in the QueryRanges format:
+
+              [
+                [d1lo1, d1hi1, d1lo2, d1hi2, ...],
+                [d2lo1, d2hi1, d2lo2, d2hi2, ...],
+                ...,
+              ]
+
+          but there are many ways to construct it:
+
+          - A node returning the entire `[[lo, hi, ...], ...]` list-of-lists.
+          - `[[(lo node), (hi node)], ...]`
+          - `[(node returning lo/hi pairs), ...]`
+          - Or a mix of any of the above.
+
+          Either this or `user_ranges` must be specified, but not both.
+        $ref: "#/definitions/TGArgValue"
+
   TGInputNodeData:
     description: >
       Specifies that a node is an “input value”, allowing for parameterized
@@ -3760,7 +3925,7 @@ definitions:
     x-nullable: True
     properties:
       default_value:
-        $ref: '#/definitions/TGArgValue'
+        $ref: "#/definitions/TGArgValue"
       datatype:
         description: >
           An annotation of what datatype this node is supposed to be.
@@ -3791,9 +3956,9 @@ definitions:
           Fixed-length. Arguments must be in JSON format.
         type: array
         items:
-          $ref: '#/definitions/TGArgValue'
+          $ref: "#/definitions/TGArgValue"
       result_format:
-        $ref: '#/definitions/ResultFormat'
+        $ref: "#/definitions/ResultFormat"
       namespace:
         description: >
           If set, the non-default namespace to execute this SQL query under.
@@ -3827,7 +3992,7 @@ definitions:
           for debugging.
         type: string
       environment:
-        $ref: '#/definitions/TGUDFEnvironment'
+        $ref: "#/definitions/TGUDFEnvironment"
       arguments:
         description: >
           The arguments to a UDF function. This encompasses both named and
@@ -3869,9 +4034,9 @@ definitions:
               ]
         type: array
         items:
-          $ref: '#/definitions/TGUDFArgument'
+          $ref: "#/definitions/TGUDFArgument"
       result_format:
-        $ref: '#/definitions/ResultFormat'
+        $ref: "#/definitions/ResultFormat"
 
 
   TGUDFArgument:
@@ -3885,7 +4050,7 @@ definitions:
         type: string
         x-nullable: true
       value:
-        $ref: '#/definitions/TGArgValue'
+        $ref: "#/definitions/TGArgValue"
 
   TGArgValue:
     description: >
@@ -3921,7 +4086,7 @@ definitions:
     type: object
     properties:
       language:
-        $ref: '#/definitions/UDFLanguage'
+        $ref: "#/definitions/UDFLanguage"
       language_version:
         description: >
           The language version used to execute this UDF. Neither this nor
@@ -3972,6 +4137,220 @@ definitions:
           client-side execution, the function will be executed on the server.
         type: boolean
         x-omitempty: true
+      timeout:
+        description: >
+          The maximum length of time this UDF is allowed to execute for before
+          it is killed and fails. If not present (or zero), the function is
+          allowed to run indefinitely (subject to the server’s global limits).
+        type: number
+        x-nullable: true
+
+  FragmentMetadata:
+    description: Fragment Metadata
+    type: object
+    # TODO: define all properties
+    properties:
+      fileSizes:
+        description: fixed sizes
+        type: array
+        items:
+          type: integer
+          format: uint64
+      fileVarSizes:
+        description: var length sizes
+        type: array
+        items:
+          type: integer
+          format: uint64
+      fileValiditySizes:
+        description: validity sizes
+        type: array
+        items:
+          type: integer
+          format: uint64
+      fragmentUri:
+        type: string
+      hasTimestamps:
+        type: boolean
+      hasDeleteMeta:
+        type: boolean
+      sparseTileNum:
+        type: integer
+        format: uint64
+      tileIndexBase:
+        type: integer
+        format: uint64
+      tileOffsets:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint64
+      tileVarOffsets:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint64
+      tileVarSizes:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint64
+      tileValidityOffsets:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint64
+      tileMinBuffer:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      tileMinVarBuffer:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      tileMaxBuffer:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      tileMaxVarBuffer:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      tileSums:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      tileNullCounts:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint64
+      fragmentMins:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      fragmentMaxs:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: uint8
+      fragmentSums:
+        type: array
+        items:
+          type: integer
+          format: uint64
+      fragmentNullCounts:
+        type: array
+        items:
+          type: integer
+          format: uint64
+      version:
+        type: integer
+        format: uint32
+      timestampRange:
+        type: array
+        items:
+          type: integer
+          format: uint64
+      # A pair of timestamps for fragment
+
+      lastTileCellNum:
+        type: integer
+        format: uint64
+
+      # TODO: handle!
+      # nonEmptyDomain @25 :NonEmptyDomainList;
+      # non empty domain
+
+      # TODO: handle!
+      # rtree @26 :Data;
+
+  SingleFragmentInfo:
+    description: Single Fragment info of an array
+    type: object
+    properties:
+      ArraySchemaName:
+        description: array schema name
+        type: string
+      meta:
+        description: fragment metadata
+        $ref: "#/definitions/FragmentMetadata"
+
+  FragmentInfo:
+    description: Fragment info of an array
+    type: object
+    properties:
+      arraySchemaAll:
+        description: map of all array schemas
+        type: object
+        additionalProperties:
+          $ref: "#/definitions/ArraySchema"
+      fragmentInfo:
+        description: information about fragments in the array
+        type: array
+        items:
+          $ref: "#/definitions/SingleFragmentInfo"
+      toVacuum:
+        description: the URIs of the fragments to vacuum
+        type: array
+        items:
+          type: string
+
+  FragmentInfoRequest:
+    description: Fragment info request
+    type: object
+    properties:
+      config:
+        description: config to use for opening
+        $ref: "#/definitions/TileDBConfig"
+
+  ArrayConsolidationRequest:
+    description: Request to consolidate an array
+    type: object
+    properties:
+      config:
+        type: object
+        description: config to use to retrieve the contents
+        $ref: "#/definitions/TileDBConfig"
+
+  ArrayVacuumRequest:
+    description: Request to consolidate an array
+    type: object
+    properties:
+      config:
+        type: object
+        description: config to use to retrieve the contents
+        $ref: "#/definitions/TileDBConfig"
 
   RetryStrategy:
     description: RetryStrategy provides controls on how to retry a taskgraph node
@@ -4207,7 +4586,7 @@ paths:
       - name: event_types
         in: query
         type: string
-        description: Event values can be one or more of the following read, write, create, delete, register, deregister, comma separated
+        description: Refer to ActivityEventType for possible values
       - name: task_id
         in: query
         type: string
@@ -4359,6 +4738,46 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /arrays/{namespace}/{array}/fragment_info:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: Content-Type
+        in: header
+        description: Content Type of input and return mime
+        type: string
+        required: true
+        default: application/json
+    post:
+      description: fetch an array's fragment info
+      tags:
+        - array
+      operationId: fragmentInfo
+      parameters:
+        - name: fragmentInfoRequest
+          in: body
+          description: ArraySchema being created
+          schema:
+            $ref: "#/definitions/FragmentInfoRequest"
+          required: true
+      responses:
+        200:
+          description: fragment info
+          schema:
+            $ref: "#/definitions/FragmentInfo"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /arrays/{namespace}/{array}/metadata:
     parameters:
       - name: namespace
@@ -4500,11 +4919,11 @@ paths:
         - array
       operationId: consolidateArray
       parameters:
-        - name: tiledb_config
+        - name: consolidate_request
           in: body
-          description: tiledb configuration
+          description: Consolidate Request
           schema:
-            $ref: "#/definitions/TileDBConfig"
+            $ref: "#/definitions/ArrayConsolidationRequest"
           required: true
       responses:
         204:
@@ -4534,11 +4953,11 @@ paths:
         - array
       operationId: vacuumArray
       parameters:
-        - name: tiledb_config
+        - name: vaccum_request
           in: body
-          description: tiledb configuration
+          description: Vaccum Request
           schema:
-            $ref: "#/definitions/TileDBConfig"
+            $ref: "#/definitions/ArrayVacuumRequest"
           required: true
       responses:
         204:
@@ -6705,6 +7124,38 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /notebooks/{namespace}/{array}/prune:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+      - name: keep_versions
+        in: query
+        description: "The number of most recents fragment to preserve"
+        type: integer
+        format: uint64
+        required: false
+    post:
+      description: prune fragments of the notebook
+      tags:
+        - notebooks
+      responses:
+        204:
+          description: notebook pruned
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /invitations:
     parameters:
       - name: organization
@@ -6715,6 +7166,11 @@ paths:
       - name: array
         in: query
         description: name/uri of array that is url-encoded to filter
+        type: string
+        required: false
+      - name: group
+        in: query
+        description: name or ID of group to filter
         type: string
         required: false
       - name: start
@@ -6829,6 +7285,40 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /invitations/group/{invitation}/{namespace}/{group_name}/share:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace group is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: invitation
+        in: path
+        description: the ID of invitation about to be cancelled
+        type: string
+        required: true
+      - name: group_name
+        in: path
+        description: name/uuid of group that is url-encoded
+        type: string
+        required: true
+    delete:
+      description: Cancels group sharing invitation
+      tags:
+        - invitation
+      operationId: cancelShareGroupByInvite
+      responses:
+        204:
+          description: Invitation cancelled successfully
+        404:
+          description: No invitation was found to cancel
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /invitations/{invitation}/{organization}/join:
     parameters:
       - name: invitation
@@ -6889,6 +7379,44 @@ paths:
           description: Could not reach one or more recipients
           schema:
             $ref: "#/definitions/InvitationArrayShareEmail"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /invitations/group/{namespace}/{group}/share:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace group is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: group
+        in: path
+        description: name/uri of group that is url-encoded
+        type: string
+        required: true
+    post:
+      tags:
+        - invitation
+      description: Sends email to multiple recipients with sharing information regarding a group
+      operationId: shareGroupByInvite
+      parameters:
+        - name: email_invite
+          in: body
+          description: list of email/namespace recipients
+          schema:
+            $ref: "#/definitions/InvitationGroupShareEmail"
+          required: true
+      responses:
+        204:
+          description: Email sent successfully to user with an email confirmation link
+        404:
+          description: Could not reach one or more recipients
+          schema:
+            $ref: "#/definitions/InvitationGroupShareEmail"
         502:
           description: Bad Gateway
         default:
@@ -7008,7 +7536,7 @@ paths:
         type: array
         collectionFormat: multi
         items:
-            type: string
+          type: string
     get:
       tags:
         - array
@@ -7026,6 +7554,39 @@ paths:
             $ref: "#/definitions/Error"
 
   /arrays/browser/shared/sidebar:
+    parameters:
+      - name: file_type
+        in: query
+        description: file_type to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: exclude_file_type
+        in: query
+        description: file_type to exclude matching array in results, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: file_property
+        in: query
+        description: file_property key-value pair (comma separated, i.e. key,value) to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: shared_to
+        in: query
+        description: namespaces to filter results of where there groups were shared to
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
     get:
       tags:
         - array
@@ -7131,6 +7692,31 @@ paths:
             $ref: "#/definitions/Error"
 
   /arrays/browser/public/sidebar:
+    parameters:
+      - name: file_type
+        in: query
+        description: file_type to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: exclude_file_type
+        in: query
+        description: file_type to exclude matching array in results, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: file_property
+        in: query
+        description: file_property key-value pair (comma separated, i.e. key,value) to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
     get:
       tags:
         - array
@@ -7236,6 +7822,31 @@ paths:
             $ref: "#/definitions/Error"
 
   /arrays/browser/owned/sidebar:
+    parameters:
+      - name: file_type
+        in: query
+        description: file_type to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: exclude_file_type
+        in: query
+        description: file_type to exclude matching array in results, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
+      - name: file_property
+        in: query
+        description: file_property key-value pair (comma separated, i.e. key,value) to search for, more than one can be included
+        required: false
+        type: array
+        collectionFormat: multi
+        items:
+          type: string
     get:
       tags:
         - array
@@ -7805,6 +8416,12 @@ paths:
       tags:
         - groups
       description: Fetch data to initialize filters for the groups browser
+      parameters:
+        - name: namespace
+          in: query
+          description: namespace
+          required: false
+          type: string
       responses:
         200:
           description: Filter data
@@ -7834,6 +8451,11 @@ paths:
           description: pagination limit
           type: integer
           required: false
+        - name: group_type
+          in: query
+          description: filter by a specific group type
+          required: false
+          type: string
         - name: search
           in: query
           description: search string that will look at name, namespace or description fields
@@ -7896,6 +8518,12 @@ paths:
       tags:
         - groups
       description: Fetch data to initialize filters for the groups browser
+      parameters:
+        - name: namespace
+          in: query
+          description: namespace
+          required: false
+          type: string
       responses:
         200:
           description: Filter data
@@ -7925,6 +8553,11 @@ paths:
           description: pagination limit
           type: integer
           required: false
+        - name: group_type
+          in: query
+          description: filter by a specific group type
+          required: false
+          type: string
         - name: search
           in: query
           description: search string that will look at name, namespace or description fields
@@ -8024,6 +8657,11 @@ paths:
           description: pagination limit
           type: integer
           required: false
+        - name: group_type
+          in: query
+          description: filter by a specific group type
+          required: false
+          type: string
         - name: search
           in: query
           description: search string that will look at name, namespace or description fields
@@ -8567,7 +9205,7 @@ paths:
           description: The node status to report.
           required: true
           schema:
-            $ref: '#/definitions/TaskGraphClientNodeStatus'
+            $ref: "#/definitions/TaskGraphClientNodeStatus"
       responses:
         204:
           description: Status reported successfully.
@@ -8576,7 +9214,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
 
   /taskgraphs/{namespace}/executions/{id}/resubmit:
     parameters:
@@ -8839,7 +9477,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
     post:
       description: >
         Register a task graph in the given namespace, with the given name.
@@ -8851,7 +9489,7 @@ paths:
           in: body
           description: Task graph to register.
           schema:
-            $ref: '#/definitions/RegisteredTaskGraph'
+            $ref: "#/definitions/RegisteredTaskGraph"
       responses:
         204:
           description: Task graph registered successfully.
@@ -8860,7 +9498,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
     patch:
       description: >
         Update the contents of an existing registered task graph.
@@ -8872,7 +9510,7 @@ paths:
           in: body
           description: The new contents of the task graph.
           schema:
-            $ref: '#/definitions/RegisteredTaskGraph'
+            $ref: "#/definitions/RegisteredTaskGraph"
       responses:
         204:
           description: Task graph updated successfully.
@@ -8881,7 +9519,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
     delete:
       description: >
         Delete the given registered task graph.
@@ -8896,7 +9534,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
 
   /taskgraphs/{namespace}/registered/{name}/share:
     parameters:
@@ -8922,7 +9560,7 @@ paths:
             type: array
             x-omitempty: true
             items:
-              $ref: '#/definitions/TaskGraphSharing'
+              $ref: "#/definitions/TaskGraphSharing"
         404:
           description: >
             The task graph does not exist (or the user does not have permission
@@ -8934,7 +9572,7 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
     patch:
       description: Share a task graph.
       tags:
@@ -8951,7 +9589,7 @@ paths:
             will be rolled back to prevent partial policies, and it's likely
             the UDF will not be shared with the namespace at all.
           schema:
-            $ref: '#/definitions/TaskGraphSharing'
+            $ref: "#/definitions/TaskGraphSharing"
           required: true
       responses:
         204:
@@ -8965,4 +9603,4 @@ paths:
         default:
           description: error response
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"

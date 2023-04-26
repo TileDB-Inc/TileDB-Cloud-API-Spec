@@ -2,7 +2,7 @@
 
 This repository documents the [TileDB Cloud REST API](https://console.tiledb.com/).
 
-Two openapi specification files exists, one for [v1 routes](openapi-v1.yaml) and one for [v2 routes](openapi-v2.yaml).
+Two openapi specification files exist, one for [v1 routes](openapi-v1.yaml) and one for [v2 routes](openapi-v2.yaml).
 
 
 ## TileDB Cloud Client APIs
