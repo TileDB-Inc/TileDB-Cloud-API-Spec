@@ -923,7 +923,7 @@ definitions:
           type: object
           properties:
             key:
-              type: string 
+              type: string
             value:
               type: string
 
@@ -1414,6 +1414,110 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/NamespaceActions"
+
+  DomainVerificationStatus:
+    description: The current status of the claim on the domain.
+    type: string
+    enum:
+      - unverified
+        # A newly-registered claim which has not been verified.
+      - verified
+        # The claim has been verified and the ownership claim is active.
+      - grace_period
+        # Verification is failing, but to ensure continuity of service,
+        # we allow a period of failure before deactivating the claim.
+      - failed
+        # The domain verification was not found and the ownership claim
+        # is inactive.
+
+  DomainCheckStatus:
+    description: The status of a single check on a domain's status.
+    type: string
+    enum:
+      - verified
+        # Verification was successful and the claim was found.
+      - failed
+        # Verification completed without error and the claim was not found.
+      - error
+        # An internal error occurred when performing verification.
+
+  DomainCheckResult:
+    description: The record of a check of a single domain's status.
+    type: object
+    properties:
+      time:
+        type: string
+        format: date-time
+        description: The timestamp when the check was performed.
+      status:
+        $ref: '#/definitions/DomainCheckStatus'
+
+  SSODomainConfig:
+    description: >
+      The information used to set up a single-sign on connection to a customer
+      domain.
+    type: object
+    properties:
+      uuid:
+        type: string
+        description: A server-generated ID for the configuration.
+      domain:
+        type: string
+        description: >
+          The fully-qualified domain (but with no trailing dot) to connect for
+          single sign-on. This may not be changed after creation.
+        x-nullable: true
+      oidc_issuer:
+        type: string
+        description: >
+          The URL of the OpenID Connect issuer that can be used to authenticate
+          this domain's users. The prefix where the
+          `/.well-known/openid-configuration` file can be found; usually without
+          a trailing slash.
+      oidc_client_id:
+        type: string
+        description: The OpenID Connect client ID for this SSO instance.
+      oidc_client_secret:
+        type: string
+        description: The OpenID Connect client secret for this SSO instance.
+        x-go-custom-tag: 'tdbrest:"secret"'
+      domain_setup:
+        $ref: '#/definitions/SSODomainSetup'
+      verification_status:
+        $ref: '#/definitions/DomainVerificationStatus'
+      check_results:
+        description: >
+          A list of the results of recent attempts to verify this domain.
+        type: array
+        items:
+          $ref: '#/definitions/DomainCheckResult'
+
+  SSODomainConfigResponse:
+    description: >
+      The response to a request for the list of domain claims associated with
+      a particular organization.
+    type: object
+    properties:
+      domain_configs:
+        type: array
+        items:
+          $ref: '#/definitions/SSODomainConfig'
+
+  SSODomainSetup:
+    description: >
+      Configuration settings to verify ownership of a given domain. At least one
+      of these must be completed enable user login from the domain.
+    type: object
+    properties:
+      txt:
+        description: a DNS TXT record to set on the domain to claim.
+        type: string
+      cname_src:
+        description: a DNS name to set a CNAME record on
+        type: string
+      cname_dst:
+        description: the CNAME target of `cname_src`.
+        type: string
 
   Organization:
     description: Organization
@@ -6009,6 +6113,150 @@ paths:
           description: error response
           schema:
             $ref: "#/definitions/Error"
+
+  /organizations/{organization}/sso_domain:
+    parameters:
+      - name: organization
+        in: path
+        description: organization name
+        required: true
+        type: string
+    post:
+      tags:
+        - organization
+      description: >
+        Create a new SSO connection that connects this organization to this
+        domain.
+      operationId: createSSODomain
+      parameters:
+        - name: config
+          in: body
+          description: The SSO connection to create.
+          schema:
+            $ref: '#/definitions/SSODomainConfig'
+          required: true
+      responses:
+        200:
+          description: Claim created successfully.
+          schema:
+            $ref: '#/definitions/SSODomainConfig'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organizations/{organization}/sso_domains:
+    parameters:
+      - name: organization
+        in: path
+        description: organization name
+        required: true
+        type: string
+    get:
+      tags:
+        - organization
+      description: >
+        Lists all the SSO connections associated with the given organization.
+      operationId: getSSODomains
+      responses:
+        200:
+          description: The SSO domains associated with the org.
+          schema:
+            $ref: '#/definitions/SSODomainConfigResponse'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organizations/{organization}/sso_domains/{uuid}:
+    parameters:
+      - name: organization
+        in: path
+        description: organization name
+        required: true
+        type: string
+      - name: uuid
+        in: path
+        description: configuration ID
+        required: true
+        type: string
+    get:
+      tags:
+        - organization
+      description: Gets details about the given SSO domain connection.
+      operationId: getSSODomain
+      responses:
+        200:
+          description: The details about this domain connection.
+          schema:
+            $ref: '#/definitions/SSODomainConfig'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      tags:
+        - organization
+      description: Updates the configuration for the given SSO connection.
+      parameters:
+        - name: config
+          in: body
+          description: The changes to make to the configuration.
+          schema:
+            $ref: '#/definitions/SSODomainConfig'
+          required: true
+      operationId: updateSSODomain
+      responses:
+        200:
+          description: The updated details about the SSO connection.
+          schema:
+            $ref: '#/definitions/SSODomainConfig'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - organization
+      description: Deletes the configuration for the given SSO connection.
+      operationId: deleteSSODomain
+      responses:
+        204:
+          description: Deletion successful.
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organizations/{organization}/sso_domains/{uuid}/run_check:
+    parameters:
+      - name: organization
+        in: path
+        description: organization name
+        required: true
+        type: string
+      - name: uuid
+        in: path
+        description: configuration ID
+        required: true
+        type: string
+    post:
+      tags:
+        - organization
+      description: >
+        Immediately verify ownership of the specified SSO domain ownership
+        claim.
+      operationId: checkSSODomain
+      responses:
+        200:
+          description: >
+            The check executed. Detailed results are available in the response.
+          schema:
+            $ref: '#/definitions/DomainCheckResult'
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
 
   /session:
     parameters:
