@@ -3126,6 +3126,7 @@ definitions:
       - vcf
       - soma
       - bioimg
+      - generic
 
   GroupTypeMetadataKey:
     description: A group type is stored in the group metadata using this key
