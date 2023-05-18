@@ -3432,6 +3432,12 @@ definitions:
       - ml_model
       # Files
       - file
+      # Biomedical Imaging
+      - bioimg
+      # SOMA
+      - soma
+      # VCF
+      - vcf
 
   GroupMember:
     description: A groups member, array or another groups, to add or remove from an existing group.
