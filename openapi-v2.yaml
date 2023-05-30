@@ -1762,6 +1762,14 @@ definitions:
       - soma
       # VCF
       - vcf
+      # Point Cloud
+      - pointcloud
+      # Raster
+      - raster
+      # Multi-dimensional raster
+      - mdraster
+      # Geometry
+      - geometry
 
   GroupMember:
     description: A groups member, array or another groups, to add or remove from an existing group.
