@@ -3123,10 +3123,22 @@ definitions:
     description: Group type is a hint for the groups contents and TileDB Cloud may use a specialized viewer for each type
     type: string
     enum:
-      - vcf
-      - soma
-      - bioimg
+      # Generic
       - generic
+      # VCF
+      - vcf
+      # SOMA
+      - soma
+      # Biomedical Imaing
+      - bioimg
+      # Point Cloud
+      - pointcloud
+      # Raster
+      - raster
+      # Multi-dimensional raster
+      - mdraster
+      # Geometry
+      - geometry
 
   GroupTypeMetadataKey:
     description: A group type is stored in the group metadata using this key
@@ -3438,6 +3450,14 @@ definitions:
       - soma
       # VCF
       - vcf
+      # Point Cloud
+      - pointcloud
+      # Raster
+      - raster
+      # Multi-dimensional raster
+      - mdraster
+      # Geometry
+      - geometry
 
   GroupMember:
     description: A groups member, array or another groups, to add or remove from an existing group.
