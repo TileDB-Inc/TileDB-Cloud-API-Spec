@@ -1416,6 +1416,13 @@ definitions:
       message:
         type: string
 
+  AccessCredentialType:
+    description: "The types of an access credential"
+    type: "string"
+    enum:
+      - "key" # a pair of (key, secret) values
+      - "arn" # a role assignment
+
   AccessCredential:
     description: "A union type which may contain a credential to access any one cloud provider."
     type: "object"
@@ -2037,6 +2044,10 @@ paths:
       - name: provider
         in: query
         description: "Show only the credentials from this provider. This should be one of the CloudProvider enum values."
+        type: string
+      - name: type
+        in: query
+        description: "Show only the credentials of this type. This should be one of the AccessCredentialType enum values."
         type: string
       - name: page
         in: query
