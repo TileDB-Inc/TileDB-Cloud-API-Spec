@@ -1616,6 +1616,23 @@ definitions:
             x-omitempty: true
             description: License text
 
+  GroupCreationResponse:
+    description: Information of the created group
+    type: object
+    properties:
+      id:
+        type: string
+        description: The UUID of the created Group
+        x-omitempty: false
+      name:
+        type: string
+        description: The name of the created Group
+        x-omitempty: false
+      tiledb_uri:
+        type: string
+        description: TileDB URI for access
+        x-omitempty: false
+
   GroupRegistrationRequest:
     type: object
     description: information for creating a new group with the passed configuration
@@ -2242,6 +2259,8 @@ paths:
       responses:
         201:
           description: group created successfully
+          schema:
+            $ref: "#/definitions/GroupCreationResponse"
         502:
           description: Bad Gateway
         default:
