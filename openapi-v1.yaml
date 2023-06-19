@@ -3135,8 +3135,6 @@ definitions:
       - pointcloud
       # Raster
       - raster
-      # Multi-dimensional raster
-      - mdraster
       # Geometry
       - geometry
 
@@ -3454,8 +3452,6 @@ definitions:
       - pointcloud
       # Raster
       - raster
-      # Multi-dimensional raster
-      - mdraster
       # Geometry
       - geometry
 

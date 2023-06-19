@@ -1790,8 +1790,6 @@ definitions:
       - pointcloud
       # Raster
       - raster
-      # Multi-dimensional raster
-      - mdraster
       # Geometry
       - geometry
 
