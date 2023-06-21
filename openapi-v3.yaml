@@ -1125,6 +1125,15 @@ definitions:
         x-omitempty: true
         items:
           $ref: "#/definitions/SubarrayRanges"
+      relevantFragments:
+        type: array
+        x-omitempty: true
+        items:
+          type: integer
+          format: uint32
+      coalesceRanges:
+        type: boolean
+
 
   SubarrayPartitioner:
     description: The subarray partitioner
