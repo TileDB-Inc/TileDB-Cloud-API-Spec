@@ -1248,6 +1248,9 @@ definitions:
       reader:
         description: reader contains data needed for continuation of reads
         $ref: "#/definitions/QueryReader"
+      denseReader:
+        description: denseReader contains data needed for continuation of incomplete dense reads with dense reader
+        $ref: "#/definitions/QueryReader"
       array:
         description: Represents an open array
         $ref: "#/definitions/Array"
