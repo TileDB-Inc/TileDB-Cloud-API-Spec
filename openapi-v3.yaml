@@ -1119,6 +1119,8 @@ definitions:
     properties:
       layout:
         $ref: "#/definitions/Layout"
+      stats:
+        $ref: "#/definitions/Stats"
       ranges:
         description: List of 1D ranges, one per dimension
         type: array
@@ -1134,6 +1136,46 @@ definitions:
       coalesceRanges:
         type: boolean
 
+  Stats:
+    description: Stats struct
+    type: object
+    properties:
+      timers:
+        $ref: "#/definitions/MapFloat64"
+      counters:
+        $ref: "#/definitions/MapUInt64"
+
+  MapFloat64:
+    description: Stats struct
+    type: object
+    properties:
+      entries:
+        type: array
+        x-omitempty: true
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            value:
+              type: number
+              format: double
+
+  MapUInt64:
+    description: Stats struct
+    type: object
+    properties:
+      entries:
+        type: array
+        x-omitempty: true
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            value:
+              type: integer
+              format: uint64
 
   SubarrayPartitioner:
     description: The subarray partitioner
@@ -1228,6 +1270,111 @@ definitions:
         description: To handle incomplete read queries.
         $ref: "#/definitions/ReadState"
 
+  ReaderIndex:
+    description: Contains data needed for continuation of incomplete sparse reads with index readers
+    type: object
+    properties:
+      layout:
+        $ref: "#/definitions/Layout"
+      subarray:
+        $ref: "#/definitions/Subarray"
+      stats:
+        $ref: "#/definitions/Stats"
+      readState:
+        description: Read state of reader
+        $ref: "#/definitions/ReadStateIndex"
+      condition:
+        description: The query condition
+        $ref: "#/definitions/Condition"
+
+  ReadStateIndex:
+    description: State of reader
+    type: object
+    properties:
+      doneAddingResultTiles:
+        description: Is the reader done adding result tiles.
+        type: boolean
+      fragTileIdx:
+        description: Tile/cell index for each fragments.
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/FragmentIndex"
+      resultCellSlab:
+        description: Result cell slab.
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ResultCellSlab"
+
+  ResultCellSlab:
+    description: Result cell slab
+    type: object
+    properties:
+      fragIdx:
+        description: Fragment index
+        type: integer
+        format: uint32
+      tileIdx:
+        description: Tile index
+        type: integer
+        format: uint64
+      start:
+        description: Start of the cell slab
+        type: integer
+        format: uint64
+      length:
+        description: length of the cell slab
+        type: integer
+        format: uint64
+
+  FragmentIndex:
+    description: Tile/cell index for fragment
+    type: object
+    properties:
+      tileIdx:
+        description: Tile index
+        type: integer
+        format: uint64
+      cellIdx:
+        description: Cell index
+        type: integer
+        format: uint64
+
+  Condition:
+    description: The query condition
+    type: object
+    properties:
+      clauseCombinationOps:
+        description: The operation that combines each condition
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+      clauses:
+        description: All clauses in this condition
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ConditionClause"
+
+  ConditionClause:
+    description: A clause within a condition
+    type: object
+    properties:
+      fieldName:
+        description: The name of the field this clause applies to
+        type: string
+      value:
+        description: The comparison value
+        type: array
+        items:
+          type: integer
+          format: uint8
+      op:
+        description: The comparison operation
+        type: string
+
   Query:
     type: object
     required:
@@ -1260,6 +1407,9 @@ definitions:
       denseReader:
         description: denseReader contains data needed for continuation of incomplete dense reads with dense reader
         $ref: "#/definitions/QueryReader"
+      readerIndex:
+        description: readerIndex contains data needed for continuation of incomplete sparse reads with index readers
+        $ref: "#/definitions/ReaderIndex"
       array:
         description: Represents an open array
         $ref: "#/definitions/Array"
