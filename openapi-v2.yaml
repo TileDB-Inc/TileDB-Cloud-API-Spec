@@ -40,6 +40,39 @@ security:
   # - OAuth2: [read, write, admin]
 
 definitions:
+  AssetType:
+    description: Asset types represented as TileDB arrays
+    type: string
+    enum:
+      # Array
+      - array
+      # Notebook
+      - notebook
+      # Dashboard
+      - dashboard
+      # UDF
+      - user_defined_function
+      # ML Model
+      - ml_model
+      # Files
+      - file
+      # Task graphs
+      - registered_task_graph
+      # Groups
+      - group
+      # VCF
+      - vcf
+      # SOMA
+      - soma
+      # Point cloud
+      - point_cloud
+      # Biomedical imaging
+      - bioimg
+      # Geometry
+      - geometry
+      # Raster
+      - raster
+
   Datatype:
     description: TileDB data type
     type: string
