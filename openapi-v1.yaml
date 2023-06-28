@@ -1736,6 +1736,8 @@ definitions:
       - geometry
       # Raster
       - raster
+      # Vector search
+      - vector_search      
 
   FilePropertyName:
     description: File property assigned to a specific file (array)
@@ -3170,6 +3172,8 @@ definitions:
       - raster
       # Geometry
       - geometry
+      # Vector search
+      - vector_search
 
   GroupTypeMetadataKey:
     description: A group type is stored in the group metadata using this key
@@ -3487,6 +3491,8 @@ definitions:
       - raster
       # Geometry
       - geometry
+      # Vector search
+      - vector_search
 
   GroupMember:
     description: A groups member, array or another groups, to add or remove from an existing group.
