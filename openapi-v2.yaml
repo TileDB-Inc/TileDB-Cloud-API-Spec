@@ -1483,6 +1483,10 @@ definitions:
         type: string
         format: date-time
         readOnly: true
+      allowed_in_tasks:
+        description: "Is this credential allowed to be used in tasks"
+        type: boolean
+        x-nullable: true
       credential:
         description: "The credential information itself. Exactly one sub-field may be set. The names match those in the CloudProvider enum."
         type: object

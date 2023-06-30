@@ -2267,6 +2267,9 @@ definitions:
         type: string
         description: Docker image name to use for UDF
         x-omitempty: true
+      access_credentials_name:
+        description: The name of the access credentials to use. if unset, no credentials will be configured in the environment.
+        type: string
       resource_class:
         type: string
         description: >
@@ -2368,6 +2371,9 @@ definitions:
         type: string
         description: Docker image name to use for UDF
         x-omitempty: true
+      access_credentials_name:
+        description: The name of the access credentials to use. if unset, no credentials will be configured in the environment.
+        type: string
       resource_class:
         type: string
         description: >
@@ -4147,6 +4153,10 @@ definitions:
       image_name:
         description: >
           The name of the image to use for the execution environment.
+        type: string
+      access_credentials_name:
+        description: >
+          The name of the access credentials to use. if unset, no credentials will be configured in the environment.
         type: string
       namespace:
         description: >
