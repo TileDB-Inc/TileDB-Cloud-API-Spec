@@ -980,6 +980,7 @@ definitions:
       - UDF
       - QUERY
       - GENERIC_UDF
+      - BATCH_UDF
       - CLIENT_COMPUTATION
 
   ArrayTaskStatus:
@@ -1058,6 +1059,11 @@ definitions:
       status:
         description: The status of an individual task
         $ref: "#/definitions/ArrayTaskStatus"
+      status_message:
+        description: The reason the array task status is in the state
+        type: string
+        x-nullable: true
+        x-omitempty: true
       start_time:
         description: Start time RFC3339 for job
         type: string
@@ -3633,6 +3639,14 @@ definitions:
       - cancelled
         # The client has cancelled further execution of the task graph.
 
+  TaskGraphType:
+    description: >
+      The type of a task graph.
+    type: string
+    enum:
+      - batch
+      - realtime
+
   TaskGraphLog:
     description: Logging information about the execution of a task graph.
     type: object
@@ -3723,6 +3737,11 @@ definitions:
           when first setting up the task graph. Thereafter, it is read-only.
           This must be topographically sorted; that is, each node must appear
           after all nodes that it depends upon.
+      task_graph_type:
+        $ref: "#/definitions/TaskGraphType"
+      task_graph_id:
+        type: string
+        description: The UUID of the task graph.
 
   TaskGraphNodeMetadata:
     description: Metadata about an individual node in a task graph.
@@ -3754,6 +3773,11 @@ definitions:
           `QUEUED`. For nodes that are set to run locally and have not reported
           any status information, this will be listed as `UNKNOWN`.
         $ref: "#/definitions/ArrayTaskStatus"
+      status_message:
+        description: The reason the array task status is in the state
+        type: string
+        x-nullable: true
+        x-omitempty: true
       executions:
         type: array
         items:
@@ -3789,6 +3813,77 @@ definitions:
         type: string
       status:
         $ref: "#/definitions/ArrayTaskStatus"
+
+  # Task graph
+  TaskGraph:
+    description: Information about a task graph.
+    type: object
+    properties:
+      uuid:
+        type: string
+        readOnly: true
+        description: The server-generated UUID of the task graph.
+      namespace:
+        type: string
+        description: >
+          The namespace that owns this task graph.
+          When creating a task graph log, this is used as the namespace to
+          create the log in; thereafter it is read-only.
+      created_by:
+        type: string
+        readOnly: true
+        description: The name of the user who created this task graph log.
+      name:
+        type: string
+        description: >
+          A name for this task graph, displayed in the UI.
+          Does not need to be unique.
+      created_at:
+        type: string
+        format: date-time
+        readOnly: true
+        description: >
+          The date/time when this task graph was originally created.
+      nodes:
+        type: array
+        items:
+          $ref: "#/definitions/TaskGraphNode"
+        description: >
+          The structure of the graph. This is provided by the client
+          when first setting up the task graph. 
+          This must be topographically sorted; that is, each node must appear
+          after all nodes that it depends upon.
+      parallelism:
+        type: integer
+        format: int64
+        x-nullable: true
+        x-omitempty: true
+        description: >
+          Parallelism limits the max total parallel pods that can execute
+          at the same time in a workflow.
+      retry_strategy:
+        $ref: '#/definitions/RetryStrategy'
+      deadline:
+        type: integer
+        format: int64
+        x-nullable: true
+        x-omitempty: true
+        description: >
+          Duration in seconds relative to the workflow start time which the
+          workflow is allowed to run before it gets terminated.
+      task_graph_type:
+        $ref: "#/definitions/TaskGraphType"
+
+  TaskGraphs:
+    description: Information about a series of task graphs.
+    type: object
+    properties:
+      graphs:
+        type: array
+        items:
+          $ref: "#/definitions/TaskGraph"
+        description: >
+          The series of graphs.
 
   # Registered task graphs
 
@@ -3830,7 +3925,7 @@ definitions:
       nodes:
         type: array
         items:
-          $ref: "#/definitions/RegisteredTaskGraphNode"
+          $ref: '#/definitions/TaskGraphNode'
         description: >
           The structure of the graph, in the form of the nodes that make it up.
           As with `TaskGraphLog`, nodes must topologically sorted, so that any
@@ -3867,7 +3962,7 @@ definitions:
         type: string
         example: "organization"
 
-  RegisteredTaskGraphNode:
+  TaskGraphNode:
     description: >
       Information about a single node within a registered task graph.
       A single node represents one piece of data or a computational step;
@@ -3899,7 +3994,26 @@ definitions:
       sql_node:
         $ref: "#/definitions/TGSQLNodeData"
       udf_node:
-        $ref: "#/definitions/TGUDFNodeData"
+        $ref: '#/definitions/TGUDFNodeData'
+      retry_strategy:
+        $ref: '#/definitions/RetryStrategy'
+      expand_node_output:
+        type: string
+        x-nullable: true
+        description: >
+          Used to create dynamic tasks based on the output of another node.
+          The other node's output must be a JSON list of values. The expansion
+          process creates one task per item in the output list. The item is
+          also passed as an argument to each task. The value is the
+          client_node_uuid of the node that we want to expand.
+      deadline:
+        type: integer
+        format: int64
+        x-nullable: true
+        x-omitempty: true
+        description: >
+          Duration in seconds relative to the node start time which the
+          node is allowed to run before it gets terminated.
 
   TGArrayNodeData:
     description: >
@@ -4096,6 +4210,7 @@ definitions:
       result_format:
         $ref: "#/definitions/ResultFormat"
 
+
   TGUDFArgument:
     description: >
       A single argument to a UDF. This may represent a positional argument or
@@ -4171,6 +4286,23 @@ definitions:
           UDF will execute in the standard resource class of the TileDB Cloud
           provider.
         type: string
+        x-omitempty: true
+      resources:
+        type: object
+        description: >
+          The resources requested for this particular node. If resources are not 
+          specified resource_class is used, if it is not set the standard resource 
+          // defaults are used
+        properties:
+          cpu:
+            type: string
+            example: 500m
+          memory:
+            type: string
+            example: 8Gi
+          gpu:
+            type: integer
+            example: 1
         x-omitempty: true
       run_client_side:
         description: >
@@ -4395,6 +4527,52 @@ definitions:
         type: object
         description: config to use to retrieve the contents
         $ref: "#/definitions/TileDBConfig"
+
+  RetryStrategy:
+    description: RetryStrategy provides controls on how to retry a taskgraph node
+    type: object
+    properties:
+      backoff:
+        description: Backoff is a backoff strategy
+        $ref: '#/definitions/Backoff'
+      expression:
+        description: Expression is a condition expression for when a node will be retried. If it evaluates to false, the node will not be retried and the retry strategy will be ignored
+        type: string
+      limit:
+        description: Limit is the maximum number of retry attempts when retrying a container. It does not include the original container; the maximum number of total attempts will be `limit + 1`.
+        type: integer
+        format: uint32
+      retryPolicy:
+        description: RetryPolicy is a policy of NodePhase statuses that will be retried
+        $ref: '#/definitions/RetryPolicy'
+
+  Backoff:
+    description: Backoff is a backoff strategy to use within retryStrategy
+    type: object
+    properties:
+      duration:
+        description: Duration is the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+        type: string
+      factor:
+        description: Factor is a factor to multiply the base duration after each failed retry
+        type: integer
+        format: uint32
+      maxDuration:
+        description: MaxDuration is the maximum amount of time allowed for the backoff strategy
+        type: string
+
+  RetryPolicy:
+    description: RetryPolicy is a policy of node statuses that will be retried
+    type: string
+    enum:
+      # Retry always
+      - Always
+      # Retry task failures
+      - OnFailure
+      # Retry task errors
+      - OnError
+      # Retry task transient errors
+      - OnTransientError
 
 paths:
   /.stats:
@@ -9351,6 +9529,237 @@ paths:
       responses:
         204:
           description: Status reported successfully.
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /taskgraphs/{namespace}/executions/{id}/resubmit:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph execution.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph execution (TaskGraphLog).
+        type: string
+        required: true
+    post:
+      description:  Resubmits a task graph in the given namespace using the associated execution id.
+      operationId: resubmitTaskGraphExecution
+      tags:
+        - task_graph_logs
+      responses:
+        202:
+          description: Information about the task graph execution.
+          schema:
+            $ref: "#/definitions/TaskGraphLog"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
+  /taskgraphs/{namespace}/executions/{id}/retry:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph execution.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph execution (TaskGraphLog).
+        type: string
+        required: true
+    post:
+      description: Retries failed tasks of a task graph in the given namespace using the associated execution id.
+      operationId: retryTaskGraphExecution
+      tags:
+        - task_graph_logs
+      responses:
+        202:
+          description: Information about the task graph execution.
+          schema:
+            $ref: "#/definitions/TaskGraphLog"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
+  /taskgraphs/{namespace}/executions/{id}/stop:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph execution.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph execution (TaskGraphLog).
+        type: string
+        required: true
+    post:
+      description:  Stops a task graph execution in the given namespace using the associated associated execution id.
+      operationId: stopTaskGraphExecution
+      tags:
+        - task_graph_logs
+      responses:
+        202:
+          description: Information about the task graph execution.
+          schema:
+            $ref: "#/definitions/TaskGraphLog"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: '#/definitions/Error'
+
+  # Task graphs
+  /taskgraphs/{namespace}/graphs:
+    get:
+      description: >
+        Fetch the task graphs of a namespace the user has access to. The
+        returned entries will include only summary data, and will not include
+        information about the individual tasks that were executed. (This
+        information is available when requesting an individual task graph log.)
+
+        Entries in the response are ordered from newest to oldest. Pagination
+        parameters work as in other API methods; see PaginationMetadata.
+      operationId: listTaskGraphs
+      parameters:
+        - name: namespace
+          in: path
+          description: Namespace for graphs
+          type: string
+          required: true
+      tags:
+        - task_graphs
+      responses:
+        200:
+          description: The task graphs that matched the user's query.
+          schema:
+            $ref: "#/definitions/TaskGraphs"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      description: >
+        Create a single task graph for execution.
+      operationId: createTaskGraph
+      tags:
+        - task_graphs
+      parameters:
+        - name: namespace
+          in: path
+          description: Include graphs for this namespace.
+          type: string
+          required: true
+        - name: graph
+          in: body
+          description: Create the task graph.
+          schema:
+            $ref: "#/definitions/TaskGraph"
+          required: true
+      responses:
+        201:
+          description: Task graph created successfully.
+          schema:
+            $ref: "#/definitions/TaskGraph"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /taskgraphs/{namespace}/graphs/{id}:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph entry.
+        type: string
+        required: true
+    get:
+      description: >
+        Fetch information about a single task graph.
+      operationId: getTaskGraph
+      tags:
+        - task_graphs
+      responses:
+        200:
+          description: Information about the single task graph.
+          schema:
+            $ref: "#/definitions/TaskGraph"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      description: >
+        Update information about a single task graph execution.
+      operationId: updateTaskGraph
+      tags:
+        - task_graphs
+      parameters:
+        - name: graph
+          in: body
+          description: Updates to make to the task graph.
+          schema:
+            $ref: "#/definitions/TaskGraph"
+          required: true
+      responses:
+        204:
+          description: Task graph created successfully.
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /taskgraphs/{namespace}/graphs/{id}/submit:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace that owns this task graph.
+        type: string
+        required: true
+      - name: id
+        in: path
+        description: The UUID of the task graph entry.
+        type: string
+        required: true
+    post:
+      description: >
+       Submit a single task graph for execution.
+      operationId: submitTaskGraph
+      tags:
+        - task_graphs
+        - task_graph_logs
+      responses:
+        202:
+          description: Information about the execution of a single task graph.
+          schema:
+            $ref: "#/definitions/TaskGraphLog"
         502:
           description: Bad Gateway
         default:
