@@ -2413,6 +2413,38 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /groups/{group_namespace}/{group_name}/delete:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+      - name: recursive
+        in: query
+        description: If true, it descends in the group and deletes every subgroup and subarray
+        type: string
+        required: false
+    delete:
+      description: Deregisters and physically deletes a group
+      operationId: deleteGroup
+      tags:
+        - groups
+      responses:
+        204:
+          description: group deleted successfully
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
   /files/{namespace}/{array}/upload:
     parameters:
       - type: string
