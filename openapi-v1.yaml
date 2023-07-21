@@ -2881,7 +2881,6 @@ definitions:
     description: Encapsulates information regarding inviting people using email to join organization, same permissions for all invitees
     type: object
     required:
-      - invitee_email
       - organization_role
     properties:
       actions:
@@ -2901,6 +2900,12 @@ definitions:
         x-omitempty: true
         items:
           type: string
+      invitee_username:
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+
 
   Invitation:
     description: Invitations to share or collaborate
