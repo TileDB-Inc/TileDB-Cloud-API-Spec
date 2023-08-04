@@ -209,7 +209,7 @@ definitions:
           type: number
           format: double
 
-  ArrayData:
+  Array:
     description: Represents an open array
     type: object
     required:
@@ -1413,7 +1413,7 @@ definitions:
         $ref: "#/definitions/ReaderIndex"
       array:
         description: Represents an open array
-        $ref: "#/definitions/ArrayData"
+        $ref: "#/definitions/Array"
       totalFixedLengthBufferBytes:
         description: Total number of bytes in fixed size attribute buffers.
         type: integer
@@ -2009,7 +2009,7 @@ paths:
         200:
           description: Array opened successfully
           schema:
-            $ref: "#/definitions/ArrayData"
+            $ref: "#/definitions/Array"
         502:
           description: Bad Gateway
         default:
