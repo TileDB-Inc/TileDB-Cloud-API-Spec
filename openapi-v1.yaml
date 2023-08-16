@@ -2994,15 +2994,8 @@ definitions:
         x-omitempty: false
       namespace_invited:
         description: The namespace invited (user or organization, if it exists in the DB)
-        type: object
+        type: string
         x-omitempty: true
-        properties:
-          id:
-            description: The namespace uuid
-            type: string
-          namespace:
-            description: The namespace name (username or organization name)
-            type: string
 
   InvitationData:
     description: Object including invitations and metadata
