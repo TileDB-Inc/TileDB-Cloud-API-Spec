@@ -2847,6 +2847,18 @@ definitions:
         items:
           type: string
 
+  InvitationFailedRecipients:
+    description: Encapsulates information regarding the failed invitation recipients
+    type: object
+    required:
+      - failed_recipients
+    properties:
+      failed_recipients:
+        type: array
+        x-omitempty: true
+        items:
+          type: string
+
   InvitationGroupShareEmail:
     description: Encapsulates information regarding inviting people using email to share group, same permissions for all invitees
     type: object
@@ -7699,10 +7711,14 @@ paths:
       responses:
         204:
           description: Email sent successfully to user for email confirmation link
-        404:
-          description: Could not reach one or more recipients
+        207:
+          description: Only a portion of the invitations succeeded, some failed
           schema:
-            $ref: "#/definitions/InvitationArrayShareEmail"
+            $ref: "#/definitions/InvitationFailedRecipients"
+        500:
+          description: Could not reach any recipients
+          schema:
+            $ref: "#/definitions/InvitationFailedRecipients"
         502:
           description: Bad Gateway
         default:
@@ -7737,10 +7753,14 @@ paths:
       responses:
         204:
           description: Email sent successfully to user with an email confirmation link
-        404:
-          description: Could not reach one or more recipients
+        207:
+          description: Only a portion of the invitations succeeded, some failed
           schema:
-            $ref: "#/definitions/InvitationGroupShareEmail"
+            $ref: "#/definitions/InvitationFailedRecipients"
+        500:
+          description: Could not reach any recipients
+          schema:
+            $ref: "#/definitions/InvitationFailedRecipients"
         502:
           description: Bad Gateway
         default:
@@ -7770,10 +7790,14 @@ paths:
       responses:
         204:
           description: Email sent successfully to user for email confirmation link
-        404:
-          description: Could not reach one or more recipients
+        207:
+          description: Only a portion of the invitations succeeded, some failed
           schema:
-            $ref: "#/definitions/InvitationOrganizationJoinEmail"
+            $ref: "#/definitions/InvitationFailedRecipients"
+        500:
+          description: Could not reach any recipients
+          schema:
+            $ref: "#/definitions/InvitationFailedRecipients"
         502:
           description: Bad Gateway
         default:
