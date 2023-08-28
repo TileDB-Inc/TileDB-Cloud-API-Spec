@@ -2672,8 +2672,18 @@ definitions:
         type: integer
         format: uint64
         example: 4000
+      gpu_usage:
+        description: gpu usage in milligpu
+        type: integer
+        format: uint64
+        example: 4000
       memory_usage:
         description: memory usage in bytes
+        type: integer
+        format: uint64
+        example: 1073741824
+      gpu_limit:
+        description: gpu limit in milligpu
         type: integer
         format: uint64
         example: 1073741824
