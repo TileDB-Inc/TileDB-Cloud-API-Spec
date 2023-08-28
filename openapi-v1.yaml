@@ -7829,7 +7829,7 @@ paths:
         type: string
       - name: orderby
         in: query
-        description: sort by which field valid values include last_accessed, size, name
+        description: sort by which field valid values include size, name
         required: false
         type: string
       - name: permissions
@@ -7975,7 +7975,7 @@ paths:
         type: string
       - name: orderby
         in: query
-        description: sort by which field valid values include last_accessed, size, name
+        description: sort by which field valid values include size, name
         required: false
         type: string
       - name: permissions
@@ -8105,7 +8105,7 @@ paths:
         type: string
       - name: orderby
         in: query
-        description: sort by which field valid values include last_accessed, size, name
+        description: sort by which field valid values include size, name
         required: false
         type: string
       - name: permissions
