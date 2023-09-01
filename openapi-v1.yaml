@@ -2707,6 +2707,13 @@ definitions:
         type: integer
         format: uint64
         example: 4000
+      cost:
+        description: cost in USD for the current notebook session 
+        x-omitempty: true
+        x-nullable: true
+        type: number
+        format: double
+        example: 0.27
 
   ArrayFavorite:
     description: A user-favorite array item
