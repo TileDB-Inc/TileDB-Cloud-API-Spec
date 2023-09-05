@@ -124,6 +124,8 @@ definitions:
       - estimated_result_sizes
       # read_fragment_info
       - read_fragment_info
+      # read_enumerations
+      - read_enumerations
 
   UDFLanguage:
     description: UDF Type
