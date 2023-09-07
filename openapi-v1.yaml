@@ -1391,6 +1391,11 @@ definitions:
       default_namespace_charged:
         description: Override the default namespace charged for actions when no namespace is specified
         type: string
+      default_region:
+        description: >
+          The default region to use for notebooks and other operations. It must be a region supported by TileDB,
+          see https://docs.tiledb.com/cloud/concepts/tiledb-cloud-internals/architecture#orchestration
+        type: string
 
   OrganizationUser:
     description: user in an organization
