@@ -4561,6 +4561,55 @@ definitions:
         description: config to use to retrieve the contents
         $ref: "#/definitions/TileDBConfig"
 
+  Enumeration:
+    description: The enumerations of a single attribute
+    type: object
+    properties:
+      name:
+        type: string
+      path_name:
+        type: string
+      type:
+        type: string
+      cell_val_num:
+        type: integer
+        format: uint32
+      ordered:
+        type: boolean
+      data:
+        type: array
+        items:
+          type: integer
+          format: uint8
+      offsets:
+        type: array
+        items:
+          type: integer
+          format: uint8
+  
+
+  LoadEnumerationsRequest:
+    description: Request to return enumerations for attributes
+    type: object
+    properties:
+      config:
+        type: object
+        description: config to use to retrieve the contents
+        $ref: "#/definitions/TileDBConfig"
+      enumerations:
+        type: array
+        items:
+          type: string
+
+  LoadEnumerationsResponse:
+    description: Contains the enumerations of the array's attributes
+    type: object
+    properties:
+      enumerations:
+        type: array
+        items:
+          $ref: '#/definitions/Enumeration'
+
   RetryStrategy:
     description: RetryStrategy provides controls on how to retry a taskgraph node
     type: object
@@ -5171,6 +5220,44 @@ paths:
       responses:
         204:
           description: array vacuumed successfully
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/{namespace}/{array}/enumerations:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+    post:
+      description: request to get the enumerations of the arrays' attributes
+      tags:
+        - array
+      operationId: loadEnumerations
+      parameters:
+        - name: load_enumerations_request
+          in: body
+          description: Load Enumerations Request
+          schema:
+            $ref: "#/definitions/LoadEnumerationsRequest"
+          required: true
+      responses:
+        200:
+          description: enumerations returned successfully
+          schema:
+            $ref: "#/definitions/LoadEnumerationsResponse"
+        404:
+          description: Array does not exist or user does not have permissions to access it
         502:
           description: Bad Gateway
         default:
