@@ -89,6 +89,54 @@ definitions:
       - STRING_UCS4
       # This can be any datatype. Must store (type tag, value) pairs.
       - ANY
+      # Datetime with year resolution
+      - DATETIME_YEAR
+      # Datetime with month resolution
+      - DATETIME_MONTH
+      # Datetime with week resolution
+      - DATETIME_WEEK
+      # Datetime with day resolution
+      - DATETIME_DAY
+      # Datetime with hour resolution
+      - DATETIME_HR
+      # Datetime with minute resolution
+      - DATETIME_MIN
+      # Datetime with second resolution
+      - DATETIME_SEC
+      # Datetime with millisecond resolution
+      - DATETIME_MS
+      # Datetime with microsecond resolution
+      - DATETIME_US
+      # Datetime with nanosecond resolution
+      - DATETIME_NS
+      # Datetime with picosecond resolution
+      - DATETIME_PS
+      # Datetime with femtosecond resolution
+      - DATETIME_FS
+      # Datetime with attosecond resolution
+      - DATETIME_AS
+      # Time with hour resolution
+      - TIME_HR
+      # Time with minute resolution
+      - TIME_MIN
+      # Time with second resolution
+      - TIME_SEC
+      # Time with millisecond resolution
+      - TIME_MS
+      # Time with microsecond resolution
+      - TIME_US
+      # Time with nanosecond resolution
+      - TIME_NS
+      # Time with picosecond resolution
+      - TIME_PS
+      # Time with femtosecond resolution
+      - TIME_FS
+      # Time with attosecond resolution
+      - TIME_AS
+      # 8-bit unsigned integer
+      - BLOB
+      # Boolean
+      - BOOL
 
   ActivityEventType:
     description: Type of activity logged
