@@ -1693,6 +1693,10 @@ definitions:
         type: string
         description: TileDB URI for access
         x-omitempty: false
+      uri:
+        description: uri of group.
+        type: string
+        x-omitempty: false
 
   GroupRegistrationRequest:
     type: object
