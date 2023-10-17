@@ -1869,6 +1869,45 @@ definitions:
       type:
         $ref: "#/definitions/GroupMemberType"
 
+  GroupContentActivity:
+    description: Object containing activity of an asset of a group
+    type: object
+    properties:
+      asset:
+        description: The asset details
+        type: object
+        properties:
+          id:
+            description: The asset ID
+            type: string
+          name:
+            description: The asset name
+            type: string
+          namespace:
+            description: The namespace that the asset belongs to
+            type: string
+          asset_type:
+            description: The type of the asset
+            $ref: "#/definitions/AssetType"
+      activity_log:
+        description: Object containing the activity log
+        type: object
+        $ref: "#/definitions/ArrayActivityLog"
+
+  GroupContentActivityResponse:
+    description: Object containing activity logs of group content along with the pagination metadata
+    type: object
+    properties:
+      activity:
+        description: Activity of a group's content
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/GroupContentActivity"
+      pagination_metadata:
+        x-omitempty: false
+        $ref: "#/definitions/PaginationMetadata"
+
   TileDBConfig:
     description: TileDB config used for interaction with the embedded library
     type: object
@@ -2460,6 +2499,45 @@ paths:
       responses:
         204:
           description: group deleted successfully
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{group_namespace}/{group_name}/content_activity:
+    parameters:
+      - name: group_namespace
+        type: string
+        in: path
+        required: true
+        description: The namespace of the group
+      - name: group_name
+        type: string
+        in: path
+        required: true
+        description: The unique name or id of the group
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+    get:
+      description: Retrieves combined activity logs for all assets contained in a group.
+      operationId: getGroupContentActivity
+      tags:
+        - groups
+      responses:
+        200:
+          description: Activity logs of group contents along with the pagination metadata
+          schema:
+            $ref: "#/definitions/GroupContentActivityResponse"
         502:
           description: Bad Gateway
         default:
