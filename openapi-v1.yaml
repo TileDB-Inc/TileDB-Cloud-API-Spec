@@ -298,8 +298,6 @@ definitions:
       - admin
       # Read and write User
       - read_write
-      # Read and write and delete asset user
-      - read_write_delete
       # Read Only User
       - read_only
 
