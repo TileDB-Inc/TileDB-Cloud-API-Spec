@@ -3755,6 +3755,8 @@ definitions:
       - idle
         # The graph is not yet completed, but nothing is actively running.
         # This should not be reported by the client.
+      - unfinished
+        # The task graph is unfinished
       - abandoned
         # The graph has been idle for an extended period of time, likely due to
         # the client crashing or aborting without notifying the server.
@@ -9660,6 +9662,11 @@ paths:
       - name: created_by
         in: query
         description: Include logs from only this user.
+        type: string
+        required: false
+      - name: status
+        in: query
+        description: Filter to only return these statuses
         type: string
         required: false
       - name: search
