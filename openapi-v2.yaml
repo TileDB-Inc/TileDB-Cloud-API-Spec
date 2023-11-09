@@ -767,6 +767,10 @@ definitions:
         description: Attribute name
         type: string
         example: attribute1
+      enumerationName:
+        description: Enumeration name
+        type: string
+        example: colors
       type:
         $ref: "#/definitions/Datatype"
       filterPipeline:
