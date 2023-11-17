@@ -2460,6 +2460,12 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     delete:
+      parameters:
+        - name: recursive
+          in: query
+          description: If true, it descends in the group and deregisters every subgroup and subarray
+          type: string
+          required: false
       description: Deregisters a group
       operationId: deregisterGroup
       tags:
