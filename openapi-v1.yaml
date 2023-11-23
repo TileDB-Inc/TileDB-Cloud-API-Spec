@@ -1662,6 +1662,39 @@ definitions:
         readOnly: true
         example: false
 
+  OrganizationUpdate:
+    description: OrganizationUpdate
+    type: object
+    properties:
+      name:
+        type: string
+        minLength: 1
+        maxLength: 63
+        pattern: "^[\\w.\\-]+$" # only allows alphanumeric characters
+        description: organization name must be unique
+        x-nullable: true
+      logo:
+        description: Organization logo
+        type: string
+        x-nullable: true
+      description:
+        description: Organization description
+        type: string
+        x-nullable: true
+      default_s3_path:
+        description: >
+          The default location to store newly-created notebooks and other assets
+          like UDFs. The name `default_s3_path` is a legacy holdover; it may
+          refer to any supported storage location.
+        type: string
+      default_s3_path_credentials_name:
+        description: >
+          The name of the credentials used to create and access files in the
+          `default_s3_path`, if needed.
+        type: string
+      asset_locations:
+        $ref: "#/definitions/AssetLocations"
+
   AssetLocations:
     description: >
       Custom storage locations on a per–asset type basis. If any is unset,
@@ -6470,7 +6503,7 @@ paths:
           in: body
           description: organization details to update
           schema:
-            $ref: "#/definitions/Organization"
+            $ref: "#/definitions/OrganizationUpdate"
           required: true
       responses:
         204:
