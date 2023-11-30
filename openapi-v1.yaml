@@ -1687,11 +1687,13 @@ definitions:
           like UDFs. The name `default_s3_path` is a legacy holdover; it may
           refer to any supported storage location.
         type: string
+        x-nullable: true
       default_s3_path_credentials_name:
         description: >
           The name of the credentials used to create and access files in the
           `default_s3_path`, if needed.
         type: string
+        x-nullable: true
       asset_locations:
         $ref: "#/definitions/AssetLocations"
 
