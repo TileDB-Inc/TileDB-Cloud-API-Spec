@@ -1661,6 +1661,12 @@ definitions:
         type: boolean
         readOnly: true
         example: false
+      assume_role_arn:
+        description: >
+          A AWS Role that will be first assumed before assuming the organization's AWS Role.
+          Visible to owners and admins.
+        type: string
+        x-omitempty: true
 
   OrganizationUpdate:
     description: OrganizationUpdate
