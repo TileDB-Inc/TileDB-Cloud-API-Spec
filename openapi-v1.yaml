@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: TileDB Storage Platform REST API
   title: TileDB Storage Platform API
-  version: 2.2.19
+  version: 2.17.51
 
 produces:
   - application/json
@@ -9920,10 +9920,8 @@ paths:
       tags:
         - task_graph_logs
       responses:
-        202:
-          description: Information about the task graph execution.
-          schema:
-            $ref: "#/definitions/TaskGraphLog"
+        204:
+          description: Graph stopped successfully
         502:
           description: Bad Gateway
         default:
