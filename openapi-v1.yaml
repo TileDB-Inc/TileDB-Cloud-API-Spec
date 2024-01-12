@@ -2810,6 +2810,22 @@ definitions:
         type: number
         format: double
         example: 0.27
+      pod_status:
+        description: Status of the pod
+        $ref: "#/definitions/PodStatus"
+        example: RUNNING
+        x-omitempty: true
+
+  PodStatus:
+    description: List of all available pod statuses
+    type: string
+    enum:
+      # Terminating
+      - TERMINATING
+      # Running
+      - RUNNING
+      # Launching
+      - LAUNCHING
 
   ArrayFavorite:
     description: A user-favorite array item
