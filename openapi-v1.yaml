@@ -2088,6 +2088,10 @@ definitions:
         type: boolean
         x-omitempty: true
         example: true
+      created_at:
+        description: Datetime array was registered with tiledb 
+        type: string
+        format: date-time
 
   ArrayInfoUpdate:
     description: metadata of an array
@@ -3428,6 +3432,10 @@ definitions:
         type: string
         x-omitempty: true
         description: License text
+      created_at:
+        description: Datetime the group was registered with tiledb 
+        type: string
+        format: date-time
 
   GroupEntry:
     description: Object describing a single member of a group, which can be an array or a group
