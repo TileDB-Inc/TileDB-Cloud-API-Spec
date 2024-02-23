@@ -65,7 +65,7 @@ definitions:
       # SOMA
       - soma
       # Point cloud
-      - point_cloud
+      - pointcloud
       # Biomedical imaging
       - bioimg
       # Geometry
