@@ -1118,6 +1118,7 @@ definitions:
         description: Start time RFC3339 for job
         type: string
         format: date-time
+        x-nullable: true
       finish_time:
         description: Finish time RFC3339 for job
         type: string
