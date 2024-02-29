@@ -1840,7 +1840,7 @@ definitions:
       # Raster
       - raster
       # Vector search
-      - vector_search      
+      - vector_search
 
   FilePropertyName:
     description: File property assigned to a specific file (array)
@@ -2090,7 +2090,7 @@ definitions:
         x-omitempty: true
         example: true
       created_at:
-        description: Datetime array was registered with tiledb 
+        description: Datetime array was registered with tiledb
         type: string
         format: date-time
 
@@ -2813,7 +2813,7 @@ definitions:
         format: uint64
         example: 4000
       cost:
-        description: cost in USD for the current notebook session 
+        description: cost in USD for the current notebook session
         x-omitempty: true
         x-nullable: true
         type: number
@@ -2954,6 +2954,8 @@ definitions:
       - GROUP_SHARE
       # Join Organization
       - JOIN_ORGANIZATION
+      # Allow a child namespace to use a payment instrument
+      - PAYMENT_SHARE
 
   InvitationStatus:
     description: List of values that InvitationStatus can take
@@ -3438,7 +3440,7 @@ definitions:
         x-omitempty: true
         description: License text
       created_at:
-        description: Datetime the group was registered with tiledb 
+        description: Datetime the group was registered with tiledb
         type: string
         format: date-time
 
@@ -4050,7 +4052,7 @@ definitions:
           $ref: "#/definitions/TaskGraphNode"
         description: >
           The structure of the graph. This is provided by the client
-          when first setting up the task graph. 
+          when first setting up the task graph.
           This must be topographically sorted; that is, each node must appear
           after all nodes that it depends upon.
       parallelism:
@@ -4490,8 +4492,8 @@ definitions:
       resources:
         type: object
         description: >
-          The resources requested for this particular node. If resources are not 
-          specified resource_class is used, if it is not set the standard resource 
+          The resources requested for this particular node. If resources are not
+          specified resource_class is used, if it is not set the standard resource
           // defaults are used
         properties:
           cpu:
@@ -4753,7 +4755,6 @@ definitions:
         items:
           type: integer
           format: uint8
-  
 
   LoadEnumerationsRequest:
     description: Request to return enumerations for attributes
@@ -8071,6 +8072,78 @@ paths:
             $ref: "#/definitions/InvitationFailedRecipients"
         502:
           description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /invitations/share_payment/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: name or UUID of namespace sharing their payment info
+        type: string
+        required: true
+    post:
+      tags:
+        - invitation
+      description: |
+        Sends email to multiple recipients allowing them to use the payment
+        instrument provided by the source namespace.
+      operationId: sharePayment
+      parameters:
+        - name: email_invite
+          in: body
+          type: object
+          description: |
+            Recipients of the invitation. These may only be namespaces,
+            not email addresses.
+          schema:
+            name: namespaces
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        204:
+          description: Email sent successfully to user for email confirmation link
+        207:
+          description: Only a portion of the invitations succeeded, some failed
+          schema:
+            $ref: "#/definitions/InvitationFailedRecipients"
+        500:
+          description: Could not reach any recipients
+          schema:
+            $ref: "#/definitions/InvitationFailedRecipients"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /invitations/share_payment/{namespace}/{target}:
+    parameters:
+      - name: namespace
+        in: path
+        description: name or UUID of namespace sharing their payment info
+        type: string
+        required: true
+      - name: target
+        in: path
+        description: name or UUID of recipient namespace
+        type: string
+        required: true
+    delete:
+      tags:
+        - invitation
+      description: Revokes invitation from the source namespace to the target.
+      operationId: cancelSharePayment
+      responses:
+        204:
+          description: Invitation cancelled successfully
+        404:
+          description: No invitation was found to cancel
         default:
           description: error response
           schema:
