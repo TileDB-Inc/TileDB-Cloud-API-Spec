@@ -1479,6 +1479,7 @@ definitions:
     enum:
       - "key" # a pair of (key, secret) values
       - "arn" # a role assignment
+      - "azure_token" # an azure token credential
 
   AccessCredential:
     description: "A union type which may contain a credential to access any one cloud provider."
@@ -1525,6 +1526,13 @@ definitions:
         properties:
           aws:
             $ref: "#/definitions/AWSRole"
+      token:
+        description: "The token information itself. Exactly one sub-field may be set. The names match those in the CloudProvider enum."
+        type: object
+        x-omitempty: true
+        properties:
+          azure:
+            $ref: "#/definitions/AzureToken"
 
   AccessCredentialsData:
     description: Object including credentials and pagination metadata
@@ -1598,6 +1606,24 @@ definitions:
         description: "The endpoint used for this role"
         type: string
         example: "https://example.us-west-2.amazonaws.com"
+
+  AzureToken:
+    description: "Token information to access Azure services"
+    type: object
+    x-nullable: true
+    x-omitempty: true
+    properties:
+      account_name:
+        description: "The account name of the configuration"
+        x-go-name: "AccountName"
+        type: string
+        x-go-custom-tag: 'validate:"required"'
+        example: tiledbpoc
+      sas_token:
+        x-nullable: false
+        description: "The token to use for this account"
+        type: string
+        example: "sv=2022-11-02&ss=bfqt&srt=sco&sp=dsafdssdfafasdfsda&se=2024-03-28T03:02:08Z&st=2024-03-27T19:02:08Z&spr=https&sig=444444555555555555555555555555555555555%3D"
 
   CloudProvider:
     description: "A service where data is stored or computations take place."
