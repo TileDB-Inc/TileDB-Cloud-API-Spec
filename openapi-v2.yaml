@@ -1533,8 +1533,8 @@ definitions:
         properties:
           azure:
             $ref: "#/definitions/AzureToken"
-          google:
-            $ref: "#/definitions/GoogleServiceAccountKey"
+          gcp:
+            $ref: "#/definitions/GCPServiceAccountKey"
 
   AccessCredentialsData:
     description: Object including credentials and pagination metadata
@@ -1627,8 +1627,8 @@ definitions:
         type: string
         example: "sv=2022-11-02&ss=bfqt&srt=sco&sp=dsafdssdfafasdfsda&se=2024-03-28T03:02:08Z&st=2024-03-27T19:02:08Z&spr=https&sig=444444555555555555555555555555555555555%3D"
 
-  GoogleServiceAccountKey:
-    description: The key to a Google Cloud service account.
+  GCPServiceAccountKey:
+    description: The key to a Google Cloud Platform service account.
     type: object
     x-nullable: true
     x-omitempty: true
@@ -1679,7 +1679,7 @@ definitions:
     enum:
       - "AWS" # Amazon Web Services
       - "AZURE" # Microsoft Azure
-      - "GOOGLE" # Google Cloud
+      - "GCP" # Google Cloud Platform
 
   MetadataEntry:
     type: object
