@@ -1533,6 +1533,8 @@ definitions:
         properties:
           azure:
             $ref: "#/definitions/AzureToken"
+          google:
+            $ref: "#/definitions/GoogleServiceAccountKey"
 
   AccessCredentialsData:
     description: Object including credentials and pagination metadata
@@ -1625,12 +1627,59 @@ definitions:
         type: string
         example: "sv=2022-11-02&ss=bfqt&srt=sco&sp=dsafdssdfafasdfsda&se=2024-03-28T03:02:08Z&st=2024-03-27T19:02:08Z&spr=https&sig=444444555555555555555555555555555555555%3D"
 
+  GoogleServiceAccountKey:
+    description: The key to a Google Cloud service account.
+    type: object
+    x-nullable: true
+    x-omitempty: true
+    properties:
+      account_id:
+        description: |
+          The ID of the service account (i.e., its email address).
+
+          This is ignored when uploading key information, and is only provided
+          by the server when downloading metadata about an existing key.
+        type: string
+        example: "identity-data-reader@cinco-research.iam.gserviceaccount.com"
+      key_id:
+        description: |
+          The ID of the particular key. This identifies it among other keys
+          issued for this service account.
+
+          This is ignored when uploading key information, and is only provided
+          by the server when downloading metadata about an existing key.
+        type: string
+        example: "b85b7bac16fabf44fd9cd6885d4d1b444f07e9ab"
+      key_text:
+        description: |
+          The full file provided by Google Cloud. This is usually in the form of
+          a JSON document, but TileDB Cloud treats it as opaque (except to
+          attempt to extract the service account ID and the key ID).
+        type: string
+        x-go-custom-tag: 'tdbrest:"secret"'
+        example: |
+          {
+            "type": "service_account",
+            "project_id": "cinco-research",
+            "private_key_id": "b85b7bac16fabf44fd9cd6885d4d1b444f07e9ab",
+            "private_key": "-----BEGIN PRIVATE KEY-----\n[lots of data goes here]\n-----END PRIVATE KEY-----\n",
+            "client_email": "identity-data-reader@cinco-research.iam.gserviceaccount.com",
+            "client_id": "105800434159734259879",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/identity-data-reader%40cinco-research.iam.gserviceaccount.com",
+            "universe_domain": "googleapis.com"
+          }
+
+
   CloudProvider:
     description: "A service where data is stored or computations take place."
     type: "string"
     enum:
       - "AWS" # Amazon Web Services
       - "AZURE" # Microsoft Azure
+      - "GOOGLE" # Google Cloud
 
   MetadataEntry:
     type: object
