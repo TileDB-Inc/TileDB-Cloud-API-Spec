@@ -1480,6 +1480,7 @@ definitions:
       - "key" # a pair of (key, secret) values
       - "arn" # a role assignment
       - "azure_token" # an azure token credential
+      - "gcp_token" # a token for gcp service account
 
   AccessCredential:
     description: "A union type which may contain a credential to access any one cloud provider."
