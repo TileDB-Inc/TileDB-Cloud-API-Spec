@@ -1479,8 +1479,8 @@ definitions:
     enum:
       - "key" # a pair of (key, secret) values
       - "arn" # a role assignment
-      - "azure_token" # an azure token credential
-      - "gcp_token" # a token for gcp service account
+      - "token" # a token credential
+      - "azure_token" # alias for "token" credential
 
   AccessCredential:
     description: "A union type which may contain a credential to access any one cloud provider."
