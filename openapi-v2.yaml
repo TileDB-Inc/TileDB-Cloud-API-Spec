@@ -1983,6 +1983,79 @@ definitions:
         x-omitempty: false
         $ref: "#/definitions/PaginationMetadata"
 
+  GroupActivityLogResponse:
+    description: Object containing activity logs of a group along with the pagination metadata
+    type: object
+    properties:
+      activitylogs:
+        description: Array of GroupActivityLog
+        type: array
+        x-omitempty: false
+        items:
+          $ref: "#/definitions/GroupActivityLog"
+      pagination_metadata:
+        x-omitempty: false
+        $ref: "#/definitions/PaginationMetadata"
+
+  GroupActivityLog:
+    description: Activity of a Group
+    type: object
+    properties:
+      id:
+        description: id of the activity
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      event_at:
+        description: time event took place (RFC3339)
+        type: string
+        format: date-time
+      action:
+        description: type of the event
+        $ref: "#/definitions/GroupActivityEventType"
+      username:
+        description: user who performed the action
+        type: string
+        example: "user1"
+
+  GroupActivityEventType:
+    description: Event type of Group activity
+    type: string
+    enum:
+      # create operation
+      - create
+      # update operation
+      - update
+      # delete operation
+      - delete
+      # register operation
+      - register
+      # deregister operation
+      - deregister
+      # add member operation
+      - group_member_add
+      # get member operation
+      - group_member_get
+      # remove member operation
+      - group_member_remove
+      # get metadata operation
+      - group_metadata_get
+      # update metadata operation
+      - group_metadata_update
+      # delete metadata operation
+      - group_metadata_delete
+      # serialize metadata operation
+      - group_metadata_serialize
+      # deserialize metadata operation
+      - group_metadata_deserialize
+      # consolidate metadata operation
+      - group_metadata_consolidate
+      # vacuum metadata operation
+      - group_metadata_vacuum
+      # set configuration operation
+      - config_set
+      # get configuration operation
+      - config_get
+
   TileDBConfig:
     description: TileDB config used for interaction with the embedded library
     type: object
@@ -2619,6 +2692,64 @@ paths:
           description: Activity logs of group contents along with the pagination metadata
           schema:
             $ref: "#/definitions/GroupContentActivityResponse"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /groups/{namespace}/{group}/activity:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace group is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: group
+        in: path
+        description: name/uri of group that is url-encoded
+        type: string
+        required: true
+      - name: start
+        in: query
+        description: "Start time of window of fetch logs, unix epoch in seconds (default: seven days ago)"
+        type: integer
+        format: uint64
+        required: false
+      - name: end
+        in: query
+        description: "End time of window of fetch logs, unix epoch in seconds (default: current utc timestamp)"
+        type: integer
+        format: uint64
+        required: false
+      - name: event_types
+        in: query
+        collectionFormat: multi
+        type: array
+        items:
+          type: string
+        description: Refer to GroupActivityEventType for possible values
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+    get:
+      description: get group activity logs
+      tags:
+        - group
+      operationId: groupActivityLog
+      responses:
+        200:
+          description: log of group activity
+          schema:
+            $ref: "#/definitions/GroupActivityLogResponse"
         502:
           description: Bad Gateway
         default:
