@@ -1482,6 +1482,8 @@ definitions:
       - "azure_token" # an azure token credential
 
   AccessCredential:
+    # Within this type, all fields which are used to contain credential data
+    # are tagged with `cred_field`.
     description: "A union type which may contain a credential to access any one cloud provider."
     type: "object"
     properties:
@@ -1514,6 +1516,7 @@ definitions:
         description: "The credential information itself. Exactly one sub-field may be set. The names match those in the CloudProvider enum."
         type: object
         x-omitempty: true
+        x-go-custom-tag: 'tdbrest:"cred_field"'
         properties:
           aws:
             $ref: "#/definitions/AWSCredential"
@@ -1525,6 +1528,7 @@ definitions:
         description: "The role information itself. Exactly one sub-field may be set. The names match those in the CloudProvider enum."
         type: object
         x-omitempty: true
+        x-go-custom-tag: 'tdbrest:"cred_field"'
         properties:
           aws:
             $ref: "#/definitions/AWSRole"
@@ -1532,6 +1536,7 @@ definitions:
         description: "The token information itself. Exactly one sub-field may be set. The names match those in the CloudProvider enum."
         type: object
         x-omitempty: true
+        x-go-custom-tag: 'tdbrest:"cred_field"'
         properties:
           azure:
             $ref: "#/definitions/AzureToken"
@@ -1612,11 +1617,11 @@ definitions:
         description: "The role arn used to access"
         x-go-name: "RoleARN"
         type: string
-        x-go-custom-tag: 'validate:"required"'
+        x-go-custom-tag: 'validate:"required" tdbrest:"limit_20"'
         example: arn:partition:service:region:account-id:resource-type:resource-id
       external_id:
         description: "The role external id used to access"
-        x-go-custom-tag: 'validate:"required"'
+        x-go-custom-tag: 'validate:"required" tdbrest:"secret"'
         x-go-name: "RoleExternalID"
         type: string
         example: "MzU0M2UwMTItMWJhYy00NWUwLThmZDItZTgwYmQ1NjE5Yjhm"
@@ -1657,6 +1662,7 @@ definitions:
           This is ignored when uploading key information, and is only provided
           by the server when downloading metadata about an existing key.
         type: string
+        x-go-custom-tag: 'tdbrest:"key_id,output_only"'
         example: "identity-data-reader@cinco-research.iam.gserviceaccount.com"
       key_id:
         description: |
@@ -1666,6 +1672,7 @@ definitions:
           This is ignored when uploading key information, and is only provided
           by the server when downloading metadata about an existing key.
         type: string
+        x-go-custom-tag: 'tdbrest:"output_only"'
         example: "b85b7bac16fabf44fd9cd6885d4d1b444f07e9ab"
       key_text:
         description: |
