@@ -3746,7 +3746,7 @@ definitions:
         type: string
         example: "MyOrganization"
 
-  GroupActivity:
+  GroupContentActivity:
     description: Object containing activity of an asset of a group
     type: object
     properties:
@@ -3770,7 +3770,7 @@ definitions:
         description: Object containing the activity log
         $ref: "#/definitions/ArrayActivityLog"
 
-  GroupActivityResponse:
+  GroupContentActivityResponse:
     description: Object containing activity logs of group content along with the pagination metadata
     type: object
     properties:
@@ -3780,7 +3780,7 @@ definitions:
         x-omitempty: false
         x-nullable: false
         items:
-          $ref: "#/definitions/GroupActivity"
+          $ref: "#/definitions/GroupContentActivity"
       pagination_metadata:
         x-omitempty: false
         x-nullable: false
@@ -9677,7 +9677,7 @@ paths:
         200:
           description: Activity logs of group contents along with the pagination metadata
           schema:
-            $ref: "#/definitions/GroupActivityResponse"
+            $ref: "#/definitions/GroupContentActivityResponse"
         502:
           description: Bad Gateway
         default:
