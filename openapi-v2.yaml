@@ -1617,7 +1617,7 @@ definitions:
         description: "The role arn used to access"
         x-go-name: "RoleARN"
         type: string
-        x-go-custom-tag: 'validate:"required" tdbrest:"limit_20"'
+        x-go-custom-tag: 'validate:"required" tdbrest:"key_id,limit_20"'
         example: arn:partition:service:region:account-id:resource-type:resource-id
       external_id:
         description: "The role external id used to access"
