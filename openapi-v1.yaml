@@ -2241,6 +2241,10 @@ definitions:
       - stripe
       # Okta
       - okta
+      # perdomain
+      - perdomain
+      # SCIM
+      - scim
 
   PublicShareFilter:
     description: Query parameter to get array metadatas
