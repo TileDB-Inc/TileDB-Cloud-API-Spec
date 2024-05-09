@@ -3332,12 +3332,6 @@ definitions:
       - soma
       # Biomedical Imaing
       - bioimg
-      # Point Cloud
-      - pointcloud
-      # Raster
-      - raster
-      # Geometry
-      - geometry
       # Vector search
       - vector_search
 
