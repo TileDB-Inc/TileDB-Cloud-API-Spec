@@ -4037,6 +4037,7 @@ definitions:
         description: The name of the user who created this task graph log.
       name:
         type: string
+        maxLength: 255
         description: >
           A name for this task graph, displayed in the UI.
           Does not need to be unique.
@@ -4103,6 +4104,7 @@ definitions:
         description: The namespace that owns this task graph log.
       name:
         type: string
+        maxLength: 255
         description: >
           The name of this graph, to appear in URLs.
           Must be unique per-namespace.
@@ -4178,6 +4180,7 @@ definitions:
         description: The client-generated UUID of the given graph node.
       name:
         type: string
+        maxLength: 255
         x-nullable: true
         description: >
           A client-specified name for the node. If provided, this must be
