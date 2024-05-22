@@ -8094,16 +8094,16 @@ paths:
       parameters:
         - name: email_invite
           in: body
-          type: object
           description: |
             Recipients of the invitation. These may only be namespaces,
             not email addresses.
           schema:
-            name: namespaces
-            schema:
-              type: array
-              items:
-                type: string
+            type: object
+            properties:
+              namespaces:
+                type: array
+                items:
+                  type: string
       responses:
         204:
           description: Email sent successfully to user for email confirmation link
