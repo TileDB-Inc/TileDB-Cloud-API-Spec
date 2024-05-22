@@ -1,0 +1,31 @@
+name: cloud-api-spec
+
+on:
+  push:
+    tags: [v*]
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  GO_VERSION: 1.22
+
+jobs:
+  Validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Install go-swagger
+        run: go install github.com/go-swagger/go-swagger/cmd/swagger@latest
+
+      - name: Validate specs
+        run: |
+          swagger validate openapi-v1.yaml
+          swagger validate openapi-v2.yaml
+
