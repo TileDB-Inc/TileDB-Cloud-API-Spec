@@ -2915,12 +2915,9 @@ paths:
       operationId: HandleMultipartUploadFile
       parameters:
         - name: file
-          in: body
+          in: formData
           description: file to upload
-          schema:
-            type: string
-            format: binary
-            description: File contents
+          type: file
           required: true
       responses:
         201:
