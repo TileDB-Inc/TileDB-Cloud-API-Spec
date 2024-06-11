@@ -3952,6 +3952,7 @@ definitions:
         description: The client-generated UUID of the given graph node.
       name:
         type: string
+        maxLength: 255
         description: >
           The client-generated name of the node.
           This is not guaranteed to be unique.
