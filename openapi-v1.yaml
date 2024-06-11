@@ -6890,6 +6890,11 @@ paths:
         type: array
         items:
           type: string
+      - name: include_internal_type
+        in: query
+        description: match file_type of task array, more than one can be included
+        required: false
+        type: boolean
       - name: status
         in: query
         description: Filter to only return these statuses
