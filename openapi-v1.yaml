@@ -1032,6 +1032,7 @@ definitions:
       - GENERIC_UDF
       - BATCH_UDF
       - CLIENT_COMPUTATION
+      - INTERNAL
 
   ArrayTaskStatus:
     description: Status of array task
