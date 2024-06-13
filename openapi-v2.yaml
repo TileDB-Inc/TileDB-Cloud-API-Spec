@@ -1379,6 +1379,9 @@ definitions:
           asset_type:
             description: The type of the asset
             $ref: "#/definitions/AssetType"
+          task_id:
+            description: uuid of associated array task
+            type: string
     required:
       - id
       - eventAt
