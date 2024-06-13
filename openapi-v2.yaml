@@ -1347,51 +1347,88 @@ definitions:
         type: integer
         format: uint64
 
+  AssetActivityLog:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The ID of the activity
+      eventAt:
+        description: time event took place (RFC3339)
+        type: string
+        format: date-time
+      action:
+        type: string
+        description: type of the event
+      username:
+        description: User who performed action
+        type: string
+      asset:
+        description: The asset details
+        type: object
+        properties:
+          id:
+            description: The asset ID
+            type: string
+          name:
+            description: The asset name
+            type: string
+          namespace:
+            description: The namespace that the asset belongs to
+            type: string
+          asset_type:
+            description: The type of the asset
+            $ref: "#/definitions/AssetType"
+    required:
+      - id
+      - eventAt
+      - action
+      - username
+      - asset
+
   ArrayActivityLog:
     description: Activity of an Array
-    allOf:
-      - $ref: '#/definitions/BaseActivityLog'
-      - type: object
-        properties:
-          event_at:
-            description: time event took place (RFC3339)
-            type: string
-            format: date-time
-          action:
-            description: Type of the event
-            $ref: "#/definitions/ActivityEventType"
-          username:
-            description: User who performed action
-            type: string
-            example: "user1"
-          bytes_sent:
-            description: Bytes sent to client
-            type: integer
-            format: uint64
-            example: 1073741824
-          bytes_received:
-            description: Bytes received from client
-            type: integer
-            format: uint64
-            example: 1073741824
-          array_task_id:
-            description: uuid of associated array task
-            type: string
-            example: "00000000-0000-0000-0000-000000000000"
-          id:
-            description: id of the activity
-            type: string
-            example: "00000000-0000-0000-0000-000000000000"
-          query_ranges:
-            description: ranges for query
-            x-omitempty: true
-            type: string
-            example: '{"rows":[{"start": 1, "end": 1},{"start": 3, "end": 4}],"cols":[{"start": 1, "end": 4}]}'
-          query_stats:
-            description: stats for query
-            x-omitempty: true
-            type: string
-            example: '{"timers": {"Context.StorageManager.read_load_array_schema_from_uri.sum": 0.0255293, "...": "..."}, "counters": {"Context.StorageManager.read_unfiltered_byte_num": 191, "...": "..."}}'
+    type: object
+    properties:
+      event_at:
+        description: time event took place (RFC3339)
+        type: string
+        format: date-time
+      action:
+        description: Type of the event
+        $ref: "#/definitions/ActivityEventType"
+      username:
+        description: User who performed action
+        type: string
+        example: "user1"
+      bytes_sent:
+        description: Bytes sent to client
+        type: integer
+        format: uint64
+        example: 1073741824
+      bytes_received:
+        description: Bytes recieved from client
+        type: integer
+        format: uint64
+        example: 1073741824
+      array_task_id:
+        description: uuid of associated array task
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      id:
+        description: id of the activity
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      query_ranges:
+        description: ranges for query
+        x-omitempty: true
+        type: string
+        example: '{"rows":[{"start": 1, "end": 1},{"start": 3, "end": 4}],"cols":[{"start": 1, "end": 4}]}'
+      query_stats:
+        description: stats for query
+        x-omitempty: true
+        type: string
+        example: '{"timers": {"Context.StorageManager.read_load_array_schema_from_uri.sum": 0.0255293, "...": "..."}, "counters": {"Context.StorageManager.read_unfiltered_byte_num": 191, "...": "..."}}'
 
   ActivityEventType:
     description: Type of activity logged
@@ -1970,39 +2007,7 @@ definitions:
       type:
         $ref: "#/definitions/GroupMemberType"
 
-  BaseActivityLog:
-    type: object
-    properties:
-      type:
-        type: string
-        description: The type of the activity log
-    discriminator: type
-    required:
-      - type
-
-  GroupActivityLog:
-    description: Activity of a Group
-    allOf:
-      - $ref: '#/definitions/BaseActivityLog'
-      - type: object
-        properties:
-          id:
-            description: id of the activity
-            type: string
-            example: "00000000-0000-0000-0000-000000000000"
-          event_at:
-            description: time event took place (RFC3339)
-            type: string
-            format: date-time
-          action:
-            description: type of the event
-            $ref: "#/definitions/GroupActivityEventType"
-          username:
-            description: user who performed the action
-            type: string
-            example: "user1"
-
-  GroupActivityLogResponse:
+  GroupTotalActivityLogResponse:
     description: Object containing activity logs of a group and its content (arrays and subgroups) along with pagination metadata
     type: object
     properties:
@@ -2011,11 +2016,10 @@ definitions:
         type: array
         x-omitempty: false
         items:
-          $ref: '#/definitions/BaseActivityLog'
+          $ref: '#/definitions/AssetActivityLog'
       pagination_metadata:
         x-omitempty: false
         $ref: "#/definitions/PaginationMetadata"
-
 
   GroupActivityEventType:
     description: Event type of Group activity
@@ -2660,7 +2664,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /groups/{group_namespace}/{group_name}/activity:
+  /groups/{group_namespace}/{group_name}/total_activity:
     parameters:
       - name: group_namespace
         in: path
@@ -2703,7 +2707,7 @@ paths:
         '200':
           description: Activity logs of group and all its content along with the pagination metadata
           schema:
-            $ref: "#/definitions/GroupActivityLogResponse"
+            $ref: "#/definitions/GroupTotalActivityLogResponse"
         '502':
           description: Bad Gateway
         default:
