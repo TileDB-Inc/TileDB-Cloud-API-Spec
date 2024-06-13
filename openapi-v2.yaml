@@ -2667,7 +2667,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /groups/{group_namespace}/{group_name}/total_activity:
+  /groups/{group_namespace}/{group_name}/activity:
     parameters:
       - name: group_namespace
         in: path
