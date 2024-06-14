@@ -1387,7 +1387,6 @@ definitions:
       - event_at
       - action
       - username
-      - array_task_id
       - asset
 
   ArrayActivityLog:
