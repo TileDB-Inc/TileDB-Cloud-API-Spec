@@ -1363,6 +1363,9 @@ definitions:
       username:
         description: User who performed action
         type: string
+      array_task_id:
+            description: uuid of associated array task
+            type: string
       asset:
         description: The asset details
         type: object
@@ -1379,14 +1382,12 @@ definitions:
           asset_type:
             description: The type of the asset
             $ref: "#/definitions/AssetType"
-          array_task_id:
-            description: uuid of associated array task
-            type: string
     required:
       - id
       - event_at
       - action
       - username
+      - array_task_id
       - asset
 
   ArrayActivityLog:
