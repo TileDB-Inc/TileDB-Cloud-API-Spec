@@ -1353,7 +1353,7 @@ definitions:
       id:
         type: string
         description: The ID of the activity
-      eventAt:
+      event_at:
         description: time event took place (RFC3339)
         type: string
         format: date-time
@@ -2010,7 +2010,7 @@ definitions:
       type:
         $ref: "#/definitions/GroupMemberType"
 
-  GroupTotalActivityLogResponse:
+  GroupActivityResponse:
     description: Object containing activity logs of a group and its content (arrays and subgroups) along with pagination metadata
     type: object
     properties:
@@ -2710,7 +2710,7 @@ paths:
         '200':
           description: Activity logs of group and all its content along with the pagination metadata
           schema:
-            $ref: "#/definitions/GroupTotalActivityLogResponse"
+            $ref: "#/definitions/GroupActivityResponse"
         '502':
           description: Bad Gateway
         default:
