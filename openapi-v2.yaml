@@ -1384,7 +1384,7 @@ definitions:
             type: string
     required:
       - id
-      - eventAt
+      - event_at
       - action
       - username
       - asset
