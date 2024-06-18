@@ -4722,6 +4722,12 @@ definitions:
         type: object
         description: config to use to retrieve the contents
         $ref: "#/definitions/TileDBConfig"
+      fragments:
+        description: list of fragments in the array to consolidate
+        type: array
+        x-omitempty: true
+        items:
+          type: string
 
   ArrayVacuumRequest:
     description: Request to consolidate an array
