@@ -1347,8 +1347,50 @@ definitions:
         type: integer
         format: uint64
 
+  AssetActivityLog:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The ID of the activity
+      event_at:
+        description: time event took place (RFC3339)
+        type: string
+        format: date-time
+      action:
+        type: string
+        description: type of the event
+      username:
+        description: User who performed action
+        type: string
+      array_task_id:
+            description: uuid of associated array task
+            type: string
+      asset:
+        description: The asset details
+        type: object
+        properties:
+          id:
+            description: The asset ID
+            type: string
+          name:
+            description: The asset name
+            type: string
+          namespace:
+            description: The namespace that the asset belongs to
+            type: string
+          asset_type:
+            description: The type of the asset
+            $ref: "#/definitions/AssetType"
+    required:
+      - id
+      - event_at
+      - action
+      - username
+      - asset
+
   ArrayActivityLog:
-    description: Actvity of an Array
+    description: Activity of an Array
     type: object
     properties:
       event_at:
@@ -2007,39 +2049,19 @@ definitions:
         x-omitempty: false
         $ref: "#/definitions/PaginationMetadata"
 
-  GroupActivityLogResponse:
-    description: Object containing activity logs of a group along with the pagination metadata
+  GroupActivityResponse:
+    description: Object containing activity logs of a group and its content (arrays and subgroups) along with pagination metadata
     type: object
     properties:
       activity_logs:
-        description: Array of GroupActivityLog
+        description: Array of activity logs, including both group and array activities
         type: array
         x-omitempty: false
         items:
-          $ref: "#/definitions/GroupActivityLog"
+          $ref: '#/definitions/AssetActivityLog'
       pagination_metadata:
         x-omitempty: false
         $ref: "#/definitions/PaginationMetadata"
-
-  GroupActivityLog:
-    description: Activity of a Group
-    type: object
-    properties:
-      id:
-        description: id of the activity
-        type: string
-        example: "00000000-0000-0000-0000-000000000000"
-      event_at:
-        description: time event took place (RFC3339)
-        type: string
-        format: date-time
-      action:
-        description: type of the event
-        $ref: "#/definitions/GroupActivityEventType"
-      username:
-        description: user who performed the action
-        type: string
-        example: "user1"
 
   GroupActivityEventType:
     description: Event type of Group activity
@@ -2723,14 +2745,14 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /groups/{namespace}/{group}/activity:
+  /groups/{group_namespace}/{group_name}/activity:
     parameters:
-      - name: namespace
+      - name: group_namespace
         in: path
         description: namespace group is in (an organization name or user's username)
         type: string
         required: true
-      - name: group
+      - name: group_name
         in: path
         description: name/uri of group that is url-encoded
         type: string
@@ -2758,16 +2780,16 @@ paths:
         type: integer
         required: false
     get:
-      description: get group activity logs
+      description: Retrieves activity logs for all assets contained in a group (arrays and other groups) including the parent group itself.
+      operationId: getGroupActivity
       tags:
         - groups
-      operationId: listGroupActivity
       responses:
-        200:
-          description: log of group activity
+        '200':
+          description: Activity logs of group and all its content along with the pagination metadata
           schema:
-            $ref: "#/definitions/GroupActivityLogResponse"
-        502:
+            $ref: "#/definitions/GroupActivityResponse"
+        '502':
           description: Bad Gateway
         default:
           description: error response
