@@ -1472,6 +1472,8 @@ definitions:
         format: int64
       message:
         type: string
+      request_id:
+        type: string
 
   AccessCredentialType:
     description: "The types of an access credential"
