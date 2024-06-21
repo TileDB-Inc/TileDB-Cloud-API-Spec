@@ -1192,6 +1192,8 @@ definitions:
         x-omitempty: true
         description: >
           If set, the client-defined ID of the node within this task's graph.
+      region:
+        $ref: "#/definitions/CloudRegion"
 
   PaginationMetadata:
     properties:
@@ -3942,6 +3944,8 @@ definitions:
       task_graph_id:
         type: string
         description: The UUID of the task graph.
+      region:
+        $ref: "#/definitions/CloudRegion"
 
   TaskGraphNodeMetadata:
     description: Metadata about an individual node in a task graph.
@@ -4825,6 +4829,19 @@ definitions:
       - OnError
       # Retry task transient errors
       - OnTransientError
+
+  CloudRegion:
+    description: Represents the region of a particular cloud provider
+    type: object
+    properties:
+      provider:
+        description: The cloud provider's name, e.g. "AWS"
+        type: string
+        enum:
+          - AWS
+      region:
+        description: The cloud provider's region, e.g. "us-east-1"
+        type: string
 
 paths:
   /.stats:
