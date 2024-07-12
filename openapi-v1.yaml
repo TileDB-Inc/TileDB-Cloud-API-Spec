@@ -4784,6 +4784,27 @@ definitions:
         items:
           $ref: '#/definitions/Enumeration'
 
+  LoadArraySchemaRequest:
+    description: Request to load an array schema
+    type: object
+    properties:
+      config:
+        type: object
+        description: config to use to retrieve the contents
+        $ref: "#/definitions/TileDBConfig"
+
+  LoadArraySchemaResponse:
+    description: Contains the latest schema and all schemas for the opened array
+    type: object
+    properties:
+      latestArraySchema:
+        $ref: "#/definitions/ArraySchema"
+      arraySchemaAll:
+        description: map of all array schemas
+        type: object
+        additionalProperties:
+          $ref: "#/definitions/ArraySchema"
+
   RetryStrategy:
     description: RetryStrategy provides controls on how to retry a taskgraph node
     type: object
@@ -5443,6 +5464,44 @@ paths:
           description: enumerations returned successfully
           schema:
             $ref: "#/definitions/LoadEnumerationsResponse"
+        404:
+          description: Array does not exist or user does not have permissions to access it
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /arrays/{namespace}/{array}/schema:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace array is in (an organization name or user's username)
+        type: string
+        required: true
+      - name: array
+        in: path
+        description: name/uri of array that is url-encoded
+        type: string
+        required: true
+    post:
+      description: request to get the array schema
+      tags:
+        - array
+      operationId: loadArraySchema
+      parameters:
+        - name: load_array_schema_request
+          in: body
+          description: Load Array Schema Request
+          schema:
+            $ref: "#/definitions/LoadArraySchemaRequest"
+          required: true
+      responses:
+        200:
+          description: array schemas returned successfully
+          schema:
+            $ref: "#/definitions/LoadArraySchemaResponse"
         404:
           description: Array does not exist or user does not have permissions to access it
         502:
