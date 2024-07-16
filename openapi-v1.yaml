@@ -3946,6 +3946,10 @@ definitions:
         description: The UUID of the task graph.
       region:
         $ref: "#/definitions/CloudRegion"
+      status_message:
+        type: string
+        description: A system message providing more info about a potential status change
+        x-nullable: true
 
   TaskGraphNodeMetadata:
     description: Metadata about an individual node in a task graph.
