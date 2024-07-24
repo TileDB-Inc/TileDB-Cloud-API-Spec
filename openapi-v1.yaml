@@ -675,6 +675,7 @@ definitions:
         package: "github.com/TileDB-Inc/TileDB-Go"
         alias: "tiledb"
       type: "ArraySchema"
+      embedded: true
 
   AttributeBufferHeader:
     description: Represents an attribute buffer header information
