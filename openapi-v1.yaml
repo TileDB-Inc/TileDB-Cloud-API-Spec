@@ -4816,9 +4816,9 @@ definitions:
     description: Contains the latest schema and all schemas for the opened array
     type: object
     properties:
-      latest_array_schema:
+      schema:
         $ref: "#/definitions/ArraySchema"
-      all_array_schemas:
+      arraySchemasAll:
         description: map of all array schemas
         type: object
         additionalProperties:
