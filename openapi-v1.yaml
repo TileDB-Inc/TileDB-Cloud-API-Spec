@@ -7612,8 +7612,6 @@ paths:
           description: status of running notebook
           schema:
             $ref: "#/definitions/NotebookStatus"
-        202:
-          description: Notebook server is pending
         402:
           description: Payment required
           schema:
