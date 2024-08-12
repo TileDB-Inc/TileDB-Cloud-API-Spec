@@ -4089,7 +4089,7 @@ definitions:
         x-omitempty: true
         description: >
           Duration in seconds relative to the workflow start time which the
-          workflow is allowed to run before it gets terminated.
+          workflow is allowed to run before it gets terminated. Defaults to 24h when unset
       task_graph_type:
         $ref: "#/definitions/TaskGraphType"
 
