@@ -1473,6 +1473,14 @@ definitions:
         description: username for user
         type: string
         example: "username"
+      user_full_name:
+        description: full name of the user; available to organization admins
+        type: string
+        example: "Alice Hanna"
+      user_email:
+        description: email address of the user; available to organization admins
+        type: string
+        example: alice@example.com
       organization_name:
         description: name of organization
         type: string
