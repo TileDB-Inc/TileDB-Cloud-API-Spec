@@ -964,6 +964,24 @@ definitions:
         items:
           $ref: "#/definitions/ArrayMetadataEntry"
 
+  MetadataStringifiedEntry:
+    type: object
+    description: key/value pair representing an asset metadata map entry
+    properties:
+      key:
+        description: The metadata key
+        type: string
+        x-omitempty: false
+      value:
+        description: The metadata value
+        type: string
+        x-omitempty: false
+      type:
+        description: The metadata type
+        type: string
+        x-omitempty: false
+        example: array_metadata
+
   TileDBConfig:
     description: TileDB config used for interaction with the embedded library
     type: object
@@ -2110,6 +2128,14 @@ definitions:
         description: Datetime array was registered with tiledb
         type: string
         format: date-time
+      metadata:
+        description: |
+          Contains the metadata of the array.
+          **Note:** This property is included in the response only if the `with_metadata` query parameter is set to `true`.
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/MetadataStringifiedEntry"
 
   ArrayInfoUpdate:
     description: metadata of an array
@@ -3460,6 +3486,14 @@ definitions:
         description: Datetime the group was registered with tiledb
         type: string
         format: date-time
+      metadata:
+        description: |
+          Contains metadata of the group.
+          **Note:** This property is included in the response only if the `with_metadata` query parameter is set to `true`.
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/MetadataStringifiedEntry"
 
   GroupEntry:
     description: Object describing a single member of a group, which can be an array or a group
@@ -4938,6 +4972,11 @@ paths:
         description: namespace array is in (an organization name or user's username)
         type: string
         required: true
+      - name: with_metadata
+        in: query
+        description: include the metadata of the arrays
+        type: boolean
+        required: false
     get:
       description: get metadata on all arrays in a namespace
       tags:
@@ -8319,6 +8358,11 @@ paths:
         collectionFormat: multi
         items:
           type: string
+      - name: with_metadata
+        in: query
+        description: include the metadata of the array
+        type: boolean
+        required: false
     get:
       tags:
         - array
@@ -8457,6 +8501,11 @@ paths:
         collectionFormat: multi
         items:
           type: string
+      - name: with_metadata
+        in: query
+        description: include the metadata of the array
+        type: boolean
+        required: false
     get:
       tags:
         - array
@@ -8587,6 +8636,11 @@ paths:
         collectionFormat: multi
         items:
           type: string
+      - name: with_metadata
+        in: query
+        description: include the metadata of the array
+        type: boolean
+        required: false
     get:
       tags:
         - array
@@ -9283,6 +9337,11 @@ paths:
           description: search only the children of the groups with this uuid
           type: string
           required: false
+        - name: with_metadata
+          in: query
+          description: include the metadata of the groups
+          type: boolean
+          required: false
       responses:
         200:
           description: the group contents
@@ -9393,6 +9452,11 @@ paths:
           collectionFormat: multi
           items:
             type: string
+        - name: with_metadata
+          in: query
+          description: include the metadata of the groups
+          type: boolean
+          required: false
       responses:
         200:
           description: the group contents
@@ -9488,6 +9552,11 @@ paths:
           in: query
           description: search only the children of the groups with this uuid
           type: string
+          required: false
+        - name: with_metadata
+          in: query
+          description: include the metadata of the groups
+          type: boolean
           required: false
       responses:
         200:
