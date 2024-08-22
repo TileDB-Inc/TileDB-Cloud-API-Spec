@@ -4965,7 +4965,7 @@ paths:
         required: true
       - name: with_metadata
         in: query
-        description: include the metadata of the groups
+        description: include the metadata of the arrays
         type: boolean
         required: false
     get:
