@@ -980,6 +980,7 @@ definitions:
         description: The metadata type
         type: string
         x-omitempty: false
+        example: array_metadata
 
   TileDBConfig:
     description: TileDB config used for interaction with the embedded library
