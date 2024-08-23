@@ -10630,7 +10630,7 @@ paths:
         required: false
       - name: expand
         in: query
-        description: expansion option for the AssetInfo object to added to the response
+        description: expansion option for the AssetInfo object to be added to the response
         type: string
         required: false
     get:
