@@ -4932,7 +4932,7 @@ definitions:
 
   MetadataStringified:
     type: object
-    description: user's TileDB metadata
+    description: The user's TileDB metadata
     properties:
       entries:
         description: List of metadata entries
