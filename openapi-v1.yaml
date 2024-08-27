@@ -4912,6 +4912,90 @@ definitions:
       # Retry task transient errors
       - OnTransientError
 
+  AssetBackingType:
+    description: The technology that an asset is backed by
+    type: string
+    enum:
+      # Array
+      - array
+      # Groups
+      - group
+
+  AssetOwnershipLevel:
+    description: The ownership level of the asset
+    type: string
+    enum:
+      # Owned
+      - owned
+      # Shared
+      - shared
+
+  MetadataStringified:
+    type: object
+    description: The user's TileDB metadata
+    properties:
+      entries:
+        description: List of metadata entries
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/MetadataStringifiedEntry"
+
+  AssetInfo:
+    description: metadata of an asset
+    type: object
+    properties:
+      uuid:
+        description: unique ID of a registered asset
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      asset_type:
+        description: Asset type of an asset
+        $ref: "#/definitions/AssetType"
+      asset_backing_type:
+        description: Asset type of an asset
+        $ref: "#/definitions/AssetBackingType"
+      asset_ownership_level:
+        description: Ownership level of the asset
+        $ref: "#/definitions/AssetOwnershipLevel"
+      namespace_name:
+        description: namespace_name that the asset is registered to
+        type: string
+        example: "user1"
+      namespace_uuid:
+        description: namespace_uuid that the asset is registered to
+        type: string
+        example: "00000000-0000-0000-0000-000000000000"
+      name:
+        description: name of asset
+        type: string
+        example: myarray1
+      mime_type:
+        description: mime type of the asset
+        type: string
+        example: application/vnd.tiledb.v1.array
+      created_at:
+        description: "Time when the asset was created (rfc3339)"
+        type: string
+        format: date-time
+        readOnly: true
+      metadata:
+        description: metadata for the asset, only included when expanded
+        $ref: "#/definitions/MetadataStringified"
+
+  AssetListResponse:
+    description: Asset associated with a TileDB Cloud account
+    type: object
+    properties:
+      data:
+        description: asset information for each asset
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/AssetInfo"
+      pagination_metadata:
+        $ref: "#/definitions/PaginationMetadata"
+
 paths:
   /.stats:
     get:
@@ -10491,6 +10575,127 @@ paths:
           description: UDF does not exist or user does not have permissions to share UDF
           schema:
             $ref: '#/definitions/Error'
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /assets/{namespace}:
+    parameters:
+      - name: namespace
+        in: path
+        description: namespace
+        type: string
+        required: true
+      - name: asset_type
+        in: query
+        description: asset_type to filter to
+        type: string
+        required: false
+      - name: ownership_level
+        in: query
+        description: ownership_level to filter to (owned, shared)
+        type: string
+        required: false
+      - name: depth
+        in: query
+        description: depth of assets to be returned
+        type: string
+        required: false
+      - name: search
+        in: query
+        description: search string
+        type: string
+        required: false
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+      - name: order_by
+        in: query
+        description: |
+          order by a specific property, defaults to `created_at desc`
+          supported values are created_at, name, asset_type
+          can also include the order type (asc or desc) separated by space
+          i.e. `name asc` `name desc` etc.
+        type: string
+        required: false
+      - name: expand
+        in: query
+        description: expansion option for the AssetInfo object to be added to the response
+        type: string
+        required: false
+    get:
+      tags:
+        - assets
+      description: List assets in a namespace
+      operationId: listAssets
+      responses:
+        200:
+          description: Successful list of assets
+          schema:
+            $ref: "#/definitions/AssetListResponse"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /public_assets:
+    parameters:
+      - name: asset_type
+        in: query
+        description: asset_type to filter to
+        type: string
+        required: false
+      - name: depth
+        in: query
+        description: depth of assets to be returned
+        type: string
+        required: false
+      - name: search
+        in: query
+        description: search string
+        type: string
+        required: false
+      - name: page
+        in: query
+        description: pagination offset
+        type: integer
+        required: false
+      - name: per_page
+        in: query
+        description: pagination limit
+        type: integer
+        required: false
+      - name: order_by
+        in: query
+        description: |
+          order by a specific property, defaults to `created_at desc`
+          supported values are created_at, name, asset_type
+          can also include the order type (asc or desc) separated by space
+          i.e. `name asc` `name desc` etc.
+        type: string
+        required: false
+    get:
+      tags:
+        - assets
+      description: List public assets
+      operationId: listPublicAssets
+      responses:
+        200:
+          description: Successful list of assets
+          schema:
+            $ref: "#/definitions/AssetListResponse"
         502:
           description: Bad Gateway
         default:
