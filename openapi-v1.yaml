@@ -2128,6 +2128,10 @@ definitions:
         description: Datetime array was registered with tiledb
         type: string
         format: date-time
+      created_by:
+        description: The user who created the array, if known.
+        type: string
+        x-omitempty: true
       metadata:
         description: |
           Contains the metadata of the array.
@@ -3486,6 +3490,10 @@ definitions:
         description: Datetime the group was registered with tiledb
         type: string
         format: date-time
+      created_by:
+        description: The username of the group's creator, if known.
+        type: string
+        x-omitempty: true
       metadata:
         description: |
           Contains metadata of the group.
