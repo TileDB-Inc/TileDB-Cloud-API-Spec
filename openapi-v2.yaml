@@ -1532,6 +1532,9 @@ definitions:
     description: "A union type which may contain a credential to access any one cloud provider."
     type: "object"
     properties:
+      uuid:
+        description: The unique UUID of the credential
+        type: string
       name:
         description: "A user-specified name for the key"
         type: string
