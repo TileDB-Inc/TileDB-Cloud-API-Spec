@@ -1533,7 +1533,7 @@ definitions:
     type: "object"
     properties:
       uuid:
-        description: The unique UUID of the credential
+        description: The UUID of the credential
         type: string
       name:
         description: "A user-specified name for the key"
