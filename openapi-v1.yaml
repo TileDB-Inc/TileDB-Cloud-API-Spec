@@ -2415,6 +2415,12 @@ definitions:
         type: string
         description: name of UDFInfo to run, format is {namespace}/{udf_name}. Can not be used with exec
         example: TileDB-Inc/csv_ingestor
+      udf_info_timestamp:
+        type: string
+        format: date-time
+        description: if set, the timestamp at which to load the named UDF. if unset, loads the latest version.
+        x-nullable: true
+        x-omitempty: true
       language:
         $ref: "#/definitions/UDFLanguage"
         description: UDF language
@@ -2519,6 +2525,12 @@ definitions:
         type: string
         description: name of UDFInfo to run, format is {namespace}/{udf_name}. Can not be used with exec
         example: TileDB-Inc/quickstart_median
+      udf_info_timestamp:
+        type: string
+        format: date-time
+        description: if set, the timestamp at which to load the named UDF. if unset, loads the latest version.
+        x-nullable: true
+        x-omitempty: true
       language:
         $ref: "#/definitions/UDFLanguage"
         description: UDF language
@@ -4419,6 +4431,14 @@ definitions:
           `namespace/name`. Either this or `executable_code` should be set,
           but not both.
         type: string
+        x-nullable: true
+      registered_udf_timestamp:
+        description: >
+          If set, the timestamp at which to load the UDF specified in
+          `registered_udf_name`. If not present, the latest version is used.
+          This should only be set when `registered_udf_name` is set.
+        type: string
+        format: date-time
         x-nullable: true
       executable_code:
         description: >
