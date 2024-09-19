@@ -10729,7 +10729,13 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  /assets/change_credentials:
+  /assets/{namespace}/change_credentials:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace to send the request on behalf of.
+        type: string
+        required: true
     post:
       tags:
         - assets
