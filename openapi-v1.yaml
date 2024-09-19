@@ -5008,11 +5008,11 @@ definitions:
     description: Request body to change the credentials of the given assets
     type: object
     required:
-      - access_credentials_uuid
+      - access_credentials
       - asset_uuids
     properties:
-      access_credentials_uuid:
-        description: The uuid of the access credentials
+      access_credentials:
+        description: The name or uuid of the access credentials
         type: string
         x-nullable: false
       asset_uuids:
