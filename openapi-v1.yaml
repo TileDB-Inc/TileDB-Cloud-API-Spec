@@ -5004,6 +5004,24 @@ definitions:
       pagination_metadata:
         $ref: "#/definitions/PaginationMetadata"
 
+  ChangeAssetCredentialsRequest:
+    description: Request body to change the credentials of the given assets
+    type: object
+    required:
+      - access_credentials
+      - asset_uuids
+    properties:
+      access_credentials:
+        description: The name or uuid of the access credentials
+        type: string
+        x-nullable: false
+      asset_uuids:
+        description: The list of asset uuids to have their credentials changed
+        type: array
+        items:
+          type: string
+        x-nullable: false
+
 paths:
   /.stats:
     get:
@@ -10704,6 +10722,35 @@ paths:
           description: Successful list of assets
           schema:
             $ref: "#/definitions/AssetListResponse"
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /assets/{namespace}/change_credentials:
+    parameters:
+      - name: namespace
+        in: path
+        description: The namespace to send the request on behalf of.
+        type: string
+        required: true
+    post:
+      tags:
+        - assets
+      description: Changes the access credentials to the given assets
+      operationId: changeAssetCredentials
+      parameters:
+        - name: changeCredentialsRequest
+          in: body
+          description: aws access credentials to store for a namespace
+          schema:
+            $ref: "#/definitions/ChangeAssetCredentialsRequest"
+          required: true
+      responses:
+        204:
+          description: Credentials changed successfully
         502:
           description: Bad Gateway
         default:
