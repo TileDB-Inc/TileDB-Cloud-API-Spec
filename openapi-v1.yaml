@@ -296,6 +296,8 @@ definitions:
       - owner
       # Admin almost all rights but can't delete organization
       - admin
+      # Read, write, and delete User
+      - read_write_delete
       # Read and write User
       - read_write
       # Read Only User
