@@ -7046,6 +7046,12 @@ paths:
         description: flag to create a token with expiration of 30 days, default is false
         type: string
         required: false
+      - name: expires
+        in: query
+        description: Expiration date for token, if empty token defaults to 30 minutes
+        type: string
+        format: date-time
+        required: false
     get:
       tags:
         - user
