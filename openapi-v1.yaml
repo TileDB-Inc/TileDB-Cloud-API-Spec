@@ -3410,6 +3410,12 @@ definitions:
         description: namespace group is in
         type: string
         example: "user1"
+      size_bytes:
+        description: size in bytes of all members in the group, recursively
+        type: number
+        format: uint64
+        example: 1024
+        x-nullable: true
       name:
         description: name of group
         type: string
