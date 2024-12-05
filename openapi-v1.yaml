@@ -456,6 +456,10 @@ definitions:
         description: Attribute name
         type: string
         example: attribute1
+      enumerationName:
+        description: Enumeration name
+        type: string
+        example: colors
       type:
         $ref: "#/definitions/Datatype"
       filterPipeline:
@@ -4813,11 +4817,11 @@ definitions:
     properties:
       name:
         type: string
-      path_name:
+      pathName:
         type: string
       type:
         type: string
-      cell_val_num:
+      cellValNum:
         type: integer
         format: uint32
       ordered:
