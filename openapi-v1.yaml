@@ -679,6 +679,26 @@ definitions:
       type: "ArraySchema"
       embedded: true
 
+  ArraySchemaMap:
+    type: object
+    description: array's schemas
+    properties:
+      entries:
+        description: List of array schemas entries
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/ArraySchemaEntry"
+
+  ArraySchemaEntry:
+    type: object
+    description: key/value pair representing an array schema map entry
+    properties:
+      key:
+        type: string
+      value:
+        $ref: "#/definitions/ArraySchema"
+
   AttributeBufferHeader:
     description: Represents an attribute buffer header information
     type: object
@@ -4868,13 +4888,12 @@ definitions:
     description: Contains the latest schema and all schemas for the opened array
     type: object
     properties:
-      latest_array_schema:
+      schema:
+        description: latest array schema
         $ref: "#/definitions/ArraySchema"
-      all_array_schemas:
+      arraySchemasAll:
         description: map of all array schemas
-        type: object
-        additionalProperties:
-          $ref: "#/definitions/ArraySchema"
+        $ref: "#/definitions/ArraySchemaMap"
 
   RetryStrategy:
     description: RetryStrategy provides controls on how to retry a taskgraph node
