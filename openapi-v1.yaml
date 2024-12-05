@@ -3496,6 +3496,9 @@ definitions:
         description: The username of the group's creator, if known.
         type: string
         x-omitempty: true
+      is_deleted:
+        description: Indicates whether the group is deleted
+        type: boolean
       metadata:
         description: |
           Contains metadata of the group.
