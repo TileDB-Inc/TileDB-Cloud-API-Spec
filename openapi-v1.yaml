@@ -5024,6 +5024,14 @@ definitions:
           type: string
         x-nullable: false
 
+  RestVersion:
+    description: Model representing REST TileDB version capabilities
+    type: object
+    properties:
+      tiledbVersion:
+        description: Version of TileDB core library
+        type: string
+
 paths:
   /.stats:
     get:
@@ -10759,6 +10767,30 @@ paths:
       responses:
         204:
           description: Credentials changed successfully
+        502:
+          description: Bad Gateway
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/Error"
+
+  /version:
+    get:
+      description: Get REST TileDB version capabilities
+      consumes:
+        - application/json
+        - application/capnp
+      produces:
+        - application/json
+        - application/capnp
+      tags:
+        - version
+      operationId: HandleGetTileDBVersion
+      responses:
+        200:
+          description: Retrieved REST TileDB version
+          schema:
+            $ref: "#/definitions/RestVersion"
         502:
           description: Bad Gateway
         default:
