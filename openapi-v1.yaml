@@ -183,6 +183,8 @@ definitions:
       - python
       # r
       - r
+      # nextflow
+      - nextflow
 
   UDFType:
     description: UDF Type
@@ -4593,6 +4595,32 @@ definitions:
           allowed to run indefinitely (subject to the server’s global limits).
         type: number
         x-nullable: true
+      storage:
+        description: >
+          Storage options for mounting persistent volumes.
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/TGUDFStorage"
+
+  TGUDFStorage:
+    description: Storage options for mounting persistent volumes.
+    type: object
+    properties:
+      path:
+        description: >
+          Mount path for the attached volume.
+        type: string
+      size:
+        description: >
+          Storage size.
+        type: string
+        example: 8Gi
+      storage_class:
+        description: >
+          Storage class to use for creating the volume.
+        type: string
+        example: gp2
 
   FragmentMetadata:
     description: Fragment Metadata
