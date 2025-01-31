@@ -183,6 +183,8 @@ definitions:
       - python
       # r
       - r
+      # nextflow
+      - nextflow
 
   UDFType:
     description: UDF Type
@@ -3907,6 +3909,7 @@ definitions:
     enum:
       - batch
       - realtime
+      - nextflow
 
   TaskGraphLog:
     description: Logging information about the execution of a task graph.
@@ -4011,6 +4014,20 @@ definitions:
         type: string
         x-omitempty: true
         description: The region of the cloud provider where this task graph executed.
+      root_task_graph_uuid:
+        type: string
+        x-omitempty: true
+        description: >
+          The UUID of the root taskgraph that this taskgraph is related to.
+          This is used to provide consistent tracking and UI view for graphs that
+          are executed by a set of taskgraphs.
+      children_task_graph_uuids:
+        description: >
+          If this is a root taskgraph, this contains the list of all its children
+          taskgraph UUIDs.
+        type: array
+        items:
+          type: string
 
   TaskGraphNodeMetadata:
     description: Metadata about an individual node in a task graph.
@@ -4593,6 +4610,32 @@ definitions:
           allowed to run indefinitely (subject to the server’s global limits).
         type: number
         x-nullable: true
+      storage:
+        description: >
+          Storage options for mounting persistent volumes.
+        type: array
+        x-omitempty: true
+        items:
+          $ref: "#/definitions/TGUDFStorage"
+
+  TGUDFStorage:
+    description: Storage options for mounting persistent volumes.
+    type: object
+    properties:
+      path:
+        description: >
+          Mount path for the attached volume.
+        type: string
+      size:
+        description: >
+          Storage size.
+        type: string
+        example: 8Gi
+      storage_class:
+        description: >
+          Storage class to use for creating the volume.
+        type: string
+        example: gp2
 
   FragmentMetadata:
     description: Fragment Metadata
@@ -10439,6 +10482,11 @@ paths:
         description: The UUID of the task graph entry.
         type: string
         required: true
+      - name: root_task_graph_uuid
+        in: query
+        description: UUID of the root taskgraph that this graph is assosiated with
+        type: string
+        required: false
     post:
       description: >
        Submit a single task graph for execution.
