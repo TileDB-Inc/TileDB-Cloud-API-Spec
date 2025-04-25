@@ -2018,6 +2018,10 @@ definitions:
         description: unique ID of registered array
         type: string
         example: "00000000-0000-0000-0000-000000000000"
+      asset_id:
+        type: string
+        description: The asset id of the created array
+        x-omitempty: false
       file_type:
         description: File type stored /wrapped by this array
         x-omitempty: true
@@ -3261,6 +3265,7 @@ definitions:
     type: object
     required:
       - id
+      - asset_id
     properties:
       output_uri:
         type: string
@@ -3268,6 +3273,10 @@ definitions:
       file_name:
         type: string
         description: name of the file uploaded
+      asset_id:
+        type: string
+        description: The asset id of the created Group
+        x-omitempty: false
       id:
         description: unique ID of the uploaded file
         type: string

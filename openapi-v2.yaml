@@ -1832,6 +1832,10 @@ definitions:
         type: string
         description: The UUID of the created Group
         x-omitempty: false
+      asset_id:
+        type: string
+        description: The asset id of the created Group
+        x-omitempty: false
       name:
         type: string
         description: The name of the created Group
@@ -1891,6 +1895,27 @@ definitions:
           access_credentials_name:
             description: the name of the access credentials to use. if unset, the default credentials will be used.
             type: string
+
+  GroupRegistrationResponse:
+    description: Information of the created group
+    type: object
+    properties:
+      id:
+        type: string
+        description: The UUID of the created Group
+        x-omitempty: false
+      asset_id:
+        type: string
+        description: The asset id of the created Group
+        x-omitempty: false
+      name:
+        type: string
+        description: The name of the created Group
+        x-omitempty: false
+      tiledb_uri:
+        type: string
+        description: TileDB URI for access
+        x-omitempty: false
 
   GroupContentsRetrievalResponse:
     description: Object including a page of members of a group and pagination metadata
@@ -2127,6 +2152,7 @@ definitions:
     type: object
     required:
       - id
+      - asset_id
     properties:
       output_uri:
         type: string
@@ -2134,6 +2160,10 @@ definitions:
       file_name:
         type: string
         description: name of the file uploaded
+      asset_id:
+        type: string
+        description: The asset id of the created Group
+        x-omitempty: false
       id:
         description: unique ID of the uploaded file
         type: string
@@ -2152,6 +2182,10 @@ definitions:
       name:
         type: string
         description: name of the notebook uploaded
+      asset_id:
+        type: string
+        description: The asset id of the created Group
+        x-omitempty: false
       id:
         description: unique ID of the uploaded notebook
         type: string
@@ -2560,7 +2594,7 @@ paths:
         201:
           description: group created successfully
           schema:
-            $ref: "#/definitions/GroupCreationResponse"
+            $ref: "#/definitions/GroupRegistrationResponse"
         502:
           description: Bad Gateway
         default:
@@ -2579,7 +2613,9 @@ paths:
             $ref: "#/definitions/GroupRegistrationRequest"
       responses:
         201:
-          description: group created successfully
+          description: group registered successfully
+          schema:
+            $ref: "#/definitions/GroupCreationResponse"
         502:
           description: Bad Gateway
         default:
