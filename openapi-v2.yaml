@@ -1618,12 +1618,17 @@ definitions:
         description: "The access key's secret. Never returned in responses."
         type: string
         x-go-custom-tag: 'tdbrest:"secret" validate:"required"'
-
       endpoint:
         description: "The endpoint used for this credential"
         x-nullable: true
         type: string
         example: "https://example.us-west-2.amazonaws.com"
+      sse_kms_key_id:
+        x-nullable: true
+        description: "The key ID, key ARN, or key alias of the AWS KMS key to use with this credential"
+        type: string
+        example: "arn:aws:kms:us-east-1:1234:key/mykey"
+
 
   AzureCredential:
     description: "Credential information to access Microsoft Azure. Each supported property is the snake_case version of its name in an Azure Storage connection string."
@@ -1678,6 +1683,11 @@ definitions:
         description: "The endpoint used for this role"
         type: string
         example: "https://example.us-west-2.amazonaws.com"
+      sse_kms_key_id:
+        x-nullable: true
+        description: "The key ID, key ARN, or key alias of the AWS KMS key to use with this credential"
+        type: string
+        example: "arn:aws:kms:us-east-1:1234:key/mykey"
 
   AzureToken:
     description: "Token information to access Azure services"
